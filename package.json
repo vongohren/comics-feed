@@ -17,7 +17,8 @@
   "dependencies": {
     "cheerio": "^0.20.0",
     "cron": "^1.1.0",
-    "request": "^2.71.0",
-    "rss": "^1.2.1"
+    "express": "^4.13.4",
+    "feed": "^0.3.0",
+    "request": "^2.71.0"
   }
 }
