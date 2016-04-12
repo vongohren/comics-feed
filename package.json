@@ -1,0 +1,23 @@
+{
+  "name": "comics-feed",
+  "version": "1.0.0",
+  "description": "This is a server that parses pages with comics and serve them up as an rss feed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rss",
+    "parser",
+    "feed",
+    "comics"
+  ],
+  "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "cron": "^1.1.0",
+    "request": "^2.71.0",
+    "rss": "^1.2.1"
+  }
+}
