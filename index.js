@@ -82,7 +82,7 @@ app.get('/lunch', function (req, res) {
     res.send(lunchFeed.render('rss-2.0'));
   });
 });
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.listen(port, function () {
   console.log('Example app listening on port '+port);
