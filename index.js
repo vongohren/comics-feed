@@ -33,7 +33,7 @@ function fetchLunch() {
         if (!error) {
           var promise = Url.where("value").equals(res.request.href).exec();
           promise.then(function(entries) {
-            // if(entries.length == 0 ) {
+            if(entries.length == 0 ) {
               console.log("INSIDE IF")
               var newEntry = new Url({value:res.request.href})
               newEntry.save(function (err, userObj) {
@@ -43,7 +43,7 @@ function fetchLunch() {
                   console.log('saved successfully:', userObj);
                 }
               });
-            // }
+            }
           })
         }
       })
@@ -62,11 +62,10 @@ app.get('/lunch', function (req, res) {
     link:           'http://lunchstriper.no/',
     image:          'http://lunchstriper.no/assets/graphics/logo.png',
     copyright:      'None',
-    id: "01294149"
+    id:             'https://comic-feed.herokuapp.com/lunch'
   });
   var lastThreePromise = Url.find({}).sort('-date').limit(3).exec()
   lastThreePromise.then(function(objs) {
-    console.log(objs)
     for(var entry of objs) {
       lunchFeed.addItem({
         title: "Lunch",
@@ -76,7 +75,7 @@ app.get('/lunch', function (req, res) {
       })
     }
     res.set('Content-Type', 'text/xml');
-    res.send(lunchFeed.render('rss-2.0'));
+    res.send(lunchFeed.render('atom-1.0'));
   });
 });
 var port = process.env.PORT;
