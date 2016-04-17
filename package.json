@@ -4,7 +4,8 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "keywords": [
     "rss",
