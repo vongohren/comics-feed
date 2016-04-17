@@ -62,7 +62,8 @@ app.get('/lunch', function (req, res) {
     link:           'http://lunchstriper.no/',
     image:          'http://lunchstriper.no/assets/graphics/logo.png',
     copyright:      'None',
-    id:             'https://comic-feed.herokuapp.com/lunch'
+    id:             'https://comic-feed.herokuapp.com/lunch',
+    feed:           'https://comic-feed.herokuapp.com/lunch'
   });
   var lastThreePromise = Url.find({}).sort('-date').limit(3).exec()
   lastThreePromise.then(function(objs) {
@@ -75,7 +76,7 @@ app.get('/lunch', function (req, res) {
       })
     }
     res.set('Content-Type', 'text/xml');
-    res.send(lunchFeed.render('atom-1.0'));
+    res.send(lunchFeed.render('rss-2.0'));
   });
 });
 var port = process.env.PORT;
