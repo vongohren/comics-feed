@@ -1,5 +1,7 @@
 var name = 'lunch'
 var itemDescription = 'Lunchstripe'
+var tegneserieLink = 'http://lunchstriper.no/'
+var tegneserieLogo = 'http://lunchstriper.no/assets/graphics/logo.png'
 var url = 'http://www.dagbladet.no/tegneserie/lunch/'
 var feed = require('feed');
 var Entry = require('../../models/comic-entry.js');
@@ -57,21 +59,23 @@ function capitalizeFirstLetter(string) {
 }
 
 exports.routeFunction = function (req, res) {
-  var lunchFeed = new feed({
-    title:          'Lunch feed',
-    description:    'This is the norwegian lunch comic feed',
-    link:           'http://lunchstriper.no/',
-    image:          'http://lunchstriper.no/assets/graphics/logo.png',
+  var title = capitalizeFirstLetter(name);
+  var description = itemDescription;
+  var comicFeed = new feed({
+    title:          title,
+    description:    'This is the norwegian '+name+' comic feed',
+    link:           tegneserieLink,
+    image:          tegneserieLogo,
     copyright:      'None',
-    id:             'https://comic-feed.herokuapp.com/lunch',
-    feed:           'https://comic-feed.herokuapp.com/lunch'
+    id:             'https://comic-feed.herokuapp.com/'+name,
+    feed:           'https://comic-feed.herokuapp.com/'+name
   });
   var lastThreePromise = Entry.find({'label':name}).sort('-date').limit(3).exec()
   lastThreePromise.then(function(objs) {
     var title = capitalizeFirstLetter(name);
-    var description = itemDescription;
+
     for(var entry of objs) {
-      lunchFeed.addItem({
+      comicFeed.addItem({
         title: title,
         link: entry.url,
         description: description,
@@ -79,6 +83,6 @@ exports.routeFunction = function (req, res) {
       })
     }
     res.set('Content-Type', 'text/xml');
-    res.send(lunchFeed.render('rss-2.0'));
+    res.send(comicFeed.render('rss-2.0'));
   });
 };
