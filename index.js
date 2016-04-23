@@ -16,7 +16,8 @@ var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 var Url = mongoose.model('Url', {
   value: String,
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+	label: String
 });
 
 
