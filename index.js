@@ -1,5 +1,4 @@
 var express = require('express');
-
 var lunch = require('./modules/dagbladet/lunch')
 var pondus = require('./modules/dagbladet/pondus')
 var mongoose = require('mongoose');

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "main": "index.js",
+  "engines": {
+    "node": "5.11.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
@@ -16,6 +19,7 @@
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.3.5",
     "cheerio": "^0.20.0",
     "cron": "^1.1.0",
     "express": "^4.13.4",

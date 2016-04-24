@@ -3,10 +3,10 @@ var itemDescription = 'Lunchstripe'
 var tegneserieLink = 'http://lunchstriper.no/'
 var tegneserieLogo = 'http://lunchstriper.no/assets/graphics/logo.png'
 var url = 'http://www.dagbladet.no/tegneserie/lunch/'
-var feed = require('feed');
 var Entry = require('../../models/comic-entry.js');
 var request = require('request');
 var cheerio = require('cheerio');
+var generateFeed = require('../../utils/generateFeed');
 
 
 exports.init = function(hour, minute) {
@@ -54,35 +54,10 @@ function fetch() {
   });
 }
 
-function capitalizeFirstLetter(string) {
-  return (string.charAt(0).toUpperCase() + string.slice(1))
-}
-
 exports.routeFunction = function (req, res) {
-  var title = capitalizeFirstLetter(name);
-  var description = itemDescription;
-  var comicFeed = new feed({
-    title:          title,
-    description:    'This is the norwegian '+name+' comic feed',
-    link:           tegneserieLink,
-    image:          tegneserieLogo,
-    copyright:      'None',
-    id:             'https://comic-feed.herokuapp.com/'+name,
-    feed:           'https://comic-feed.herokuapp.com/'+name
-  });
-  var lastThreePromise = Entry.find({'label':name}).sort('-date').limit(3).exec()
-  lastThreePromise.then(function(objs) {
-    var title = capitalizeFirstLetter(name);
-
-    for(var entry of objs) {
-      comicFeed.addItem({
-        title: title,
-        link: entry.url,
-        description: description,
-        date: entry.date,
-      })
-    }
+  const obj = generateFeed(name, itemDescription, tegneserieLink, tegneserieLogo)
+  obj.then(function(feed){
     res.set('Content-Type', 'text/xml');
-    res.send(comicFeed.render('rss-2.0'));
-  });
+    res.send(feed);
+  })
 };
