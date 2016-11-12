@@ -1,7 +1,7 @@
 var express = require('express');
 var lunch = require('./modules/dagbladet/lunch')
 var pondus = require('./modules/dagbladet/pondus')
-var pondus = require('./modules/dagbladet/nemi')
+var nemi = require('./modules/dagbladet/nemi')
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 
