@@ -1,5 +1,5 @@
-var name = 'pondus'
-var itemDescription = 'Pondusstripe'
+var name = 'nemi'
+var itemDescription = 'Nemistripe'
 var tegneserieLink = 'https://www.facebook.com/Nemino-207588812589578/'
 var tegneserieLogo = 'http://vignette3.wikia.nocookie.net/cartoonfatness/images/3/3e/Blog_yk_4915575_7599245_tr_logo.png/revision/latest?cb=20140520195208'
 var url = 'http://www.dagbladet.no/tegneserie/nemi/'
