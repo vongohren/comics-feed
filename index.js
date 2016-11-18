@@ -15,7 +15,7 @@ var app = express();
 app.get('/lunch', lunch.routeFunction);
 app.get('/pondus', pondus.routeFunction);
 app.get('/nemi', nemi.routeFunction);
-app.get('/nemi', wumo.routeFunction);
+app.get('/wumo', wumo.routeFunction);
 
 var port = process.env.PORT || 3000;
 
