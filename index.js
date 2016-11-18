@@ -4,7 +4,7 @@ var pondus = require('./modules/dagbladet/pondus')
 var nemi = require('./modules/dagbladet/nemi')
 var wumo = require('./modules/heltnormalt/wumo')
 var mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 
 lunch.init(process.env.LUNCH_HOUR || '11', process.env.LUNCH_MIN || '00')
 pondus.init(process.env.PONDUS_HOUR || '10', process.env.PONDUS_MIN || '00')
