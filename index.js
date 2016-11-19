@@ -1,4 +1,3 @@
-"use strict";
 var express = require('express');
 var Lunch = require('./modules/dagbladet/lunch')
 var Pondus = require('./modules/dagbladet/pondus')
