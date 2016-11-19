@@ -42,7 +42,7 @@ function fetch() {
           if (!error) {
             var $ = cheerio.load(body);
             var imageSrc = "http://"+$('#comic img').attr('src').substring(2);
-            fetchUtil.fetchAndSaveImage(imageSrc, {
+            fetchUtil.fetchAndSaveImage(imageSrc, name, {
               callback: getExplanationAndSendMessageToSlack.bind(this, $, url, title)
             });
           } else {

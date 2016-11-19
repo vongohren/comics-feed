@@ -31,7 +31,7 @@ function fetch() {
     if (!error) {
       var $ = cheerio.load(body);
       var imageSrc = $('img.tegneserie').attr('src')
-      fetchUtil.fetchAndSaveImage(imageSrc);
+      fetchUtil.fetchAndSaveImage(imageSrc, name);
     } else {
       console.log("We’ve encountered an error: " + error);
     }

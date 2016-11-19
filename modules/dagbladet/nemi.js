@@ -7,7 +7,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var generateFeed = require('../../utils/generateFeed');
 var fetchUtil = require('../../utils/fetch');
-
+var Entry = require('../../models/comic-entry.js');
 
 exports.init = function(hour, minute) {
   setupCronjob(hour, minute);
@@ -31,7 +31,7 @@ function fetch() {
     if (!error) {
       var $ = cheerio.load(body);
       var imageSrc = $('img.tegneserie').attr('src')
-      fetchUtil.fetchAndSaveImage(imageSrc);
+      fetchUtil.fetchAndSaveImage(imageSrc, name);
     } else {
       console.log("We’ve encountered an error: " + error);
     }
