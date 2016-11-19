@@ -1,36 +1,22 @@
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../../utils/generateFeed');
-var fetchUtil = require('../../utils/fetch');
-var cronjob = require('../../utils/cronjob');
+var Feed = require('../feed');
 
-var name = 'wumo'
-var itemDescription = 'Wumostripe'
-var tegneserieLink = 'http://wumo.com/wumo'
-var tegneserieLogo = 'http://wumo.com/images/en_US/m_header_wumo.png'
-var url = 'http://heltnormalt.no/wumo'
+class Wumo extends Feed {
+  constructor({
+    name = 'wumo',
+    itemDescription = 'Wumostripe',
+    tegneserieSideLink = 'http://wumo.com/wumo',
+    tegneserieLogo = 'http://wumo.com/images/en_US/m_header_wumo.png',
+    stripUrl = 'http://heltnormalt.no/wumo',
+    hour = '10',
+    minute = '00'
+  }) {
+    super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
+  }
 
-exports.init = function(hour, minute) {
-  cronjob(hour, minute, fetch);
-  fetch();
+  extractImageSrc($) {
+    console.log("EXTRACTING WUMO")
+    return $(".strip.wumo img").attr("src")
+  }
 }
 
-function fetch() {
-  request(url, function (error, response, body) {
-    if (!error) {
-      var $ = cheerio.load(body);
-      var imageSrc = $(".strip.wumo img").attr("src")
-      fetchUtil.fetchAndSaveImage(imageSrc, name);
-    } else {
-      console.log("We’ve encountered an error: " + error);
-    }
-  });
-}
-
-exports.routeFunction = function (req, res) {
-  const obj = generateFeed(name, itemDescription, tegneserieLink, tegneserieLogo)
-  obj.then(function(feed){
-    res.set('Content-Type', 'text/xml');
-    res.send(feed);
-  })
-};
+module.exports = Wumo;
