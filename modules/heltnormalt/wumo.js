@@ -1,28 +1,18 @@
+var request = require('request');
+var cheerio = require('cheerio');
+var generateFeed = require('../../utils/generateFeed');
+var fetchUtil = require('../../utils/fetch');
+var cronjob = require('../../utils/cronjob');
+
 var name = 'wumo'
 var itemDescription = 'Wumostripe'
 var tegneserieLink = 'http://wumo.com/wumo'
 var tegneserieLogo = 'http://wumo.com/images/en_US/m_header_wumo.png'
 var url = 'http://heltnormalt.no/wumo'
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../../utils/generateFeed');
-var fetchUtil = require('../../utils/fetch');
 
 exports.init = function(hour, minute) {
-  setupCronjob(hour, minute);
+  cronjob(hour, minute, fetch);
   fetch();
-}
-
-function setupCronjob(hour, minute) {
-  var cronTime = process.env.CRON_TIME || '00 '+minute+' '+hour+' * * 1-7';
-  var timeZone = process.env.TIME_ZONE || 'Europe/Oslo';
-  var CronJob = require('cron').CronJob;
-  var job =  new CronJob({
-    cronTime: cronTime,
-    onTick: fetch,
-    start: true,
-    timeZone: timeZone
-  });
 }
 
 function fetch() {

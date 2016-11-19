@@ -1,34 +1,22 @@
+var request = require('request');
+var cheerio = require('cheerio');
+var generateFeed = require('../../utils/generateFeed');
+var fetchUtil = require('../../utils/fetch');
+var cronjob = require('../../utils/cronjob');
+var xml2js = require('xml2js');
+var Slack = require('slack-node');
+var apiToken = process.env.XKCD_BOT_TOKEN;
+var slack = new Slack(apiToken);
+
 var name = 'xkcd'
 var itemDescription = 'Xkcd'
 var tegneserieLink = 'http://xkcd.com'
 var tegneserieLogo = 'http://imgs.xkcd.com/static/terrible_small_logo.png'
 var rssUrl = 'http://xkcd.com/rss.xml'
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../../utils/generateFeed');
-var fetchUtil = require('../../utils/fetch');
-var xml2js = require('xml2js');
-var Slack = require('slack-node');
-var apiToken = process.env.XKCD_BOT_TOKEN;
-
-var slack = new Slack(apiToken);
 
 exports.init = function(hour, minute) {
-  setupCronjob(hour, minute);
+  cronjob(hour, minute, fetch);
   fetch();
-
-}
-
-function setupCronjob(hour, minute) {
-  var cronTime = process.env.CRON_TIME || '00 '+minute+' '+hour+' * * 1-7';
-  var timeZone = process.env.TIME_ZONE || 'Europe/Oslo';
-  var CronJob = require('cron').CronJob;
-  var job =  new CronJob({
-    cronTime: cronTime,
-    onTick: fetch,
-    start: true,
-    timeZone: timeZone
-  });
 }
 
 function fetch() {

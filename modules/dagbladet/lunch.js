@@ -1,29 +1,18 @@
+var request = require('request');
+var cheerio = require('cheerio');
+var generateFeed = require('../../utils/generateFeed');
+var fetchUtil = require('../../utils/fetch');
+var cronjob = require('../../utils/cronjob');
+
 var name = 'lunch'
 var itemDescription = 'Lunchstripe'
 var tegneserieLink = 'http://lunchstriper.no/'
 var tegneserieLogo = 'http://lunchstriper.no/assets/graphics/logo.png'
 var url = 'http://www.dagbladet.no/tegneserie/lunch/'
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../../utils/generateFeed');
-var fetchUtil = require('../../utils/fetch');
-
 
 exports.init = function(hour, minute) {
-  setupCronjob(hour, minute);
+  cronjob(hour, minute, fetch);
   fetch();
-}
-
-function setupCronjob(hour, minute) {
-  var cronTime = process.env.CRON_TIME || '00 '+minute+' '+hour+' * * 1-7';
-  var timeZone = process.env.TIME_ZONE || 'Europe/Oslo';
-  var CronJob = require('cron').CronJob;
-  var job =  new CronJob({
-    cronTime: cronTime,
-    onTick: fetch,
-    start: true,
-    timeZone: timeZone
-  });
 }
 
 function fetch() {

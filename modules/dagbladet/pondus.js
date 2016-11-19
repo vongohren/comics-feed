@@ -1,14 +1,15 @@
-var name = 'pondus'
-var itemDescription = 'Pondusstripe'
-var tegneserieLink = 'http://www.klikk.no/pondus/'
-var tegneserieLogo = 'https://login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png'
-var url = 'http://www.dagbladet.no/tegneserie/pondus/'
 var request = require('request');
 var cheerio = require('cheerio');
 var generateFeed = require('../../utils/generateFeed');
 var fetchUtil = require('../../utils/fetch');
 var Entry = require('../../models/comic-entry.js');
 var cronjob = require('../../utils/cronjob');
+
+var name = 'pondus'
+var itemDescription = 'Pondusstripe'
+var tegneserieLink = 'http://www.klikk.no/pondus/'
+var tegneserieLogo = 'https://login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png'
+var url = 'http://www.dagbladet.no/tegneserie/pondus/'
 
 
 exports.init = function(hour, minute) {
