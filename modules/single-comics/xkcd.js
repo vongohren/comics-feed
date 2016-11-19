@@ -54,7 +54,7 @@ function getExplanationAndSendMessageToSlack($, url, title, imageUrl) {
     "title": title,
     "image_url": imageUrl,
     "pretext": explanationUrl
-  }]
+  }];
   slack.api('chat.postMessage', {
     text:'*XKCD with explanation*',
     channel:process.env.SLACK_CHANNEL,
