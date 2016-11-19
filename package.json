@@ -26,6 +26,8 @@
     "feed": "^0.3.0",
     "mongoose": "^4.4.12",
     "node-uuid": "^1.4.7",
-    "request": "^2.71.0"
+    "request": "^2.71.0",
+    "slack-node": "^0.1.8",
+    "xml2js": "^0.4.17"
   }
 }

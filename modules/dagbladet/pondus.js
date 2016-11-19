@@ -3,11 +3,10 @@ var itemDescription = 'Pondusstripe'
 var tegneserieLink = 'http://www.klikk.no/pondus/'
 var tegneserieLogo = 'https://login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png'
 var url = 'http://www.dagbladet.no/tegneserie/pondus/'
-var feed = require('feed');
-var Entry = require('../../models/comic-entry.js');
 var request = require('request');
 var cheerio = require('cheerio');
 var generateFeed = require('../../utils/generateFeed');
+var fetchUtil = require('../../utils/fetch');
 
 
 exports.init = function(hour, minute) {
@@ -32,23 +31,7 @@ function fetch() {
     if (!error) {
       var $ = cheerio.load(body);
       var imageSrc = $('img.tegneserie').attr('src')
-      request(imageSrc, function (error, res, body) {
-        if (!error) {
-          var promise = Entry.where("url").equals(res.request.href).exec();
-          promise.then(function(entries) {
-            if(entries.length == 0 ) {
-              var newEntry = new Entry({url:res.request.href, label:name})
-              newEntry.save(function (err, userObj) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  console.log('saved successfully:', userObj);
-                }
-              });
-            }
-          })
-        }
-      })
+      fetchUtil.fetchAndSaveImage(imageSrc);
     } else {
       console.log("We’ve encountered an error: " + error);
     }

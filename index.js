@@ -3,19 +3,23 @@ var lunch = require('./modules/dagbladet/lunch')
 var pondus = require('./modules/dagbladet/pondus')
 var nemi = require('./modules/dagbladet/nemi')
 var wumo = require('./modules/heltnormalt/wumo')
+var xkcd = require('./modules/single-comics/xkcd')
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect("mongodb://localhost:27017/comics")
 
 lunch.init(process.env.LUNCH_HOUR || '11', process.env.LUNCH_MIN || '00')
 pondus.init(process.env.PONDUS_HOUR || '10', process.env.PONDUS_MIN || '00')
 nemi.init(process.env.NEMI_HOUR || '12', process.env.NEMI_MIN || '00')
 wumo.init(process.env.WUMO_HOUR || '09', process.env.WUMO_MIN || '00')
+xkcd.init(process.env.XKCD_HOUR || '09', process.env.XKCD_MIN || '30')
 
 var app = express();
 app.get('/lunch', lunch.routeFunction);
 app.get('/pondus', pondus.routeFunction);
 app.get('/nemi', nemi.routeFunction);
 app.get('/wumo', wumo.routeFunction);
+app.get('/xkcd', xkcd.routeFunction);
 
 var port = process.env.PORT || 3000;
 
