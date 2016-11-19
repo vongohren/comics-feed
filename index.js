@@ -1,23 +1,26 @@
 var express = require('express');
-var lunch = require('./modules/dagbladet/lunch')
-var pondus = require('./modules/dagbladet/pondus')
-var nemi = require('./modules/dagbladet/nemi')
-var wumo = require('./modules/heltnormalt/wumo')
+var Lunch = require('./modules/dagbladet/lunch')
+var Pondus = require('./modules/dagbladet/pondus')
+var Nemi = require('./modules/dagbladet/nemi')
+var Wumo = require('./modules/heltnormalt/wumo')
 var xkcd = require('./modules/single-comics/xkcd')
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 
-lunch.init(process.env.LUNCH_HOUR || '11', process.env.LUNCH_MIN || '00')
-pondus.init(process.env.PONDUS_HOUR || '10', process.env.PONDUS_MIN || '00')
-nemi.init(process.env.NEMI_HOUR || '12', process.env.NEMI_MIN || '00')
-wumo.init(process.env.WUMO_HOUR || '09', process.env.WUMO_MIN || '00')
+var comics = [
+  new Pondus({ hour: 10 }),
+  new Nemi({ hour: 11 }),
+  new Wumo({ hour: 09 }),
+  new Lunch({ hour: 09, minute: 30 })
+]
+
 xkcd.init(process.env.XKCD_HOUR || '09', process.env.XKCD_MIN || '30')
 
 var app = express();
-app.get('/lunch', lunch.routeFunction);
-app.get('/pondus', pondus.routeFunction);
-app.get('/nemi', nemi.routeFunction);
-app.get('/wumo', wumo.routeFunction);
+for(var comic of comics) {
+  app.get(`/${comic.name}`, comic.routeFunction.bind(comic));
+}
+
 app.get('/xkcd', xkcd.routeFunction);
 
 var port = process.env.PORT || 3000;
