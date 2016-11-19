@@ -14,7 +14,6 @@ class Wumo extends Feed {
   }
 
   extractImageSrc($) {
-    console.log("EXTRACTING WUMO")
     return $(".strip.wumo img").attr("src")
   }
 }

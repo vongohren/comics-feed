@@ -13,7 +13,7 @@ exports.fetchAndSaveImage = function (url, name, optionals) {
               console.log(err);
             } else {
               if (optionals && optionals.callback) {
-                optionals.callback(url);
+                optionals.callback(res.request.href);
               }
               console.log('saved successfully:', userObj);
             }
