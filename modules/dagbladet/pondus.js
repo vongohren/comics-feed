@@ -8,23 +8,12 @@ var cheerio = require('cheerio');
 var generateFeed = require('../../utils/generateFeed');
 var fetchUtil = require('../../utils/fetch');
 var Entry = require('../../models/comic-entry.js');
+var cronjob = require('../../utils/cronjob');
 
 
 exports.init = function(hour, minute) {
-  setupCronjob(hour, minute);
+  cronjob(hour, minute, fetch);
   fetch();
-}
-
-function setupCronjob(hour, minute) {
-  var cronTime = process.env.CRON_TIME || '00 '+minute+' '+hour+' * * 1-7';
-  var timeZone = process.env.TIME_ZONE || 'Europe/Oslo';
-  var CronJob = require('cron').CronJob;
-  var job =  new CronJob({
-    cronTime: cronTime,
-    onTick: fetch,
-    start: true,
-    timeZone: timeZone
-  });
 }
 
 function fetch() {
@@ -37,10 +26,6 @@ function fetch() {
       console.log("We’ve encountered an error: " + error);
     }
   });
-}
-
-function capitalizeFirstLetter(string) {
-  return (string.charAt(0).toUpperCase() + string.slice(1))
 }
 
 exports.routeFunction = function (req, res) {

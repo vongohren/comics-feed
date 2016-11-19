@@ -38,10 +38,6 @@ function fetch() {
   });
 }
 
-function capitalizeFirstLetter(string) {
-  return (string.charAt(0).toUpperCase() + string.slice(1))
-}
-
 exports.routeFunction = function (req, res) {
   const obj = generateFeed(name, itemDescription, tegneserieLink, tegneserieLogo)
   obj.then(function(feed){
