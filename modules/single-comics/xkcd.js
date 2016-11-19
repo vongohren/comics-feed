@@ -70,10 +70,14 @@ function getExplanationAndSendMessageToSlack($, url, title, imageUrl) {
   slack.api('chat.postMessage', {
     text:'*XKCD with explanation*',
     channel:'#snorretest',
-    attachments: JSON.stringify(attachments)
+    attachments: JSON.stringify(attachments),
+    as_user: true
   }, function(err, response){
     if(err) {
-      console.log(err)
+      console.log(err);
+    }
+    if(!response.ok) {
+      console.log(response);
     }
   });
 }
