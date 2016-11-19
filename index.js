@@ -11,7 +11,7 @@ var comics = [
   new Pondus({ hour: 10 }),
   new Nemi({ hour: 11 }),
   new Wumo({ hour: 09 }),
-  new Lunch({ hour: 09, minute: 30 })
+  new Lunch({ hour: 12 })
 ]
 
 xkcd.init(process.env.XKCD_HOUR || '09', process.env.XKCD_MIN || '30')
