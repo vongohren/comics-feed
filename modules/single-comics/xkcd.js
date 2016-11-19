@@ -57,7 +57,7 @@ function getExplanationAndSendMessageToSlack($, url, title, imageUrl) {
   }]
   slack.api('chat.postMessage', {
     text:'*XKCD with explanation*',
-    channel:'#tegneserier',
+    channel:process.env.SLACK_CHANNEL,
     attachments: JSON.stringify(attachments),
     as_user: true
   }, function(err, response){

@@ -32,5 +32,6 @@ module.exports = Promise.coroutine(function*(name, itemDescription, tegneserieLi
       date: entry.date,
     })
   }
+  
   return comicFeed.render('rss-2.0');
 })
