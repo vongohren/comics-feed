@@ -14,4 +14,4 @@ class Kaxxco extends Feed {
   }
 }
 
-module.exports = Pondus;
+module.exports = Kaxxco;
