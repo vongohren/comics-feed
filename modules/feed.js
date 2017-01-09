@@ -22,7 +22,12 @@ class Feed {
       if (!error) {
         var $ = cheerio.load(body);
         var imageSrc = this.extractImageSrc($);
-        fetchUtil.fetchAndSaveImage(imageSrc, this.name);
+        if(imageSrc) {
+          fetchUtil.fetchAndSaveImage(imageSrc, this.name);
+        } else {
+          console.log(`Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
+        }
+
       } else {
         console.log("We’ve encountered an error: " + error);
       }

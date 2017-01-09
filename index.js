@@ -15,7 +15,6 @@ var comics = [
   new Nemi({ hour: 11 }),
   new Wumo({ hour: 09 }),
   new Lunch({ hour: 12 }),
-  new Kaxxco({ hour: 10, minute: 30 }),
   new Cyanideandhappines({ hour: 11, minute: 30 }),
   new Dilbert({ hour: 12, minute: 30 })
 ]
