@@ -6,15 +6,16 @@ class Wumo extends Feed {
     itemDescription = 'Wumostripe',
     tegneserieSideLink = 'http://wumo.com/wumo',
     tegneserieLogo = 'http://wumo.com/images/en_US/m_header_wumo.png',
-    stripUrl = 'http://heltnormalt.no/wumo',
+    stripUrl = 'http://wumo.com/wumo',
     hour = '10',
     minute = '00'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
+    this.baseUrl = 'http://wumo.com'
   }
 
   extractImageSrc($) {
-    return $(".strip.wumo img").attr("src")
+    return this.baseUrl+$(".strip.wumo img").attr("src")
   }
 }
 

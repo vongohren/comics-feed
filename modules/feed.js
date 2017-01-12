@@ -22,6 +22,7 @@ class Feed {
       if (!error) {
         var $ = cheerio.load(body);
         var imageSrc = this.extractImageSrc($);
+
         if(imageSrc) {
           fetchUtil.fetchAndSaveImage(imageSrc, this.name);
         } else {
