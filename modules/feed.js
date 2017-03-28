@@ -36,7 +36,7 @@ class Feed {
   }
 
   extractImageSrc($) {
-    return $('img.tegneserie').attr('src')
+    return $($('img.image_comic')[0]).attr('src')
   }
 
   routeFunction(req, res) {
