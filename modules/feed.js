@@ -4,6 +4,7 @@ var generateFeed = require('../utils/generateFeed');
 var cronjob = require('../utils/cronjob');
 var generateFeed = require('../utils/generateFeed');
 var fetchUtil = require('../utils/fetch');
+const logger = require('../utils/logger');
 
 
 class Feed {
@@ -26,11 +27,11 @@ class Feed {
         if(imageSrc) {
           fetchUtil.fetchAndSaveImage(imageSrc, this.name);
         } else {
-          console.log(`Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
+          logger.log('error', `Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
         }
 
       } else {
-        console.log("We’ve encountered an error: " + error);
+        logger.log('error', "We’ve encountered an error: " + error)
       }
     });
   }
