@@ -1,32 +1,40 @@
-const bunyan = require('bunyan');
-var Bunyan2Loggly = require('bunyan-loggly');
-var logglyConfig = {
-    token: 'da580656-d89b-48c6-bf32-e35ce5dbceb3',
-    subdomain: 'vongohren',
-    tags: ["ComicFeed"],
-    json: true
-};
+const winston = require('winston')
+require('winston-papertrail').Papertrail;
 
-var logglyStream = new Bunyan2Loggly(logglyConfig);
+const winstonPapertrail = new winston.transports.Papertrail({
+  host: process.env.LOGHOST,
+  port: process.env.LOGPORT,
+  colorize: true,
+  program: 'comicFeed'
+})
+
+const winstonConsole = new winston.transports.Console()
+
+winstonPapertrail.on('error', function(err) {
+    console.log(err);
+});
+
+winston.handleExceptions([ winstonPapertrail, winstonConsole ]);
 
 class Logger {
     constructor() {
-        this.mainLogger = bunyan.createLogger({
-            name: "ComicFeed",
-            streams: [
-                {
-                    type: 'raw',
-                    stream: logglyStream,
-                },
-            ]
+        this.mainLogger = new winston.Logger({
+          transports: [
+            winstonPapertrail,
+            winstonConsole
+          ]
         });
     }
 
     log(level, message) {
         this.mainLogger[level](message);
     }
+
+    close() {
+        this.mainLogger.close()
+    }
 }
 
-let LoggerClass = new Logger();
+const LoggerClass = new Logger();
 
 module.exports = LoggerClass;

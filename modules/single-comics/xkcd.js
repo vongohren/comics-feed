@@ -4,6 +4,7 @@ var generateFeed = require('../../utils/generateFeed');
 var fetchUtil = require('../../utils/fetch');
 var cronjob = require('../../utils/cronjob');
 var xml2js = require('xml2js');
+const logger = require('../../utils/logger');
 var Slack = require('slack-node');
 var apiToken = process.env.XKCD_BOT_TOKEN;
 var slack = new Slack(apiToken);
@@ -34,12 +35,12 @@ function fetch() {
               callback: getExplanationAndSendMessageToSlack.bind(this, $, url, title)
             });
           } else {
-            console.log("We’ve encountered an error: " + error);
+            logger.log('error', 'XKCD encountered and error '+error)
           }
         });
       });
     } else {
-      console.log("We’ve encountered an error: " + error);
+      logger.log('error', 'XKCD encountered and error '+error)
     }
   });
 }
@@ -62,10 +63,11 @@ function getExplanationAndSendMessageToSlack($, url, title, imageUrl) {
     as_user: true
   }, function(err, response){
     if(err) {
-      console.log(err);
+      logger.log('error', 'XKCD slack posting encountered and error '+error)
     }
     if(!response.ok) {
-      console.log(response);
+      logger.log('error', 'XKCD got not ok respons ' + response.ok +' with error '+ response.error)
+      logger.log('error', 'Probably not exported XKCD slack bot token')
     }
   });
 }

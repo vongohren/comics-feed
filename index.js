@@ -8,6 +8,7 @@ var xkcd = require('./modules/single-comics/xkcd')
 var Cyanideandhappines = require('./modules/single-comics/cyanideandhappines')
 var Dilbert = require('./modules/single-comics/dilbert')
 var mongoose = require('mongoose');
+const logger = require('./utils/logger');
 mongoose.connect(process.env.MONGODB_URI);
 
 var comics = [
@@ -31,5 +32,5 @@ app.get('/xkcd', xkcd.routeFunction);
 var port = process.env.PORT || 3000;
 
 app.listen(port, function () {
-  console.log('Example app listening on port '+port);
+  logger.log('info', 'Comics app listening on port '+port)
 });
