@@ -14,7 +14,7 @@ class Feed {
     this.tegneserieSideLink = tegneserieSideLink;
     this.tegneserieLogo = tegneserieLogo;
     this.stripUrl = stripUrl;
-    cronjob(hour, minute, this.fetch);
+    cronjob(hour, minute, this.fetch.bind(this))
     this.fetch();
   }
 
