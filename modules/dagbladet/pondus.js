@@ -1,8 +1,9 @@
 var Feed = require('../feed');
+const defaultName = 'pondus';
 
 class Pondus extends Feed {
   constructor({
-    name = 'pondus',
+    name = defaultName,
     itemDescription = 'Pondusstripe',
     tegneserieSideLink = 'http://www.klikk.no/pondus/',
     tegneserieLogo = 'https://login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png',

@@ -14,15 +14,17 @@ winstonPapertrail.on('error', function(err) {
     console.log(err);
 });
 
-winston.handleExceptions([ winstonPapertrail, winstonConsole ]);
+const transports = [winstonConsole];
+if(!process.env.DEV_LOGGING) {
+    transports.push(winstonPapertrail)
+}
+
+winston.handleExceptions(transports);
 
 class Logger {
     constructor() {
         this.mainLogger = new winston.Logger({
-          transports: [
-            winstonPapertrail,
-            winstonConsole
-          ]
+          transports: transports
         });
     }
 
