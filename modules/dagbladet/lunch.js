@@ -1,9 +1,8 @@
-var Feed = require('../feed');
-const defaultName = 'lunch'
+var Dagbladet = require('./dagbladet');
 
-class Lunch extends Feed {
+class Lunch extends Dagbladet {
   constructor({
-    name = defaultName,
+    name = 'lunch',
     itemDescription = 'Lunchstripe',
     tegneserieSideLink = 'http://lunchstriper.no/',
     tegneserieLogo = 'http://lunchstriper.no/assets/graphics/logo.png',

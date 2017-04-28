@@ -1,9 +1,8 @@
 var Feed = require('../feed');
-const defaultName = 'cyanideandhappiness';
 
 class CyanideAndHappiness extends Feed {
   constructor({
-    name = defaultName,
+    name = 'cyanideandhappiness',
     itemDescription = 'CyanideAndHappinessstripe',
     tegneserieSideLink = 'http://explosm.net/',
     tegneserieLogo = 'http://explosm.net/img/logo.png',

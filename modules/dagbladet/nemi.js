@@ -1,6 +1,6 @@
-var Feed = require('../feed');
+var Dagbladet = require('./dagbladet');
 
-class Nemi extends Feed {
+class Nemi extends Dagbladet {
   constructor({
     name = 'nemi',
     itemDescription = 'Nemistripe',

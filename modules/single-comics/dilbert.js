@@ -1,9 +1,8 @@
 var Feed = require('../feed');
-const defaultName = 'dilbert'
 
 class Dilbert extends Feed {
   constructor({
-    name = defaultName,
+    name = 'dilbert',
     itemDescription = 'Dilbertstripe',
     tegneserieSideLink = 'http://dilbert.com/',
     tegneserieLogo = 'http://dilbert.com/assets/dilbert-logo-4152bd0c31f7de7443b4bc90abd818da.png',
