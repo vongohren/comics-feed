@@ -21,7 +21,7 @@ if(!DEV) {
     });
 
     exceptionHandlers.push(winstonPapertrail);
-    transports.push(transports);
+    transports.push(winstonPapertrail);
 }
 
 winston.handleExceptions(exceptionHandlers);
