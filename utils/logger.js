@@ -1,16 +1,7 @@
 const winston = require('winston')
 require('winston-papertrail').Papertrail;
 
-const colors = {
-    error:'red'
-}
-
-const winstonPapertrail = new winston.transports.Papertrail({
-  host: process.env.LOGHOST,
-  port: process.env.LOGPORT,
-  colorize: true,
-  program: 'comicFeed'
-})
+const DEV = process.env['npm_lifecycle_event'] === 'dev' ? true : false;
 
 const winstonConsole = new winston.transports.Console({
     prettyPrint: true,
@@ -19,17 +10,26 @@ const winstonConsole = new winston.transports.Console({
     timestamp: false
 })
 
-winstonConsole.on('error', function(err) {
-    console.log('\x1b[31m', err ,'\x1b[0m');
-});
+const exceptionHandlers = [winstonConsole]
+const transports = [winstonConsole]
 
-const transports = [winstonConsole];
-if(!process.env.DEV) {
-    transports.push(winstonPapertrail)
+if(!DEV) {
+    winstonPapertrail = new winston.transports.Papertrail({
+        host: process.env.LOGHOST,
+        port: process.env.LOGPORT,
+        colorize: true,
+        program: 'comicFeed'
+    })
+
+    winstonPapertrail.on('error', function(err) {
+        console.log(err);
+    });
+
+    exceptionHandlers.push(winstonPapertrail);
+    transports.push(winstonPapertrail);
 }
 
-winston.handleExceptions(transports);
-winston.addColors(colors);
+winston.handleExceptions(exceptionHandlers);
 
 class Logger {
     constructor() {
