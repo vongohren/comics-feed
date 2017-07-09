@@ -3,30 +3,69 @@ const Entry = require('../models/comic-entry.js');
 const WebClient = require('@slack/client').WebClient;
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
 const comics = require('../comics');
+const Agenda = require('./utils/agenda');
+const moment = require('moment');
+const logger = require('../utils/logger');
 
 const postToTeam = (body) => {
     const promise = Team.where("team_id").equals(body.team_id).exec();
     promise.then(function(teams) {
-        const subscriptions = teams[0].subscriptions;
-        const webhook = teams[0].incoming_webhook.url
+        const team = teams[teams.length-1]
+        const subscriptions = team.subscriptions;
+        const webhook = team.incoming_webhook.url
         for(const subscription of subscriptions) {
-            fetchAndPost(subscription, webhook, teams[0].incoming_webhook.channel_id)
+            fetchAndPost(subscription, webhook, team.incoming_webhook.channel_id)
         }
     });
 }
 
-const postToAllSubscribers = () => {
-    const promise = Team.find({}).exec();
+const postToTeamWithId = (id) => {
+    console.log("POSTING EVERY 30min")
+    const promise = Team.where("team_id").equals(id).exec();
     promise.then(function(teams) {
+        let update = false;
+        const team = teams[teams.length-1]
+        const subscriptions = team.subscriptions;
+        const webhook = team.incoming_webhook.url
+        const tempSubs = [...subscriptions];
 
+        while(tempSubs.length != 0) {
+            const subscription = tempSubs.pop();
+            fetchEntries(subscription).then((entries) => {
+                const entry = entries[0];
+                if(
+                    !subscription.lastPublished ||
+                    (subscription.lastPublished !== entry.url && isTimeToPost(subscription))
+                ) {
+                    postWebhookToSlack(entry, webhook, team.incoming_webhook.channel_id)
+                    subscription.lastPublished = entry.url;
+                    update = true;
+                }
+                if(update && tempSubs.length == 0) {
+                    var query = { team_id: id };
+                    Team.update(query, { subscriptions: subscriptions }, (err, raw)=> {
+                        if (err) logger.log('error' `Team subscription update error: ${err}`)
+                    })
+                }
+            })
+        }
     });
 }
 
-const fetchAndPost = (subscription, token, channel) => {
-    const entries = Entry.find({label:subscription.name}).sort('-date').limit(1).exec();
-    entries.then(entries => {
-        postWebhookToSlack(entries[0], token, channel)
-    })
+const isTimeToPost = (subscription) => {
+    const now = moment();
+    return now.hour() > subscription.postTime.hour && now.minute() > subscription.postTime.minute
+}
+
+const initAgendaForTeam = (id) => {
+    const promise = Team.where("team_id").equals(id).exec();
+    promise.then(function(teams) {
+        Agenda.defineTeamPosting(id, postToTeamWithId.bind(this, id));
+    });
+}
+
+const fetchEntries = (subscription) => {
+    return Entry.find({label:subscription.name}).sort('-date').limit(1).exec();
 }
 
 const postWebhookToSlack = (entry, webhook, channel) => {
@@ -36,7 +75,7 @@ const postWebhookToSlack = (entry, webhook, channel) => {
         if (err) {
             console.log('Error:', err);
         } else {
-            console.log('Message sent: ');
+            console.log('Message sent: '+entry.url);
         }
     });
 }
@@ -68,5 +107,6 @@ const uppercaseFirst = string => {
 
 module.exports = {
     postToTeam,
-    postToAllSubscribers
+    postToTeamWithId,
+    initAgendaForTeam
 }

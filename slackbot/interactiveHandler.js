@@ -1,4 +1,5 @@
-const postToTeam = require('./poster').postToTeam;
+const Agenda = require('./utils/agenda');
+const poster = require('./poster');
 
 module.exports = (body, res) => {
     switch (body.callback_id) {
@@ -11,13 +12,11 @@ module.exports = (body, res) => {
 }
 
 const subscriptionHandler = (body, res) => {
-    // postToTeam(body);
     const subscriptionAction = body.actions.find(action=> {
         return action.name === 'subscription';
     })
     if(subscriptionAction.value==='subscribe') {
-
-
+        Agenda.defineTeamPosting(body.team.team_id, poster.postToTeamWithId.bind(this, body.team.team_id));
         const fixedAttachments = [];
         fixedAttachments.push(body.original_message.attachments[0]);
         const responsePart = body.original_message.attachments[1]

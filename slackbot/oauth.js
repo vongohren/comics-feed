@@ -3,16 +3,17 @@ const Team = require('./models/slack-teams');
 const logger = require('../utils/logger');
 const comics = require('../comics');
 const WebClient = require('@slack/client').WebClient;
+const cronjob = require('./utils/cronjob');
 
 module.exports = function(req, res) {
     if (!req.query.code) {
+        logger.log('error', "Looks like we're not getting oauth code")
         res.status(500);
         res.send({"Error": "Looks like we're not getting code."});
-        console.log("Looks like we're not getting code.");
     } else {
         request({
             url: 'https://slack.com/api/oauth.access',
-            qs: {code: req.query.code, client_id: this.clientId, client_secret: this.clientSecret},
+            qs: { code: req.query.code, client_id: this.clientId, client_secret: this.clientSecret },
             method: 'GET',
         }, function (error, response, body) {
             if (error) {
