@@ -4,7 +4,6 @@ const interactiveHandler = require('./interactiveHandler');
 const Team = require('./models/slack-teams');
 const postToTeam = require('./poster').postToTeam;
 const initAgendaForTeam = require('./poster').initAgendaForTeam;
-const cronjob = require('./utils/cronjob');
 const Agenda = require('./utils/agenda');
 
 class Slackbot {

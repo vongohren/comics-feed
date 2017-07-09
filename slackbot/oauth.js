@@ -3,7 +3,6 @@ const Team = require('./models/slack-teams');
 const logger = require('../utils/logger');
 const comics = require('../comics');
 const WebClient = require('@slack/client').WebClient;
-const cronjob = require('./utils/cronjob');
 
 module.exports = function(req, res) {
     if (!req.query.code) {
