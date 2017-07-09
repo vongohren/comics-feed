@@ -73,6 +73,7 @@ const uppercaseFirst = string => {
 }
 
 const saveTeam = (team) => {
+    console.log(team)
     const newTeam = new Team({
         access_token: team.access_token,
         scope: team.scope,
