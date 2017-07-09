@@ -10,6 +10,7 @@ module.exports = function(req, res) {
         res.status(500);
         res.send({"Error": "Looks like we're not getting code."});
     } else {
+        console.log(this.clientId, this.clientSecret)
         request({
             url: 'https://slack.com/api/oauth.access',
             qs: { code: req.query.code, client_id: this.clientId, client_secret: this.clientSecret },
