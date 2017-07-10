@@ -25,7 +25,7 @@ class Agenda {
             func()
             done()
         })
-        this.agenda.every('10 seconds', id);
+        this.agenda.every('30 minutes', id);
     }
 }
 
