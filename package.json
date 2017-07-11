@@ -4,12 +4,12 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "main": "index.js",
   "engines": {
-    "node": "7.1.0"
+    "node": "7.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "node index.js"
+    "start": "node --harmony index.js",
+    "dev": "node --harmony index.js"
   },
   "keywords": [
     "rss",
@@ -36,5 +36,8 @@
     "winston": "^2.3.1",
     "winston-papertrail": "^1.0.4",
     "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "mongoui": "^4.1.2"
   }
 }
