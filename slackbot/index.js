@@ -2,7 +2,6 @@ const oauth = require('./oauth');
 const path = require('path');
 const interactiveHandler = require('./interactiveHandler');
 const Team = require('./models/slack-teams');
-const postToTeam = require('./poster').postToTeam;
 const initAgendaForTeam = require('./poster').initAgendaForTeam;
 
 class Slackbot {
