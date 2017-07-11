@@ -16,7 +16,7 @@ const subscriptionHandler = (body, res) => {
         return action.name === 'subscription';
     })
     if(subscriptionAction.value==='subscribe') {
-        Agenda.defineTeamPosting(body.team.team_id, poster.postToTeamWithId.bind(this, body.team.team_id));
+        Agenda.defineTeamPosting(body.team.team_id, body.team.incoming_webhook.channel_id, poster.postToTeamWithId);
         const fixedAttachments = [];
         fixedAttachments.push(body.original_message.attachments[0]);
         const responsePart = body.original_message.attachments[1]

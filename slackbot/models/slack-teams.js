@@ -7,6 +7,7 @@ module.exports = mongoose.model('slackteams', {
     team_name: String,
     team_id: String,
     user_id: String,
+    active: { type: Boolean, default: false },
     incoming_webhook: {
         url: String,
         channel: String,
