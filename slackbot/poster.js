@@ -7,21 +7,10 @@ const Agenda = require('./utils/agenda');
 const moment = require('moment');
 const logger = require('../utils/logger');
 
-const postToTeam = (body) => {
-    const promise = Team.where("team_id").equals(body.team_id).exec();
-    promise.then(function(teams) {
-        const team = teams[teams.length-1]
-        const subscriptions = team.subscriptions;
-        const webhook = team.incoming_webhook.url
-        for(const subscription of subscriptions) {
-            fetchAndPost(subscription, webhook, team.incoming_webhook.channel_id)
-        }
-    });
-}
-
-const postToTeamWithId = (id) => {
-    console.log("POSTING EVERY 30min")
-    const promise = Team.where("team_id").equals(id).exec();
+const postToTeamWithId = (team_id, channel_id) => {
+    console.log("POSTING EVERY "+process.env.CHECK_INTERVAL+" with id: "+team_id+" and channel_id: "+channel_id)
+    const team_query = { team_id: team_id, "incoming_webhook.channel_id": channel_id }
+    const promise = Team.find(team_query).exec();
     promise.then(function(teams) {
         let update = false;
         const team = teams[teams.length-1]
@@ -34,15 +23,16 @@ const postToTeamWithId = (id) => {
             fetchEntries(subscription).then((entries) => {
                 const entry = entries[0];
                 if(
-                    !subscription.lastPublished ||
-                    (subscription.lastPublished !== entry.url && isTimeToPost(subscription))
+                    !subscription.lastUrlPublished ||
+                    (subscription.lastUrlPublished !== entry.url && isTimeToPost(subscription))
                 ) {
                     postWebhookToSlack(entry, webhook, team.incoming_webhook.channel_id)
-                    subscription.lastPublished = entry.url;
+                    subscription.lastUrlPublished = entry.url;
+                    subscription.datePublished = moment().format('x')
                     update = true;
                 }
                 if(update && tempSubs.length == 0) {
-                    var query = { team_id: id };
+                    var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
                     Team.update(query, { subscriptions: subscriptions }, (err, raw)=> {
                         if (err) logger.log('error' `Team subscription update error: ${err}`)
                     })
@@ -54,14 +44,13 @@ const postToTeamWithId = (id) => {
 
 const isTimeToPost = (subscription) => {
     const now = moment();
-    return now.hour() > subscription.postTime.hour && now.minute() > subscription.postTime.minute
+    return now.hour() >= subscription.postTime.hour && now.minute() >= subscription.postTime.minute
 }
 
-const initAgendaForTeam = (id) => {
-    const promise = Team.where("team_id").equals(id).exec();
-    promise.then(function(teams) {
-        Agenda.defineTeamPosting(id, postToTeamWithId.bind(this, id));
-    });
+const initAgendaForTeam = (team) => {
+    const team_id = team.team_id;
+    const channel_id = team.channel_id || team.incoming_webhook.channel_id;
+    Agenda.defineTeamPosting(team_id, channel_id, postToTeamWithId);
 }
 
 const fetchEntries = (subscription) => {
@@ -106,7 +95,6 @@ const uppercaseFirst = string => {
 }
 
 module.exports = {
-    postToTeam,
     postToTeamWithId,
     initAgendaForTeam
 }
