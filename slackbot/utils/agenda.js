@@ -20,13 +20,30 @@ class Agenda {
         return this.ready
     }
 
-    defineTeamPosting(id, func) {
-        this.agenda.define(id, function(job, done) {
-            func()
+    _stop() {
+        this.agenda.stop(function() {
+          console.log("Exiting process to handle proper stop of jobs")
+          process.exit(0);
+        });
+    }
+
+    defineTeamPosting(team_id, channel_id, func) {
+        const jobId = `${team_id}-${channel_id}`
+        this.agenda.define(jobId, function(job, done) {
+            func(job.attrs.data.team_id, job.attrs.data.channel_id)
             done()
         })
-        this.agenda.every('30 minutes', id);
+        this.agenda.every(process.env.CHECK_INTERVAL, jobId, {team_id: team_id, channel_id: channel_id});
     }
 }
 
-module.exports = new Agenda();
+const agenda = new Agenda()
+
+function graceful() {
+  agenda._stop();
+}
+
+process.on('SIGTERM', graceful);
+process.on('SIGINT' , graceful);
+
+module.exports = agenda;
