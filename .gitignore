@@ -1,3 +1,4 @@
 node_modules/
-exportSettings
+exportSettingsDev
+exportSettingsStaging
 npm-debug.log
