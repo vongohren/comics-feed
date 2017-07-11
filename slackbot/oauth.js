@@ -10,10 +10,14 @@ module.exports = function(req, res) {
         res.status(500);
         res.send({"Error": "Looks like we're not getting code."});
     } else {
-        console.log(this.clientId, this.clientSecret)
         request({
             url: 'https://slack.com/api/oauth.access',
-            qs: { code: req.query.code, client_id: this.clientId, client_secret: this.clientSecret },
+            qs: {
+                code: req.query.code,
+                client_id: this.clientId,
+                client_secret: this.clientSecret,
+                redirect_uri:`https://${req.get('host')}${req.url.split('?')[0]}`
+            },
             method: 'GET',
         }, function (error, response, body) {
             if (error) {
@@ -73,33 +77,62 @@ const uppercaseFirst = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const saveTeam = (team) => {
-    console.log(team)
-    const newTeam = new Team({
-        access_token: team.access_token,
-        scope: team.scope,
-        team_name: team.team_name,
-        team_id: team.team_id,
-        user_id: team.user_id,
-        incoming_webhook: {
-            url: team.incoming_webhook.url,
-            channel: team.incoming_webhook.channel,
-            channel_id: team.incoming_webhook.channel_id,
-            configuration_url: team.incoming_webhook.configuration_url,
-        },
-        bot: {
-            bot_user_id:team.bot.bot_user_id,
-            bot_access_token:team.bot.bot_access_token
-        },
-        subscriptions: comics.defaultSubscription.map(comic => {
-            return {name: comic.name, lastPublished:''}
-        })
+const isItAnExistingTeamEntry = (team) => {
+    return new Promise((resolve, reject) => {
+        const promise = Team.where("team_id").equals(team.team_id).exec();
+        promise.then(function(teams) {
+            if(teams.length > 0 ){
+                resolve({ team: true, channel: doesChannelExist(teams, team.incoming_webhook.channel_id)})
+            } else (
+                resolve({ team: false, channel: false })
+            )
+        });
     })
-    newTeam.save(function (err, teamObj) {
-      if (err) {
-        logger.log('error', "Saving new team failed with: " + error)
-      } else {
-        logger.log('info',teamObj.team_name+ ' was saved successfully');
-      }
-    });
+}
+
+const doesChannelExist = (teams, channel_id) => {
+    return teams.find(team=>{
+        return team.incoming_webhook.channel_id === channel_id
+    }) ? true : false
+
+}
+
+const saveTeam = async (team) => {
+    const exists = await isItAnExistingTeamEntry(team);
+    if(!exists.team || (exists.team && !exists.channel)) {
+        const newTeam = new Team({
+            access_token: team.access_token,
+            scope: team.scope,
+            team_name: team.team_name,
+            team_id: team.team_id,
+            user_id: team.user_id,
+            incoming_webhook: {
+                url: team.incoming_webhook.url,
+                channel: team.incoming_webhook.channel,
+                channel_id: team.incoming_webhook.channel_id,
+                configuration_url: team.incoming_webhook.configuration_url,
+            },
+            bot: {
+                bot_user_id:team.bot.bot_user_id,
+                bot_access_token:team.bot.bot_access_token
+            },
+            subscriptions: comics.defaultSubscription.map(comic => {
+                return {name: comic.name, lastUrlPublished:''}
+            })
+        })
+        newTeam.save(function (err, teamObj) {
+          if (err) {
+            logger.log('error', "Saving new team failed with: " + error)
+          } else {
+            logger.log('info',teamObj.team_name+ ' was saved successfully');
+          }
+        });
+    } else {
+        const query = {team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id }
+        Team.update(query, {incoming_webhook: team.incoming_webhook}, (err, raw)=> {
+            if (err) logger.log('error' `Team subscription update error: ${err}`)
+            console.log(raw)
+        })
+    }
+
 }
