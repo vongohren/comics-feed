@@ -37,7 +37,7 @@ class Feed {
   }
 
   extractImageSrc($) {
-    return $('.todays img').attr('src')
+    return $('.strip-container img').attr('src')
   }
 
   routeFunction(req, res) {
