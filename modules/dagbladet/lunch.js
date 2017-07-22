@@ -1,6 +1,6 @@
-var Feed = require('../feed');
+var Dagbladet = require('./dagbladet');
 
-class Lunch extends Feed {
+class Lunch extends Dagbladet {
   constructor({
     name = 'lunch',
     itemDescription = 'Lunchstripe',

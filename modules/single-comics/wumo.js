@@ -5,7 +5,7 @@ class Wumo extends Feed {
     name = 'wumo',
     itemDescription = 'Wumostripe',
     tegneserieSideLink = 'http://wumo.com/wumo',
-    tegneserieLogo = 'http://wumo.com/images/en_US/m_header_wumo.png',
+    tegneserieLogo = 'http://wumo.com/images/en_US/fb_wumo.png',
     stripUrl = 'http://wumo.com/wumo',
     hour = '10',
     minute = '00'

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rodolphe Töpffer</title>
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Favicons
+    ================================================== -->
+<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+
+<!-- Bootstrap -->
+<link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
+
+<!-- Stylesheet
+    ================================================== -->
+<link rel="stylesheet" type="text/css"  href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/nivo-lightbox/nivo-lightbox.css">
+<link rel="stylesheet" type="text/css" href="css/nivo-lightbox/default.css">
+<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script:400,700" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<!-- Navigation
+    ==========================================-->
+<nav id="menu" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand page-scroll" href="#page-top">Rodolphe Töpffer</a> </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#slack" class="page-scroll">Slack</a></li>
+        <li><a href="#list" class="page-scroll">Comiclist</a></li>
+        <li><a href="#rss" class="page-scroll">RSS</a></li>
+        <li><a href="#contact" class="page-scroll">Contact</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+</nav>
+<!-- Header -->
+<header id="header">
+  <div class="intro">
+    <div class="overlay">
+      <div class="container">
+        <div class="row">
+          <div class="intro-text">
+            <h1>Rodolphe Töpffer</h1>
+            <p>Provides you with comicstrips</p>
+            <a href="#slack" class="btn btn-custom btn-lg page-scroll">Bring me my comics</a> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- About Section -->
+<div id="slack">
+  <div class="container">
+    <div class="row">
+      <div class="fullcenter col-xs-8 col-md-4 ">
+          <a
+              id='slacklink'
+              href="">
+              <img
+                  alt="Add to Slack"
+                  height="40"
+                  width="139"
+                  src="https://platform.slack-edge.com/img/add_to_slack@2x.png"
+                  srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+          </a>
+          <script>
+              var link = "https://slack.com/oauth/authorize?&redirect_uri="+window.location.origin+"/auth&client_id=2609110879.172203570976&scope=incoming-webhook,links:write,bot,chat:write:bot,commands";
+              document.getElementById("slacklink").setAttribute('href', link)
+          </script>
+      </div>
+      <div class="col-xs-8 col-md-8">
+        <div class="about-text">
+          <h2>Add it to your slack!</h2>
+          <hr>
+          <img src="img/slack.jpg" class="img-responsive" alt="Slack preview"> </a> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="list">
+  <div class="section-title text-center center">
+    <div class="overlay">
+        <h2>List of comics</h2>
+        <hr>
+        <p>These are the current available comics</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="categories">
+        <ul class="cat">
+          <li>
+            <ol class="type">
+              <li><a href="#" data-filter="*" class="active">All</a></li>
+              <li><a href="#" data-filter=".norwegian">Norwegian</a></li>
+              <li><a href="#" data-filter=".english">English</a></li>
+            </ol>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="portfolio-items">
+        <div class="col-sm-6 col-md-4 col-lg-4 norwegian">
+          <div class="hover-bg">
+            <div class="portfolio-item">
+
+              <div class="hover-text">
+                <h4>Wumo</h4>
+                <h4>Rss</h4>
+              </div>
+              <img src="http://wumo.com/images/en_US/fb_wumo.png" class="img-responsive" alt="Project Title"> </a> </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-4 norwegian">
+            <div class="hover-bg">
+              <div class="portfolio-item">
+
+              <div class="hover-text">
+                <h4>Pondus</h4>
+                <h4>Rss</h4>
+              </div>
+              <img src="https://connectid.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png" class="img-responsive" alt="Project Title"> </a> </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-4 norwegian">
+          <div class="hover-bg">
+            <div class="portfolio-item">
+              <div class="hover-text">
+                <h4>Lunch</h4>
+                <h4>Rss</h4>
+              </div>
+              <img src="http://lunchstriper.no/assets/graphics/logo.png" class="img-responsive" alt="Project Title"> </a> </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-4 english">
+          <div class="hover-bg">
+            <div class="portfolio-item">
+              <div class="hover-text">
+                <h4>CyanideAndHappiness</h4>
+                <h4>Rss</h4>
+              </div>
+              <img src="http://explosm.net/img/logo.png" class="img-responsive" alt="Project Title"> </a> </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-4 norwegian">
+          <div class="hover-bg">
+            <div class="portfolio-item">
+              <div class="hover-text">
+                <h4>Nemi</h4>
+                <h4>Rss</h4>
+              </div>
+              <img src="http://vignette3.wikia.nocookie.net/cartoonfatness/images/3/3e/Blog_yk_4915575_7599245_tr_logo.png/revision/latest?cb=20140520195208" class="img-responsive" alt="Project Title"> </a> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="rss" class="text-center">
+    <div class="section-title text-center center">
+      <div class="overlay">
+          <h2>RSS</h2>
+          <hr>
+          <p>Use the rss feed to something fun</p>
+      </div>
+    </div>
+    <div class="container">
+      <p>You can use the rss feed for something fun, go to <a href="#list" class="page-scroll">comics list</a> to get the links to the different feeds</p>
+      <img src="img/rss.jpg" class="img-responsive" alt="RSS preview"> </a> </div>
+    </div>
+</div>
+<!-- Contact Section -->
+<div id="contact" class="text-center">
+  <div class="container">
+    <div class="section-title text-center">
+      <p>Contact me on comics@vongohren.me</p>
+    </div>
+</div>
+<div id="footer">
+  <div class="container text-center">
+    <div class="col-md-12">
+      <h3>Made with love in Norway</h3>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="js/jquery.1.11.1.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/SmoothScroll.js"></script>
+<script type="text/javascript" src="js/nivo-lightbox.js"></script>
+<script type="text/javascript" src="js/jquery.isotope.js"></script>
+<script type="text/javascript" src="js/jqBootstrapValidation.js"></script>
+<script type="text/javascript" src="js/contact_me.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

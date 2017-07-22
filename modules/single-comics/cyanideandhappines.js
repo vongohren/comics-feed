@@ -2,7 +2,7 @@ var Feed = require('../feed');
 
 class CyanideAndHappiness extends Feed {
   constructor({
-    name = 'CyanideAndHappiness',
+    name = 'cyanideandhappiness',
     itemDescription = 'CyanideAndHappinessstripe',
     tegneserieSideLink = 'http://explosm.net/',
     tegneserieLogo = 'http://explosm.net/img/logo.png',

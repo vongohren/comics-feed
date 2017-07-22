@@ -1,6 +1,6 @@
-var Feed = require('../feed');
+var Dagbladet = require('./dagbladet');
 
-class Pondus extends Feed {
+class Pondus extends Dagbladet {
   constructor({
     name = 'pondus',
     itemDescription = 'Pondusstripe',

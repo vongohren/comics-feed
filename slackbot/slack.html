@@ -1,0 +1,20 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <a
+            id='slacklink'
+            href="">
+            <img
+                alt="Add to Slack"
+                height="40"
+                width="139"
+                src="https://platform.slack-edge.com/img/add_to_slack.png"
+                srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+        </a>
+        <script>
+            var link = "https://slack.com/oauth/authorize?&redirect_uri="+window.location.origin+"/auth&client_id=2609110879.172203570976&scope=incoming-webhook,links:write,bot,chat:write:bot,commands";
+            document.getElementById("slacklink").setAttribute('href', link)
+        </script>
+    </body>
+</html>

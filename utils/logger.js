@@ -3,7 +3,12 @@ require('winston-papertrail').Papertrail;
 
 const DEV = process.env['npm_lifecycle_event'] === 'dev' ? true : false;
 
-const winstonConsole = new winston.transports.Console()
+const winstonConsole = new winston.transports.Console({
+    prettyPrint: true,
+    colorize: 'all',
+    silent: false,
+    timestamp: false
+})
 
 const exceptionHandlers = [winstonConsole]
 const transports = [winstonConsole]
@@ -43,5 +48,9 @@ class Logger {
 }
 
 const LoggerClass = new Logger();
+
+process.on("unhandledRejection", function(reason, promise) {
+    LoggerClass.log('error', reason)
+});
 
 module.exports = LoggerClass;

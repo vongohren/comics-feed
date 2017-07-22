@@ -4,12 +4,12 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "main": "index.js",
   "engines": {
-    "node": "7.1.0"
+    "node": "7.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "node index.js"
+    "start": "node --harmony index.js",
+    "dev": "node --harmony index.js"
   },
   "keywords": [
     "rss",
@@ -20,17 +20,24 @@
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.3.5",
+    "@slack/client": "^3.9.0",
+    "agenda": "^0.9.1",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
     "cheerio": "^0.20.0",
     "cron": "^1.1.0",
     "express": "^4.13.4",
     "feed": "^0.3.0",
-    "mongoose": "^4.4.12",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.6",
     "node-uuid": "^1.4.7",
     "request": "^2.71.0",
     "slack-node": "^0.1.8",
     "winston": "^2.3.1",
     "winston-papertrail": "^1.0.4",
     "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "mongoui": "^4.1.2"
   }
 }
