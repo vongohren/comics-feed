@@ -26,9 +26,6 @@ class Slackbot {
         this.app.get('/hello', function (req, res) {
             res.send("HELLO THANKS FOR ADDING RODOLPHE");
         });
-        this.app.get('/slack', function (req, res) {
-            res.sendFile(path.join(__dirname+"/slack.html"));
-        });
         this.app.post('/interactive', function(req, res) {
             const body = JSON.parse(req.body.payload)
             const text = body.original_message.text
