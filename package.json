@@ -29,6 +29,7 @@
     "express": "^4.13.4",
     "feed": "^0.3.0",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "mongoose": "^4.9.6",
     "node-uuid": "^1.4.7",
     "request": "^2.71.0",

@@ -43,8 +43,8 @@ const postToTeamWithId = (team_id, channel_id) => {
 }
 
 const isTimeToPost = (subscription) => {
-    const now = moment();
-    return now.hour() >= subscription.postTime.hour && now.minute() >= subscription.postTime.minute
+    const now = moment().tz(subscription.postTime.timeZone);
+    return now.hour() >= subscription.postTime.hour <= now.hour()+4 && now.minute() >= subscription.postTime.minute
 }
 
 const initAgendaForTeam = (team) => {

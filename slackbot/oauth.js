@@ -3,6 +3,7 @@ const Team = require('./models/slack-teams');
 const logger = require('../utils/logger');
 const comics = require('../comics');
 const WebClient = require('@slack/client').WebClient;
+const path = require('path');
 
 module.exports = function(req, res) {
     if (!req.query.code) {
@@ -26,7 +27,7 @@ module.exports = function(req, res) {
                 const team = JSON.parse(body)
                 saveTeam(team);
                 postStartSubscription(team);
-                res.json(body);
+                res.sendFile(path.join(__dirname+"/../landingpage/index.html"));
             }
         })
     }

@@ -7,6 +7,7 @@ module.exports = new Schema({
     datePublished: { type: Number, default: 0 },
     postTime: {
         hour: { type: Number, default: 9 },
-        minute: { type: Number, default: 0 }
+        minute: { type: Number, default: 0 },
+        timeZone: { type: String, default: "Europe/Oslo"}
     }
 })
