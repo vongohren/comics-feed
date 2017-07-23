@@ -12,6 +12,7 @@ class Wumo extends Feed {
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.baseUrl = 'http://wumo.com'
+    this.language = 'norwegian'
   }
 
   extractImageSrc($) {

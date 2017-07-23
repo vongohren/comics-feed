@@ -4,6 +4,15 @@ function main() {
 (function () {
    'use strict';
 
+   $.get('comics', function(data) {
+       var source   = $("#comic-template").html();
+       var template = Handlebars.compile(source);
+       var html    = template(data);
+       console.log(data)
+       $('.portfolio-items').html(html)
+   })
+
+
   	$('a.page-scroll').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
           var target = $(this.hash);

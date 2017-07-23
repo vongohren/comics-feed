@@ -11,6 +11,7 @@ class CyanideAndHappiness extends Feed {
     minute = '00'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
+    this.language = 'english'
   }
 
   extractImageSrc($) {

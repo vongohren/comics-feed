@@ -18,6 +18,31 @@
 <link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
 
+<script id="comic-template" type="text/x-handlebars-template">
+    {{#each this}}
+
+    <div class="col-sm-6 col-md-4 col-lg-4 {{language}}">
+        <div class="hover-bg">
+
+          <div class="portfolio-item">
+              <div class="hover-text">
+                <a class='hover-link' href="{{stripUrl}}" target="_blank" />
+                <h4>{{name}}</h4>
+                <h4><a href="/{{name}}" target="_blank">Rss</a></h4>
+                {{#if mediator}}
+                <h6>Delivered by <a href="{{stripUrl}}" target="_blank">{{mediator}}</a></h6>
+                {{/if}}
+              </div>
+              <img src={{tegneserieLogo}} class="img-responsive" alt="Project Title"> </a>
+          </div>
+        </div>
+
+    </div>
+
+    {{/each}}
+</script>
+
+
 <!-- Stylesheet
     ================================================== -->
 <link rel="stylesheet" type="text/css"  href="css/style.css">
@@ -210,13 +235,12 @@
     </div>
   </div>
 </div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
 <script type="text/javascript" src="js/jquery.1.11.1.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/SmoothScroll.js"></script>
 <script type="text/javascript" src="js/nivo-lightbox.js"></script>
 <script type="text/javascript" src="js/jquery.isotope.js"></script>
-<script type="text/javascript" src="js/jqBootstrapValidation.js"></script>
-<script type="text/javascript" src="js/contact_me.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

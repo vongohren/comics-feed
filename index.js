@@ -23,6 +23,10 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+"/landingpage/index.html"));
 });
 
+app.get('/comics', function (req, res) {
+    res.json(comics)
+})
+
 for(var comic of comics) {
   app.get(`/${comic.name}`, comic.routeFunction.bind(comic));
 }

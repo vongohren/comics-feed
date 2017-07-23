@@ -14,6 +14,7 @@ var itemDescription = 'Xkcd'
 var tegneserieLink = 'http://xkcd.com'
 var tegneserieLogo = 'http://imgs.xkcd.com/static/terrible_small_logo.png'
 var rssUrl = 'http://xkcd.com/rss.xml'
+var language = 'english'
 
 exports.init = function(hour, minute) {
   cronjob(hour, minute, fetch);
