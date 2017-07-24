@@ -44,6 +44,7 @@ const postToTeamWithId = (team_id, channel_id) => {
 
 const isTimeToPost = (subscription) => {
     const now = moment().tz(subscription.postTime.timeZone);
+    console.log(`The time now is ${now} and postTime is ${subscription.postTime.hour}. Is this within the intevall? ${now.hour() >= subscription.postTime.hour <= now.hour()+4} `)
     return now.hour() >= subscription.postTime.hour <= now.hour()+4 && now.minute() >= subscription.postTime.minute
 }
 
