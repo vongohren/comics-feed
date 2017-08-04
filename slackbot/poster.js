@@ -83,7 +83,7 @@ const createAttachments = (entry) => {
                 "color": "#36a64f",
                 "author_name": name,
                 "author_link": comic.tegneserieSideLink,
-                "author_icon": comic.tegneserieLogo,
+                "author_icon": 'http:'+comic.tegneserieLogo,
                 "title": `Dagens ${name}`,
                 "title_link": comic.stripUrl,
                 "image_url": entry.url,

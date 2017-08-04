@@ -5,7 +5,7 @@ class Dilbert extends Feed {
     name = 'dilbert',
     itemDescription = 'Dilbertstripe',
     tegneserieSideLink = 'http://dilbert.com/',
-    tegneserieLogo = 'http://dilbert.com/assets/dilbert-logo-4152bd0c31f7de7443b4bc90abd818da.png',
+    tegneserieLogo = '//dilbert.com/assets/dilbert-logo-4152bd0c31f7de7443b4bc90abd818da.png',
     stripUrl = 'http://dilbert.com/',
     hour = '10',
     minute = '00'

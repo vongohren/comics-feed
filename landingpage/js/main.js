@@ -7,8 +7,12 @@ function main() {
    $.get('comics', function(data) {
        var source   = $("#comic-template").html();
        var template = Handlebars.compile(source);
+       data.forEach(function(comic) {
+           if(comic.name === 'lunch' || comic.name === 'dilbert' ) {
+               comic.tegneserieLogo = '/img/'+comic.name+'-logo.png'
+           }
+       })
        var html    = template(data);
-       console.log(data)
        $('.portfolio-items').html(html)
    })
 
