@@ -2,6 +2,7 @@ const oauth = require('./oauth');
 const path = require('path');
 const interactiveHandler = require('./interactiveHandler');
 const Team = require('./models/slack-teams');
+const logger = require('../utils/logger');
 const initAgendaForTeam = require('./poster').initAgendaForTeam;
 
 class Slackbot {
@@ -15,6 +16,7 @@ class Slackbot {
 
     initAgendaForAllTeams() {
         Team.find({}, function(err, teams) {
+          if(teams.length < 1) logger.log('info', 'No teams to init agenda posting for')
           teams.forEach(function(team) {
             if(team.active) initAgendaForTeam(team)
           });

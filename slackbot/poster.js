@@ -52,6 +52,8 @@ const initAgendaForTeam = (team) => {
     const team_id = team.team_id;
     const channel_id = team.channel_id || team.incoming_webhook.channel_id;
     Agenda.defineTeamPosting(team_id, channel_id, postToTeamWithId);
+    logger.log('info', `Server just started, so posting to ${team.team_name} in channel ${team.incoming_webhook.channel}`)
+    postToTeamWithId(team.team_id, team.incoming_webhook.channel_id)
 }
 
 const fetchEntries = (subscription) => {
