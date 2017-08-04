@@ -335,7 +335,7 @@ header {
 	color: #777
 }
 #rss .section-title {
-	background: #444 url(../img/gallery-bg.jpg) center center no-repeat fixed;
+	background: #444 url(../img/rss-feed.png) center center no-repeat fixed;
 	background-size: cover;
 	margin-bottom: 50px;
 }
@@ -474,8 +474,13 @@ ol.type li a:hover {
 }
 /* Contact Section */
 #contact {
-	padding: 230px 0 0px 0;
 	background: #F6F6F6;
+}
+#contact .img-responsive {
+	max-width: 50%;
+	margin: 0 auto;
+    margin-bottom: 40px;
+	display: block;
 }
 
 #contact .container {
