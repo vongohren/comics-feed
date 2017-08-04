@@ -20,11 +20,12 @@ const postToTeamWithId = (team_id, channel_id) => {
 
         while(tempSubs.length != 0) {
             const subscription = tempSubs.pop();
+            const timeToPost = isTimeToPost(subscription)
             fetchEntries(subscription).then((entries) => {
                 const entry = entries[0];
                 if(
                     !subscription.lastUrlPublished ||
-                    (subscription.lastUrlPublished !== entry.url && isTimeToPost(subscription))
+                    (subscription.lastUrlPublished !== entry.url && timeToPost)
                 ) {
                     postWebhookToSlack(entry, webhook, team.incoming_webhook.channel_id)
                     subscription.lastUrlPublished = entry.url;
@@ -46,7 +47,7 @@ const isTimeToPost = (subscription) => {
     const now = moment().tz(subscription.postTime.timeZone);
     const postTime = now.clone().hour(subscription.postTime.hour)
     const postInterval = postTime.clone().add(2, 'hour')
-    logger.log('info', `The time now is ${now} and postTime is ${postTime}. Is this within the intevall? ${now.isBetween(postTime, postInterval)} `)
+    logger.log('info', `${subscription.name} want to post. The time now is ${now} and postTime is ${postTime}. Is this within the intevall? ${now.isBetween(postTime, postInterval)} `)
     return now.isBetween(postTime, postInterval)
 }
 
