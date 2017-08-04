@@ -7,6 +7,14 @@ body, html {
 	width: 100% !important;
 	height: 100% !important;
 }
+
+.about-text h2 {
+	min-height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
 h2 {
 	margin: 0 0 20px 0;
 	font-weight: 500;
@@ -68,6 +76,10 @@ ul, ol {
 	padding: 0;
 	webkit-padding: 0;
 	moz-padding: 0;
+}
+.about-text hr {
+	display: block;
+    margin: 0 auto;
 }
 hr {
 	height: 2px;
@@ -253,6 +265,10 @@ header {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
+}
+
+#slacklink {
+	margin-bottom: 50px;
 }
 /* Menu Section */
 #list {

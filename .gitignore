@@ -2,3 +2,4 @@ node_modules/
 exportSettingsDev
 exportSettingsStaging
 npm-debug.log
+.DS_Store
