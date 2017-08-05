@@ -110,9 +110,19 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:acti
 	background-color: rgba(248, 248, 248, 1);
 	border-color: rgba(231, 231, 231, 0);
 }
+
+@media (max-width: 400px) {
+	#menu a.navbar-brand {
+		font-size: 28px;
+	}
+}
+@media (min-width: 400px) {
+	#menu a.navbar-brand {
+		font-size: 36px;
+	}
+}
 #menu a.navbar-brand {
 	font-family: 'Dancing Script', cursive;
-	font-size: 36px;
 	color: #8eb640;
 	font-weight: 700;
 	letter-spacing: 1px;
