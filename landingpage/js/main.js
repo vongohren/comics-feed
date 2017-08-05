@@ -3,6 +3,11 @@ function main() {
 
 (function () {
    'use strict';
+   var params = new URLSearchParams(location.search.slice(1))
+   console.log(params.get('added'))
+   if(params.get('added')){
+       $('#slack-feedback').html("Congratulations, check your slack for a message from Rodolphe!🌟")
+   }
 
    $.get('comics', function(data) {
        var source   = $("#comic-template").html();

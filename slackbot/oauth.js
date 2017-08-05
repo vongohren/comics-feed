@@ -27,7 +27,7 @@ module.exports = function(req, res) {
                 const team = JSON.parse(body)
                 saveTeam(team);
                 postStartSubscription(team);
-                res.sendFile(path.join(__dirname+"/../landingpage/index.html"));
+                res.redirect('/?added=true#slack');
             }
         })
     }
