@@ -8,31 +8,28 @@ const moment = require('moment');
 const logger = require('../utils/logger');
 
 const postToTeamWithId = (team_id, channel_id) => {
-    console.log("POSTING EVERY "+process.env.CHECK_INTERVAL+" with id: "+team_id+" and channel_id: "+channel_id)
     const team_query = { team_id: team_id, "incoming_webhook.channel_id": channel_id }
     const promise = Team.find(team_query).exec();
     promise.then(function(teams) {
-
         let update = false;
         const team = teams[teams.length-1]
+        logger.log('info', `Checking for posts every ${process.env.CHECK_INTERVAL} and sending to ${team.team_name}-${team.incoming_webhook.channel}`)
         const subscriptions = team.subscriptions;
         const webhook = team.incoming_webhook.url
         const tempSubs = [...subscriptions];
-
         while(tempSubs.length != 0) {
             const subscription = tempSubs.pop();
-            const timeToPost = isTimeToPost(subscription)
             fetchEntries(subscription).then((entries) => {
                 const entry = entries[0];
-                if(
-                    !subscription.lastUrlPublished ||
-                    (subscription.lastUrlPublished !== entry.url && timeToPost)
-                ) {
-                    logger.log('info', `Trying to post ${subscription.name} to ${team.team_name}-${team.incoming_webhook.channel}`)
-                    postWebhookToSlack(entry, webhook, team)
-                    subscription.lastUrlPublished = entry.url;
-                    subscription.datePublished = moment().format('x')
-                    update = true;
+                if(!subscription.lastUrlPublished || subscription.lastUrlPublished !== entry.url) {
+                    const timeToPost = isTimeToPost(subscription)
+                    if(timeToPost) {
+                        logger.log('info', `Trying to post ${subscription.name} to ${team.team_name}-${team.incoming_webhook.channel}`)
+                        postWebhookToSlack(entry, webhook, team)
+                        subscription.lastUrlPublished = entry.url;
+                        subscription.datePublished = moment().format('x')
+                        update = true;
+                    }
                 }
                 if(update && tempSubs.length == 0) {
                     var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
