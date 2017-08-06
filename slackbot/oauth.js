@@ -125,7 +125,7 @@ const saveTeam = async (team) => {
           if (err) {
             logger.log('error', "Saving new team failed with: " + error)
           } else {
-            logger.log('info',teamObj.team_name+ ' was saved successfully');
+            logger.log('info',`${teamObj.team_name} with ${teamObj.incoming_webhook.channel} is a new team i am posting to, and was saved successfully`);
           }
         });
     } else {

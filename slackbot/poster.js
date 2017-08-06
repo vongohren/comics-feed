@@ -12,6 +12,7 @@ const postToTeamWithId = (team_id, channel_id) => {
     const team_query = { team_id: team_id, "incoming_webhook.channel_id": channel_id }
     const promise = Team.find(team_query).exec();
     promise.then(function(teams) {
+
         let update = false;
         const team = teams[teams.length-1]
         const subscriptions = team.subscriptions;
@@ -27,7 +28,8 @@ const postToTeamWithId = (team_id, channel_id) => {
                     !subscription.lastUrlPublished ||
                     (subscription.lastUrlPublished !== entry.url && timeToPost)
                 ) {
-                    postWebhookToSlack(entry, webhook, team.incoming_webhook.channel_id)
+                    logger.log('info', `Trying to post ${subscription.name} to ${team.team_name}-${team.incoming_webhook.channel}`)
+                    postWebhookToSlack(entry, webhook, team)
                     subscription.lastUrlPublished = entry.url;
                     subscription.datePublished = moment().format('x')
                     update = true;
@@ -45,10 +47,11 @@ const postToTeamWithId = (team_id, channel_id) => {
 
 const isTimeToPost = (subscription) => {
     const now = moment().tz(subscription.postTime.timeZone);
-    const postTime = now.clone().hour(subscription.postTime.hour)
+    const postTime = now.clone().hour(subscription.postTime.hour).minute(subscription.postTime.minute)
     const postInterval = postTime.clone().add(2, 'hour')
-    logger.log('info', `${subscription.name} want to post. The time now is ${now} and postTime is ${postTime}. Is this within the intevall? ${now.isBetween(postTime, postInterval)} `)
-    return now.isBetween(postTime, postInterval)
+    const isBetween = now.isBetween(postTime, postInterval, null, '[]')
+    logger.log('info', `${subscription.name} want to post. The time now is ${now} and postTime is ${postTime}. Is this within the intevall? ${isBetween} `)
+    return isBetween
 }
 
 const initAgendaForTeam = (team) => {
@@ -63,14 +66,14 @@ const fetchEntries = (subscription) => {
     return Entry.find({label:subscription.name}).sort('-date').limit(1).exec();
 }
 
-const postWebhookToSlack = (entry, webhook, channel) => {
+const postWebhookToSlack = (entry, webhook, team) => {
     const hook = new IncomingWebhook(webhook);
     const comicAttachment = createAttachments(entry);
     hook.send({attachments: comicAttachment}, function(err, res) {
         if (err) {
-            console.log('Error:', err);
+            logger.log('error', err);
         } else {
-            console.log('Message sent: '+entry.url);
+            logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}`);
         }
     });
 }
