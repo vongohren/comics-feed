@@ -18,7 +18,7 @@ if(!DEV) {
         host: process.env.LOGHOST,
         port: process.env.LOGPORT,
         colorize: true,
-        program: 'comicFeed'
+        program: process.env.LOGNAME
     })
 
     winstonPapertrail.on('error', function(err) {
