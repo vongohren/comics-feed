@@ -48,7 +48,7 @@ const postToTeamWithId = (team_id, channel_id) => {
 const isTimeToPost = (subscription) => {
     const now = moment().tz(subscription.postTime.timeZone);
     const postTime = now.clone().hour(subscription.postTime.hour).minute(subscription.postTime.minute)
-    const postInterval = postTime.clone().add(2, 'hour')
+    const postInterval = postTime.clone().add(3, 'hour')
     const isBetween = now.isBetween(postTime, postInterval, null, '[]')
     logger.log('info', `${subscription.name} want to post. The time now is ${now} and postTime is ${postTime}. Is this within the intevall? ${isBetween} `)
     return isBetween
