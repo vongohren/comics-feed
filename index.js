@@ -29,6 +29,10 @@ app.get('/comics', function (req, res) {
     res.json(comics)
 })
 
+app.get('/slackurl', function (req, res) {
+    res.send(process.env.SLACK_URL)
+})
+
 for(var comic of comics) {
   app.get(`/${comic.name}`, comic.routeFunction.bind(comic));
 }

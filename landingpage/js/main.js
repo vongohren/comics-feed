@@ -8,6 +8,11 @@ function main() {
        $('#slack-feedback').html("Congratulations, check your slack for a message from Rodolphe!🌟")
    }
 
+   $.get('slackurl', function(data) {
+       var link = data+"&redirect_uri="+window.location.origin;
+       document.getElementById("slacklink").setAttribute('href', link)
+   })
+
    $.get('comics', function(data) {
        var source   = $("#comic-template").html();
        var template = Handlebars.compile(source);
