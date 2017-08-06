@@ -9,7 +9,7 @@ function main() {
    }
 
    $.get('slackurl', function(data) {
-       var link = data+"&redirect_uri="+window.location.origin;
+       var link = data+"&redirect_uri="+window.location.origin+"/auth";
        document.getElementById("slacklink").setAttribute('href', link)
    })
 
