@@ -41,7 +41,7 @@ app.get('/xkcd', xkcd.routeFunction);
 
 new Slackbot(app);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 4000;
 
 app.listen(port, function () {
   logger.log('info', 'Comics app listening on port '+port)
