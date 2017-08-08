@@ -19,8 +19,10 @@ const postToTeamWithId = (team_id, channel_id) => {
         const tempSubs = [...subscriptions];
         while(tempSubs.length != 0) {
             const subscription = tempSubs.pop();
-            fetchEntries(subscription).then((entries) => {
-                const entry = entries[0];
+            fetchEntries(subscription).then((entry) => {
+                if(!entry) {
+                    throw `Entry was null with subscription name ${subscription.name}`
+                }
                 if(!subscription.lastUrlPublished) {
                     update = updateAndPost(subscription, entry, webhook, team);
                 } else if(subscription.lastUrlPublished !== entry.url) {
@@ -35,6 +37,8 @@ const postToTeamWithId = (team_id, channel_id) => {
                         if (err) logger.log('error' `Team subscription update error: ${err}`)
                     })
                 }
+            }).catch( error => {
+                logger.log('error', error)
             })
         }
     });
@@ -66,7 +70,7 @@ const initAgendaForTeam = (team) => {
 }
 
 const fetchEntries = (subscription) => {
-    return Entry.find({label:subscription.name}).sort('-date').limit(1).exec();
+    return Entry.findOne({label:subscription.name}).sort('-date').exec();
 }
 
 const postWebhookToSlack = (entry, webhook, team) => {
