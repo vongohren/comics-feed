@@ -21,14 +21,12 @@ const postToTeamWithId = (team_id, channel_id) => {
             const subscription = tempSubs.pop();
             fetchEntries(subscription).then((entries) => {
                 const entry = entries[0];
-                if(!subscription.lastUrlPublished || subscription.lastUrlPublished !== entry.url) {
+                if(!subscription.lastUrlPublished) {
+                    update = updateAndPost(subscription, entry, webhook, team);
+                } else if(subscription.lastUrlPublished !== entry.url) {
                     const timeToPost = isTimeToPost(subscription)
                     if(timeToPost) {
-                        logger.log('info', `Trying to post ${subscription.name} to ${team.team_name}-${team.incoming_webhook.channel}`)
-                        postWebhookToSlack(entry, webhook, team)
-                        subscription.lastUrlPublished = entry.url;
-                        subscription.datePublished = moment().format('x')
-                        update = true;
+                        update = updateAndPost(subscription, entry, webhook, team);
                     }
                 }
                 if(update && tempSubs.length == 0) {
@@ -40,6 +38,14 @@ const postToTeamWithId = (team_id, channel_id) => {
             })
         }
     });
+}
+
+const updateAndPost = (subscription, entry, webhook, team) => {
+    logger.log('info', `Trying to post ${subscription.name} to ${team.team_name}-${team.incoming_webhook.channel}`)
+    postWebhookToSlack(entry, webhook, team)
+    subscription.lastUrlPublished = entry.url;
+    subscription.datePublished = moment().format('x')
+    return true;
 }
 
 const isTimeToPost = (subscription) => {
