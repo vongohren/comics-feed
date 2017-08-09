@@ -1,5 +1,5 @@
 const request = require('request');
-const Team = require('./models/slack-teams');
+import { Teams } from './repository';
 const logger = require('../utils/logger');
 const comics = require('../comics');
 const WebClient = require('@slack/client').WebClient;

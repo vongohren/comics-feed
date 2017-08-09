@@ -1,4 +1,4 @@
-const Agenda = require('./utils/agenda');
+const Agenda = require('./services/agenda');
 const poster = require('./poster');
 
 module.exports = (body, res) => {

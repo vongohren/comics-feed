@@ -1,9 +1,7 @@
 const oauth = require('./oauth');
-const path = require('path');
 const interactiveHandler = require('./interactiveHandler');
 const Team = require('./models/slack-teams');
-const logger = require('../utils/logger');
-const initAgendaForTeam = require('./poster').initAgendaForTeam;
+import AgendaService from ('./services/agenda')
 
 class Slackbot {
     constructor(app) {
@@ -15,12 +13,7 @@ class Slackbot {
     }
 
     initAgendaForAllTeams() {
-        Team.find({}, function(err, teams) {
-          if(teams.length < 1) logger.log('info', 'No teams to init agenda posting for')
-          teams.forEach(function(team) {
-            if(team.active) initAgendaForTeam(team)
-          });
-        });
+      AgendaService.initAgendaForAllTeams();
     }
 
     initializeRoutes() {
@@ -34,6 +27,7 @@ class Slackbot {
             //TODO: Skummelt med promisset, silent failing på alt inne i then
             promise.then(function(team) {
                 body.team = team
+                const test = body.team.test.test
                 interactiveHandler(body, res)
             })
         })

@@ -1,9 +1,9 @@
-const AgendaUtil = require('agenda');
+const Agenda = require('agenda');
 const logger = require('../../utils/logger');
 
-class Agenda {
+class AgendaService {
     constructor() {
-        this.agenda = new AgendaUtil({db: { address: process.env.MONGODB_URI  , collection: 'agendaJobs', processEvery: '1 minute' }});
+        this.agenda = new Agenda({db: { address: process.env.MONGODB_URI  , collection: 'agendaJobs', processEvery: '1 minute' }});
         this.ready = false;
         this.agenda.on('ready', () => {
             this.ready = true;
@@ -35,9 +35,15 @@ class Agenda {
         })
         this.agenda.every(process.env.CHECK_INTERVAL, jobId, {team_id: team_id, channel_id: channel_id});
     }
+
+    initAgendaForTeam(team, agendaFunction) {
+        const team_id = team.team_id;
+        const channel_id = team.channel_id || team.incoming_webhook.channel_id;
+        this.defineTeamPosting(team_id, channel_id, agendaFunction);
+    }
 }
 
-const agenda = new Agenda()
+const agenda = new AgendaService()
 
 function graceful() {
   agenda._stop();
@@ -46,4 +52,4 @@ function graceful() {
 process.on('SIGTERM', graceful);
 process.on('SIGINT' , graceful);
 
-module.exports = agenda;
+export default agenda;

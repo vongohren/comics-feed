@@ -3,7 +3,7 @@ const Entry = require('../models/comic-entry.js');
 const WebClient = require('@slack/client').WebClient;
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
 const comics = require('../comics');
-const Agenda = require('./utils/agenda');
+const Agenda = require('./services/agenda');
 const moment = require('moment');
 const logger = require('../utils/logger');
 
@@ -61,14 +61,6 @@ const isTimeToPost = (subscription) => {
     return isBetween
 }
 
-const initAgendaForTeam = (team) => {
-    const team_id = team.team_id;
-    const channel_id = team.channel_id || team.incoming_webhook.channel_id;
-    Agenda.defineTeamPosting(team_id, channel_id, postToTeamWithId);
-    logger.log('info', `Server just started, so trying to post to ${team.team_name} in channel ${team.incoming_webhook.channel}`)
-    postToTeamWithId(team.team_id, team.incoming_webhook.channel_id)
-}
-
 const fetchEntries = (subscription) => {
     return Entry.findOne({label:subscription.name}).sort('-date').exec();
 }
@@ -111,6 +103,5 @@ const uppercaseFirst = string => {
 }
 
 module.exports = {
-    postToTeamWithId,
-    initAgendaForTeam
+    postToTeamWithId
 }
