@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --harmony index.js",
-    "dev": "node --harmony index.js"
+    "dev": "node --harmony index.js",
+    "dev-babel": "babel-watch index.js"
   },
   "keywords": [
     "rss",
@@ -39,6 +40,13 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "mongoui": "^4.1.2"
+    "mongoui": "^4.1.2",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-tape-runner": "^2.0.1",
+    "babel-watch": "^2.0.6"
   }
 }

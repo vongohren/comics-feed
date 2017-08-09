@@ -80,7 +80,7 @@ const uppercaseFirst = string => {
 
 const isItAnExistingTeamEntry = (team) => {
     return new Promise((resolve, reject) => {
-        const promise = Team.where("team_id").equals(team.team_id).exec();
+        const promise = Teams.where("team_id").equals(team.team_id).exec();
         promise.then(function(teams) {
             if(teams.length > 0 ){
                 resolve({ team: true, channel: doesChannelExist(teams, team.incoming_webhook.channel_id)})
@@ -101,7 +101,7 @@ const doesChannelExist = (teams, channel_id) => {
 const saveTeam = async (team) => {
     const exists = await isItAnExistingTeamEntry(team);
     if(!exists.team || (exists.team && !exists.channel)) {
-        const newTeam = new Team({
+        const newTeam = new Teams({
             access_token: team.access_token,
             scope: team.scope,
             team_name: team.team_name,
@@ -130,7 +130,7 @@ const saveTeam = async (team) => {
         });
     } else {
         const query = {team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id }
-        Team.update(query, {incoming_webhook: team.incoming_webhook}, (err, raw)=> {
+        Teams.update(query, {incoming_webhook: team.incoming_webhook}, (err, raw)=> {
             if (err) logger.log('error' `Team subscription update error: ${err}`)
             console.log(raw)
         })

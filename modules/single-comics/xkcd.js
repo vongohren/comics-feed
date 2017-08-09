@@ -26,7 +26,7 @@ function fetch() {
     if (!error) {
       xml2js.parseString(xmlBody, function (err, result) {
         var url = result.rss.channel[0].item[0].link[0];
-        $1 = cheerio.load(result.rss.channel[0].item[0].description[0])
+        const $1 = cheerio.load(result.rss.channel[0].item[0].description[0])
         var title = $1("img").attr("title")
         request(url, function (error, response, body) {
           if (!error) {

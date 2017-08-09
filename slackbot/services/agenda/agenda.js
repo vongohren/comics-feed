@@ -1,5 +1,5 @@
 const Agenda = require('agenda');
-const logger = require('../../utils/logger');
+const logger = require('../../../utils/logger');
 
 class AgendaService {
     constructor() {
