@@ -1,7 +1,7 @@
 const winston = require('winston')
 require('winston-papertrail').Papertrail;
 
-const DEV = process.env['npm_lifecycle_event'] === true;
+const DEV = process.env.NODE_ENV !== 'production';
 
 const winstonConsole = new winston.transports.Console({
     prettyPrint: true,
