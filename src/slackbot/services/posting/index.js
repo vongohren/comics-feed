@@ -34,8 +34,9 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
         if(postEntryToSlackWithWebhook(entry, webhook, team)) {
           setSubscriptionData(subscription, entry)
           update = true;
+        } else {
+          logger.log('info', `${subscription.name} failed to post, and did not save to mongoDB`)
         }
-        logger.log('info', `${subscription.name} failed to post, and did not save to mongoDB`)
       }
     }
 
