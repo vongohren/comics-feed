@@ -2,7 +2,7 @@ var Entry = require('../models/comic-entry.js');
 var request = require('request');
 const logger = require('./logger');
 
-export default  (url, name, metadata) => {
+export default (url, name, metadata) => {
   return new Promise( async (resolve, reject) => {
     try {
       const response = await fetchRespons(url);
