@@ -1,8 +1,7 @@
 const oauth = require('./oauth');
-const interactiveHandler = require('./interactiveHandler');
-import { Team } from './repository'
-import { initAgendaForAllTeams } from './services/agenda'
-import { postToChannelWithTeamId } from './services/posting'
+import { initAgendaForAllTeams, toggleAgendaForTeam } from './services/agenda'
+import { interactiveHandler } from './services/slack/handlers'
+
 
 class Slackbot {
     constructor(app) {
@@ -20,21 +19,11 @@ class Slackbot {
     initializeRoutes() {
         this.app.get('/auth', oauth.bind(this));
         this.app.post('/interactive', function(req, res) {
-            const body = JSON.parse(req.body.payload)
-            const text = body.original_message.text
-            console.log(text)
-            const channel_id = text.slice(text.indexOf('#')+1,text.indexOf('>'))
-            console.log(channel_id)
-            console.log(body)
-            const query = {team_id: body.team.id, "incoming_webhook.channel_id": channel_id }
-            postToChannelWithTeamId(channel_id, body.team.id)
-            // var promise = Team.findOneAndUpdate(query, {active:true}).exec()
-            // //TODO: Skummelt med promisset, silent failing på alt inne i then
-            // promise.then(function(team) {
-            //     body.team = team
-            //     const test = body.team.test.test
-            //     interactiveHandler(body, res)
-            // })
+          const body = JSON.parse(req.body.payload)
+          interactiveHandler(body, res)
+        })
+        this.app.post('/switch', function(req, res) {
+          toggleAgendaForTeam(req, res)
         })
     }
 }

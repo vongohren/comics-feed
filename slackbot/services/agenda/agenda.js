@@ -16,6 +16,7 @@ class AgendaService {
         });
     }
 
+
     isReady() {
         return this.ready
     }
@@ -27,10 +28,10 @@ class AgendaService {
         });
     }
 
-    defineTeamPosting(team_id, channel_id, func) {
+    defineTeamPosting(channel_id, team_id, func) {
         const jobId = `${team_id}-${channel_id}`
         this.agenda.define(jobId, function(job, done) {
-            func(job.attrs.data.team_id, job.attrs.data.channel_id)
+            func(job.attrs.data.channel_id, job.attrs.data.team_id)
             done()
         })
         this.agenda.every(process.env.CHECK_INTERVAL, jobId, {team_id: team_id, channel_id: channel_id});
@@ -39,7 +40,26 @@ class AgendaService {
     initAgendaForTeam(team, agendaFunction) {
         const team_id = team.team_id;
         const channel_id = team.channel_id || team.incoming_webhook.channel_id;
-        this.defineTeamPosting(team_id, channel_id, agendaFunction);
+        this.defineTeamPosting(channel_id, team_id, agendaFunction);
+    }
+
+    async disableAgendaForTeam(team) {
+      return new Promise((resolve, reject) => {
+        const team_id = team.team_id;
+        const channel_id = team.channel_id || team.incoming_webhook.channel_id;
+        const jobId = `${team_id}-${channel_id}`
+        this.agenda.cancel({name: jobId}, function(err, numRemoved) {
+          if(err) reject(err)
+          resolve(numRemoved)
+        });
+      })
+    }
+
+    async enableAgendaForTeam(channel_id, team_id, agendaFunction) {
+      return new Promise((resolve, reject) => {
+        this.defineTeamPosting(channel_id, team_id, agendaFunction);
+        resolve(true)
+      })
     }
 }
 

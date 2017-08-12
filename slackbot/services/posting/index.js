@@ -20,14 +20,12 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
   while(tempSubsscriptions.length != 0) {
     const subscription = tempSubsscriptions.pop();
     const entry = await fetchLatestEntry(subscription)
-    console.log("THIS IS TEHE ENTRY")
-    console.log(entry)
     if(!entry) throw `Entry was null with subscription name ${subscription.name}`
 
     if(!subscription.lastUrlPublished) {
       if (postEntryToSlackWithWebhook(entry, webhook, team)) {
         setSubscriptionData(subscription, entry)
-        // update = true
+        update = true
       }
     }
     if(subscription.lastUrlPublished !== entry.url) {
@@ -35,14 +33,15 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
       if(timeToPost) {
         if(postEntryToSlackWithWebhook(entry, webhook, team)) {
           setSubscriptionData(subscription, entry)
-          // update = true;
+          update = true;
         }
+        logger.log('info', `${subscription.name} failed to post, and did not save to mongoDB`)
       }
     }
 
     if(update && tempSubsscriptions.length == 0) {
         var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
-        const result = await Team.update(query, { subscriptions: subscriptions })
+        const result = await Teams.update(query, { subscriptions: subscriptions })
         console.log(result)
     }
   }
