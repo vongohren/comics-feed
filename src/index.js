@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(express.static('landingpage'))
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+"/landingpage/index.html"));
+    res.sendFile(path.join(__dirname+"/../landingpage/index.html"));
 });
 
 app.get('/comics', function (req, res) {
