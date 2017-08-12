@@ -44,7 +44,7 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
         var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
         try {
           const result = await Teams.update(query, { subscriptions: subscriptions })
-          logger.log('info', `${team.team_name} updated the subscriptions!`)
+          logger.log('info', `${team.team_name} updated it's subscriptions!`)
         } catch (e) {
           logger.log('error', `Something went wrong for ${team.team_name} when updating the subscriptions!`)
         }
