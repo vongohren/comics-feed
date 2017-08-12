@@ -13,7 +13,7 @@ export const initAgendaForAllTeams = async () => {
       if(team.active) {
         Agenda.initAgendaForTeam(team, postToChannelWithTeamId)
         logger.log('info', `Server just started, so trying to post to ${team.team_name} in channel ${team.incoming_webhook.channel}`)
-        // postToChannelWithTeamId(team.incoming_webhook.channel_id, team.team_id)
+        postToChannelWithTeamId(team.incoming_webhook.channel_id, team.team_id)
       }
     });
   }
