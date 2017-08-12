@@ -1,7 +1,7 @@
 const winston = require('winston')
 require('winston-papertrail').Papertrail;
 
-const DEV = process.env['npm_lifecycle_event'] === 'dev' ? true : false;
+const DEV = process.env.NODE_ENV !== 'production';
 
 const winstonConsole = new winston.transports.Console({
     prettyPrint: true,
@@ -14,7 +14,7 @@ const exceptionHandlers = [winstonConsole]
 const transports = [winstonConsole]
 
 if(!DEV) {
-    winstonPapertrail = new winston.transports.Papertrail({
+    const winstonPapertrail = new winston.transports.Papertrail({
         host: process.env.LOGHOST,
         port: process.env.LOGPORT,
         colorize: true,
