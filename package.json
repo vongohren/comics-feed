@@ -12,7 +12,6 @@
     "dev": "node --harmony index.js",
     "dev-babel": "babel-watch src/index.js",
     "build": "BABEL_ENV=commonjs babel src -d lib",
-    "preinstall": "npm run build"
   },
   "keywords": [
     "rss",
