@@ -1,82 +1,74 @@
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../../utils/generateFeed');
-var fetchUtil = require('../../utils/fetch');
-var cronjob = require('../../utils/cronjob');
-var xml2js = require('xml2js');
-const logger = require('../../utils/logger');
-var Slack = require('slack-node');
-var apiToken = process.env.XKCD_BOT_TOKEN;
-var slack = new Slack(apiToken);
+import request from 'request';
+import cheerio from 'cheerio';
+import generateFeed from '../../utils/generateFeed';
+import fetchAndSaveImage from '../../utils/fetch';
+import xml2js from 'xml2js';
+import logger from '../../utils/logger';
+import Feed from '../feed';
 
-var name = 'xkcd'
-var itemDescription = 'Xkcd'
-var tegneserieLink = 'http://xkcd.com'
-var tegneserieLogo = '//imgs.xkcd.com/static/terrible_small_logo.png'
-var rssUrl = 'http://xkcd.com/rss.xml'
-var language = 'english'
+class Xkcd extends Feed {
+  constructor({
+    name = 'xkcd',
+    itemDescription = 'Xkcdstripe',
+    tegneserieSideLink = 'https://www.xkcd.com/',
+    tegneserieLogo = 'https://www.xkcd.com/s/0b7742.png',
+    stripUrl = 'https://www.xkcd.com/',
+    hour = '10',
+    minute = '00'
+  }) {
+    super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
+    this.baseUrl = 'https://www.xkcd.com/'
+    this.language = 'english'
+    this.rssUrl = 'http://xkcd.com/rss.xml'
+  }
 
-exports.init = function(hour, minute) {
-  cronjob(hour, minute, fetch);
-  fetch();
-}
+  async fetch() {
+    try{
+      const xmlBody = await this.getRssFeed(this.rssUrl)
+      const xmlJson = await this.parseRssFeed(xmlBody)
+      const url = xmlJson.rss.channel[0].item[0].link[0];
+      const xkcdDocument = cheerio.load(xmlJson.rss.channel[0].item[0].description[0])
+      const title = xkcdDocument("img").attr("title")
+      const pageBody = await this.getPageBody(url)
+      const $ = cheerio.load(pageBody);
+      const imageSrc = "http://"+$('#comic img').attr('src').substring(2);
+      const comicId = url.split("/")[3];
+      const explanationUrl = "http://www.explainxkcd.com/wiki/index.php/"+comicId;
+      const saved = await fetchAndSaveImage(imageSrc, this.name, {
+        explanationUrl: explanationUrl
+      })
+    } catch(err) {
+      console.log(err)
+      logger.log('error', 'XKCD encountered and error '+err)
+    }
+  }
 
-function fetch() {
-  request(rssUrl, function (error, response, xmlBody) {
-    if (!error) {
+  getPageBody(url) {
+    return new Promise((resolve, reject) => {
+      request(url, function (error, response, body) {
+        if(error) reject(error)
+        else resolve(body)
+      })
+    })
+  }
+
+  getRssFeed(rssUrl) {
+    return new Promise((resolve, reject) => {
+      request(rssUrl, function (error, response, xmlBody) {
+        if(error) reject(error)
+        else resolve(xmlBody)
+      })
+    })
+  }
+
+  parseRssFeed(xmlBody) {
+    return new Promise((resolve, reject) => {
       xml2js.parseString(xmlBody, function (err, result) {
-        var url = result.rss.channel[0].item[0].link[0];
-        const $1 = cheerio.load(result.rss.channel[0].item[0].description[0])
-        var title = $1("img").attr("title")
-        request(url, function (error, response, body) {
-          if (!error) {
-            var $ = cheerio.load(body);
-            var imageSrc = "http://"+$('#comic img').attr('src').substring(2);
-            fetchUtil.fetchAndSaveImage(imageSrc, name, {
-              callback: getExplanationAndSendMessageToSlack.bind(this, $, url, title)
-            });
-          } else {
-            logger.log('error', 'XKCD encountered and error '+error)
-          }
-        });
-      });
-    } else {
-      logger.log('error', 'XKCD encountered and error '+error)
-    }
-  });
+        if(err) reject(err)
+        else resolve(result)
+      })
+    })
+  }
 }
 
-function getExplanationAndSendMessageToSlack($, url, title, imageUrl) {
-  var comicId = url.split("/")[3];
-  var explanationUrl = "http://www.explainxkcd.com/wiki/index.php/"+comicId;
-  var fallback = url+" "+explanationUrl+comicId
-  var attachments = [{
-    "fallback": fallback,
-    "color": "#36a64f",
-    "title": title,
-    "image_url": imageUrl,
-    "pretext": explanationUrl
-  }];
-  slack.api('chat.postMessage', {
-    text:'*XKCD with explanation*',
-    channel:process.env.SLACK_CHANNEL,
-    attachments: JSON.stringify(attachments),
-    as_user: true
-  }, function(err, response){
-    if(err) {
-      logger.log('error', 'XKCD slack posting encountered and error '+error)
-    }
-    if(!response.ok) {
-      logger.log('error', 'XKCD got not ok respons ' + response.ok +' with error '+ response.error)
-      logger.log('error', 'Probably not exported XKCD slack bot token')
-    }
-  });
-}
-
-exports.routeFunction = function (req, res) {
-  const obj = generateFeed(name, itemDescription, tegneserieLink, tegneserieLogo)
-  obj.then(function(feed){
-    res.set('Content-Type', 'text/xml');
-    res.send(feed);
-  })
-};
+module.exports = Xkcd;
