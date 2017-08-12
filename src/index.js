@@ -1,6 +1,5 @@
 var express = require('express');
 const path = require('path');
-var xkcd = require('./modules/single-comics/xkcd')
 var mongoose = require('mongoose');
 var Slackbot = require('./slackbot');
 var bodyParser = require('body-parser');
@@ -12,8 +11,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 var comics = comicsStorage.available
-
-xkcd.init(process.env.XKCD_HOUR || '09', process.env.XKCD_MIN || '30')
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,8 +33,6 @@ app.get('/slackurl', function (req, res) {
 for(var comic of comics) {
   app.get(`/${comic.name}`, comic.routeFunction.bind(comic));
 }
-
-app.get('/xkcd', xkcd.routeFunction);
 
 new Slackbot(app);
 

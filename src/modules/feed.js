@@ -1,10 +1,9 @@
-var request = require('request');
-var cheerio = require('cheerio');
-var generateFeed = require('../utils/generateFeed');
-var cronjob = require('../utils/cronjob');
-var generateFeed = require('../utils/generateFeed');
-var fetchUtil = require('../utils/fetch');
-const logger = require('../utils/logger');
+import request from 'request';
+import cheerio from 'cheerio';
+import cronjob from '../utils/cronjob';
+import generateFeed from '../utils/generateFeed';
+import fetchAndSaveImage from '../utils/fetch';
+import logger from '../utils/logger';
 
 
 class Feed {
@@ -15,7 +14,6 @@ class Feed {
     this.tegneserieLogo = tegneserieLogo;
     this.stripUrl = stripUrl;
     cronjob(hour, minute, this.fetch.bind(this))
-    this.fetch();
   }
 
   fetch() {
@@ -25,7 +23,7 @@ class Feed {
         var imageSrc = this.extractImageSrc($);
 
         if(imageSrc) {
-          fetchUtil.fetchAndSaveImage(imageSrc, this.name);
+          fetchAndSaveImage(imageSrc, this.name);
         } else {
           logger.log('error', `Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
         }

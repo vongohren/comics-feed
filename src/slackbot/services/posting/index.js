@@ -20,7 +20,10 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
   while(tempSubsscriptions.length != 0) {
     const subscription = tempSubsscriptions.pop();
     const entry = await fetchLatestEntry(subscription)
-    if(!entry) throw `Entry was null with subscription name ${subscription.name}`
+    if(!entry) {
+      logger.log('error', `Entry was null with subscription name ${subscription.name}`)
+      continue;
+    }
 
     if(!subscription.lastUrlPublished) {
       if (postEntryToSlackWithWebhook(entry, webhook, team)) {
