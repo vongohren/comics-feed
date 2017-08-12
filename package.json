@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-prebuild": "npm install --only=dev",
     "start": "node ./lib/index.js",
     "dev": "node --harmony index.js",
     "dev-babel": "babel-watch src/index.js",
