@@ -11,7 +11,7 @@ class Xkcd extends Feed {
     name = 'xkcd',
     itemDescription = 'Xkcdstripe',
     tegneserieSideLink = 'https://www.xkcd.com/',
-    tegneserieLogo = 'https://www.xkcd.com/s/0b7742.png',
+    tegneserieLogo = '//www.xkcd.com/s/0b7742.png',
     stripUrl = 'https://www.xkcd.com/',
     hour = '10',
     minute = '00'
