@@ -51,6 +51,6 @@ const createXkcdAttachement = (entry) => {
   return {
     "color": "#36a64f",
     "title":"The explanation can be found here",
-    "title_link": entry.metadata.explanationUrl
+    "title_link": entry.metadata.explanationUrl || "I have no explanation url stored"
   }
 }
