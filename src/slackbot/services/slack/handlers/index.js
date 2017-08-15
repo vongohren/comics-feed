@@ -1,5 +1,5 @@
 import interactiveHandlerImpl from './interactiveHandler'
-import subscriptionHandlerImpl from './subscriptionHandler'
+import subscriptionHandlerImpl from './subscriptionConfigHandler'
 
 export const interactiveHandler = (body, res) => {
     switch (body.callback_id) {
@@ -11,4 +11,6 @@ export const interactiveHandler = (body, res) => {
     }
 }
 
-export const subscriptionHandler
+export const subscriptionHandler = (body, res) => {
+
+}
