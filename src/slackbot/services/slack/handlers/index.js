@@ -1,4 +1,5 @@
 import subscriptionHandler from './subscriptionHandler'
+import whoHandlerImpl from './whoHandler'
 
 export const interactiveHandler = (body, res) => {
     switch (body.callback_id) {
@@ -8,4 +9,8 @@ export const interactiveHandler = (body, res) => {
         default:
 
     }
+}
+
+export const whoHandler = (res) => {
+  whoHandlerImpl(res)
 }
