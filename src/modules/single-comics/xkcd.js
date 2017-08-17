@@ -35,7 +35,8 @@ class Xkcd extends Feed {
       const comicId = url.split("/")[3];
       const explanationUrl = "http://www.explainxkcd.com/wiki/index.php/"+comicId;
       const saved = await fetchAndSaveImage(imageSrc, this.name, {
-        explanationUrl: explanationUrl
+        explanationUrl: explanationUrl,
+        xkcdTitle: title
       })
     } catch(err) {
       console.log(err)

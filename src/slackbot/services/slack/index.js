@@ -10,6 +10,12 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
     const comicAttachment = createAttachment(entry);
     if(entry.label === 'xkcd') {
       comicAttachment.text = `Explanation: ${entry.metadata.explanationUrl}`
+      comicAttachment.fields = [
+        {
+          title: entry.metadata.xkcdTitle,
+          short: false
+        }
+      ]
     }
     const hookAttachments = [comicAttachment];
     await hook.send(hookAttachments);
