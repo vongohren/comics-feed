@@ -7,11 +7,18 @@ const comics = require('../../../comics');
 export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
   try {
     const hook = new Webhook(webhook);
-    const comicAttachment = createAttachments(entry);
+    const comicAttachment = createAttachment(entry);
     if(entry.label === 'xkcd') {
-      comicAttachment.push(createXkcdAttachement(entry))
+      comicAttachment.text = `Explanation: ${entry.metadata.explanationUrl}`
+      comicAttachment.fields = [
+        {
+          title: entry.metadata.xkcdTitle,
+          short: false
+        }
+      ]
     }
-    await hook.send(comicAttachment);
+    const hookAttachments = [comicAttachment];
+    await hook.send(hookAttachments);
     logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}`);
     return true;
   } catch (error) {
@@ -21,14 +28,13 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
 
 }
 
-const createAttachments = (entry) => {
+const createAttachment = (entry) => {
   const comic = comics.available.find(comic=> {
     return comic.name === entry.label
   })
 
   const name = uppercaseFirst(comic.name)
-  return [
-          {
+  return {
               "fallback": entry.url,
               "color": "#36a64f",
               "author_name": name,
@@ -40,17 +46,8 @@ const createAttachments = (entry) => {
               "footer": comic.mediator || '',
               "footer_icon": comic.mediatorLogo || ''
           }
-      ]
 }
 
 const uppercaseFirst = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-const createXkcdAttachement = (entry) => {
-  return {
-    "color": "#36a64f",
-    "title":"The explanation can be found here",
-    "title_link": entry.metadata.explanationUrl || "I have no explanation url stored"
-  }
 }

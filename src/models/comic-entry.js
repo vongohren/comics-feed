@@ -5,6 +5,7 @@ module.exports = mongoose.model('entry', {
   date: { type: Date, default: Date.now },
   label: String,
   metadata: {
-    explanationUrl: String
+    explanationUrl: String,
+    xkcdTitle: String
   }
 });

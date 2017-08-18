@@ -1,6 +1,6 @@
 const oauth = require('./oauth');
 import { initAgendaForAllTeams, toggleAgendaForTeam } from './services/agenda'
-import { interactiveHandler, subscriptionHandler } from './services/slack/handlers'
+import { interactiveHandler, subscriptionHandler, whoHandler } from './services/slack/handlers'
 
 
 class Slackbot {
@@ -28,6 +28,9 @@ class Slackbot {
         this.app.post('/subscriptions', function(req, res) {
           const body = JSON.parse(req.body.payload)
           subscriptionHandler(body, res)
+        })
+        this.app.post('/who', function(req, res) {
+          whoHandler(res)
         })
     }
 }
