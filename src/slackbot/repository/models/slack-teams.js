@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Subscriptions = require('./subscriptions');
+import { SubscriptionSchema } from './subscriptions'
 
 module.exports = mongoose.model('slackteams', {
     access_token: String,
@@ -18,5 +18,5 @@ module.exports = mongoose.model('slackteams', {
         bot_user_id: String,
         bot_access_token: String
     },
-    subscriptions: [Subscriptions]
+    subscriptions: [SubscriptionSchema]
 });

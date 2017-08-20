@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-module.exports = new Schema({
+export const SubscriptionSchema = new Schema({
     name: String,
     lastUrlPublished: String,
     datePublished: { type: Number, default: 0 },
@@ -11,3 +11,5 @@ module.exports = new Schema({
         timeZone: { type: String, default: "Europe/Oslo"}
     }
 })
+
+export const model = mongoose.model('Subscriptions', SubscriptionSchema);

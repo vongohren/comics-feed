@@ -2,8 +2,11 @@ import interactiveHandlerImpl from './interactiveHandler'
 import {
   findBasedOnTeamId,
   findBasedOnTeamIdAndUserId,
-  deleteSubscriptionFromTeam } from './subscriptionConfigHandler'
+  deleteSubscriptionFromTeam,
+  addSubscriptionFromTeam
+} from './subscriptionConfigHandler'
 import whoHandlerImpl from './whoHandler'
+
 export const interactiveHandler = (body, res) => {
     switch (body.callback_id) {
         case 'start':
@@ -13,18 +16,19 @@ export const interactiveHandler = (body, res) => {
           findBasedOnTeamIdAndUserId(body.team.id, body.actions[0].value, res)
           break;
         case 'delete-subscription':
-          console.log(body)
           const value = JSON.parse(body.actions[0].value)
           const name = value.name
           const channel = value.channel
-
-          console.log(JSON.parse(body.actions[0].value))
           deleteSubscriptionFromTeam(name, body.team.id, channel, res)
+        case 'add-subscription':
+          const addValue = JSON.parse(body.actions[0].selected_options[0].value)
+          const addName = addValue.name
+          const addChannel = addValue.channel
+          addSubscriptionFromTeam(addName, body.team.id, addChannel, res)
         default:
 
     }
 }
-
 
 export const subscriptionHandler = (body, res) => {
   findBasedOnTeamId(body.team_id, res)

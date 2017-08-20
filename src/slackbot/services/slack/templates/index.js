@@ -1,4 +1,5 @@
 const comics = require('../../../../comics');
+require('../../../utils/stringPrototype')
 
 export const getListOfAllAvailableComics = () => {
   const comicFields = mapComicsToFieldValues()
@@ -50,7 +51,8 @@ export const getSubscriptionsAttachment = (team) => {
     "text": "Found multiple subscriptions on this team",
     "color":"#36A64F",
     "attachments": [
-      ...subscriptionAttachment
+      ...subscriptionAttachment,
+      createSelectSubscription(team)
     ]
   }
 }
@@ -58,7 +60,7 @@ export const getSubscriptionsAttachment = (team) => {
 const mapSubscriptionsToAttachmentsWithButtons = (team) => {
   return team.subscriptions.map(subscription=> {
       return {
-        "title": subscription.name,
+        "title": subscription.name.upperCaseFirstLetter(),
         "attachment_type": "default",
         "callback_id": "delete-subscription",
         "actions": [
@@ -68,8 +70,42 @@ const mapSubscriptionsToAttachmentsWithButtons = (team) => {
               "type": "button",
               "style": "danger",
               "value": JSON.stringify({"name": subscription.name, "channel":team.incoming_webhook.channel_id})
-          },
+          }
         ]
       }
+  })
+}
+
+const createSelectSubscription = (team) => {
+  return {
+    "title": "Wanna add some subscriptions",
+    "callback_id": "add-subscription",
+    "actions": [
+      {
+        "name": "subscription_list",
+        "text": "Pick a subscription",
+        "type": "select",
+        "options": mapOutOptions(comics.available, team)
+      }
+    ]
+  }
+}
+
+const mapOutOptions = (comics, team) => {
+  return filterOutExistingComics(comics, team).map(comic => {
+    return {
+      "text": comic.name.upperCaseFirstLetter(),
+      "value": JSON.stringify({"name": comic.name, "channel":team.incoming_webhook.channel_id})
+    }
+  })
+}
+
+const filterOutExistingComics = (comics, team) => {
+  return comics.filter(comic => {
+    const keep = true;
+    const matches = team.subscriptions.filter(entry => {
+      return entry.name === comic.name
+    })
+    return matches.length < 1
   })
 }

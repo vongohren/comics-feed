@@ -1,4 +1,4 @@
-import { Teams } from '../../../repository'
+import { Teams, SubscriptionsModel } from '../../../repository'
 import { Webhook } from '../slack'
 import { getTeamsAttachment, getSubscriptionsAttachment } from '../templates'
 
@@ -24,6 +24,14 @@ const sendListOfTeams = (teams, res) => {
 export const deleteSubscriptionFromTeam = async (name, team_id, channel_id, res) => {
   const query = {team_id: team_id, "incoming_webhook.channel_id": channel_id}
   const response = await Teams.findOneAndUpdate(query, { "$pull": {subscriptions:{name:name}}}, { "new": true})
+  const subscriptionsAttachment = getSubscriptionsAttachment(response)
+  res.json(subscriptionsAttachment)
+}
+
+export const addSubscriptionFromTeam = async (name, team_id, channel_id, res) => {
+  const query = {team_id: team_id, "incoming_webhook.channel_id": channel_id}
+  const subscription = new SubscriptionsModel({name:name, lastUrlPublished:""})
+  const response = await Teams.findOneAndUpdate(query, { "$push": {subscriptions:subscription}}, { "new": true})
   const subscriptionsAttachment = getSubscriptionsAttachment(response)
   res.json(subscriptionsAttachment)
 }
