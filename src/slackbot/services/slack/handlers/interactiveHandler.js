@@ -11,7 +11,7 @@ export default async (body, res) => {
 
 const subscriptionHandler = async (team, body, res) => {
     const subscriptionAction = body.actions.find(action=> {
-        return action.name === 'subscription';
+        return action.name === 'start';
     })
     if(subscriptionAction.value==='subscribe') {
         const enabled = await enableAgendaForKnownTeam(team.team_id, team.incoming_webhook.channel_id, res);

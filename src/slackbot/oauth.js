@@ -57,12 +57,12 @@ const createMessageAttachments = (team) => {
             {
                 "title": "Activate subscription",
                 "fallback": "Shame... buttons aren't supported in this environment",
-                "callback_id": "subscription",
+                "callback_id": "start",
                 "color": "#2AB27B",
                 "attachment_type": "default",
                 "actions": [
                     {
-                        "name": "subscription",
+                        "name": "start",
                         "text": "Go",
                         "style": "primary",
                         "type": "button",
