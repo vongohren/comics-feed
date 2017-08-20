@@ -43,10 +43,8 @@ class AgendaService {
         this.defineTeamPosting(channel_id, team_id, agendaFunction);
     }
 
-    async disableAgendaForTeam(team) {
+    async disableAgendaForTeam(team_id, channel_id) {
       return new Promise((resolve, reject) => {
-        const team_id = team.team_id;
-        const channel_id = team.channel_id || team.incoming_webhook.channel_id;
         const jobId = `${team_id}-${channel_id}`
         this.agenda.cancel({name: jobId}, function(err, numRemoved) {
           if(err) reject(err)

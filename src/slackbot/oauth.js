@@ -20,9 +20,9 @@ module.exports = function(req, res) {
                 redirect_uri:`https://${req.get('host')}${req.url.split('?')[0]}`
             },
             method: 'GET',
-        }, function (error, response, body) {
-            if (error) {
-                console.log(error);
+        }, function (err, response, body) {
+            if (err) {
+                logger.log('error', "Oauth call to slack failed: " + err)
             } else {
                 const team = JSON.parse(body)
                 saveTeam(team);
@@ -39,9 +39,9 @@ const postStartSubscription = (team) => {
     var web = new WebClient(token);
     web.chat.postMessage(team.user_id, text , {attachments: createMessageAttachments(team), 'as_user': true}, function(err, res) {
         if (err) {
-            console.log('Error:', err);
+          logger.log('error', "Post start failed: " + err)
         } else {
-            console.log('Message sent: ', res);
+          logger.log('info', `Message sent to team: ${team.team_name} and user ${team.user_id}`)
         }
     });
 }
@@ -132,7 +132,7 @@ const saveTeam = async (team) => {
         const query = {team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id }
         Teams.update(query, {incoming_webhook: team.incoming_webhook}, (err, raw)=> {
             if (err) logger.log('error' `Team subscription update error: ${err}`)
-            console.log(raw)
+            logger.log('info',`${team.team_name} with ${team.incoming_webhook.channel} was update with new incomming webhook ${team.incoming_webhook}`);
         })
     }
 

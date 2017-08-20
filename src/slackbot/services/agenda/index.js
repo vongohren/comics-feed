@@ -29,15 +29,12 @@ export const enableAgendaForKnownTeam = async (team_id, channel_id) => {
   }
 }
 
-export const toggleAgendaForTeam = async (req, res) => {
-  if(req.body.text === 'on') enableAgendaForTeam(req,res)
-  else if(req.body.text === 'off') disableAgendaForTeam(req,res)
-  else res.send('Have to use with on or off')
+export const toggleAgendaForTeam = async (toggle, team_id, channel_id, res) => {
+  if(toggle === 'on') enableAgendaForTeam(team_id, channel_id, res)
+  else if(toggle === 'off') disableAgendaForTeam(team_id, channel_id, res)
 }
 
-const disableAgendaForTeam = async (req, res) => {
-  const team_id = req.body.team_id
-  const channel_id = req.body.channel_id
+const disableAgendaForTeam = async (team_id, channel_id, res) => {
   const team_query = { team_id: team_id, 'incoming_webhook.channel_id': channel_id }
   const team = await Teams.findOne(team_query).exec();
   if(!team) {
@@ -46,10 +43,12 @@ const disableAgendaForTeam = async (req, res) => {
     res.send(`Doesn't seem that this ${wording} has a subscription`)
   } else {
     try {
-      const numberDisabled = await Agenda.disableAgendaForTeam(req.body)
+      const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id)
+      await Teams.update(team_query, { active: false })
       res.status(200)
-      res.send(`Disabled ${numberDisabled} subscription. If you want to enable again, use /start command from specific channel`)
+      res.send(`Disabled ${numberDisabled} subscription. If you want to enable again, use /subscriptions and activate again`)
     } catch(e) {
+      logger.log('error', `Could not disable agenda for team ${team_id} and channel ${channel_id}`)
       res.send({
         'response_type': 'ephemeral',
         'text': `Sorry, could not disable. Please try again.`
@@ -58,9 +57,7 @@ const disableAgendaForTeam = async (req, res) => {
   }
 }
 
-const enableAgendaForTeam = async (req, res) => {
-  const team_id = req.body.team_id
-  const channel_id = req.body.channel_id
+const enableAgendaForTeam = async (team_id, channel_id, res) => {
   const team_query = { team_id: team_id, 'incoming_webhook.channel_id': channel_id }
   const team = await Teams.findOne(team_query).exec();
   if(!team) {
@@ -70,9 +67,11 @@ const enableAgendaForTeam = async (req, res) => {
   } else {
     try {
       await Agenda.enableAgendaForTeam(channel_id, team_id, postToChannelWithTeamId)
+      await Teams.update(team_query, { active: true })
       res.status(200)
       res.send(`Enabled subscription.`)
     } catch (e) {
+      logger.log('error', `Could not enable agenda for team ${team_id} and channel ${channel_id}`)
       res.send({
         'response_type': 'ephemeral',
         'text': `Sorry, could not enable. Please try again.`

@@ -18,7 +18,7 @@ const mapComicsToFieldValues = () => {
 export const getTeamsAttachment = (teams) => {
   const teamsAttachment = mapTeamsToAttachmentsWithButtons(teams)
   return {
-    "text": "Found multiple subscriptions on this team",
+    "text": "*Found multiple subscriptions on this team*",
     "color":"#DE9E31",
     "attachments": [
       ...teamsAttachment
@@ -30,7 +30,8 @@ export const getTeamsAttachment = (teams) => {
 const mapTeamsToAttachmentsWithButtons = (teams) => {
   return teams.map(team=> {
       return {
-        "title": team.incoming_webhook.channel,
+        "title": `Channel - ${team.incoming_webhook.channel}`,
+        "text": `Controlled by <@${team.user_id}>`,
         "attachment_type": "default",
         "callback_id": "subscription",
         "actions": [
@@ -48,11 +49,12 @@ const mapTeamsToAttachmentsWithButtons = (teams) => {
 export const getSubscriptionsAttachment = (team) => {
   const subscriptionAttachment = mapSubscriptionsToAttachmentsWithButtons(team)
   return {
-    "text": "Found multiple subscriptions on this team",
+    "text": `*Here are the current posting comics for channel:* <#${team.incoming_webhook.channel_id}>`,
     "color":"#36A64F",
     "attachments": [
       ...subscriptionAttachment,
-      createSelectSubscription(team)
+      createSelectSubscription(team),
+      createPauseSubscription(team)
     ]
   }
 }
@@ -86,6 +88,26 @@ const createSelectSubscription = (team) => {
         "text": "Pick a subscription",
         "type": "select",
         "options": mapOutOptions(comics.available, team)
+      }
+    ]
+  }
+}
+
+const createPauseSubscription = (team) => {
+  const title = team.active ? "Want to pause the entire subscription" : "Want to active the entire subscription again"
+  const style = team.active ? "danger" : "primary"
+  const button_text = team.active ? "Pause" : "Start"
+  const toggle_value = team.active ? "off" : "on"
+  return {
+    "title": title,
+    "callback_id": "pause-subscription",
+    "actions": [
+      {
+        "name": "pause-subscription",
+        "text": button_text,
+        "type": "button",
+        "style": style,
+        "value": JSON.stringify({"toggle": toggle_value, "channel":team.incoming_webhook.channel_id})
       }
     ]
   }
