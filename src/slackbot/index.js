@@ -1,3 +1,4 @@
+require('./utils/stringPrototype')
 const oauth = require('./oauth');
 import { initAgendaForAllTeams, toggleAgendaForTeam } from './services/agenda'
 import { interactiveHandler, subscriptionHandler, whoHandler } from './services/slack/handlers'

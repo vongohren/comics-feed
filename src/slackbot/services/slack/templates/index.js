@@ -1,5 +1,4 @@
 const comics = require('../../../../comics');
-require('../../../utils/stringPrototype')
 
 export const getListOfAllAvailableComics = () => {
   const comicFields = mapComicsToFieldValues()
