@@ -44,7 +44,7 @@ export const interactiveHandler = (body, res) => {
         } else if(action.name === 'pause-subscription') {
           pauseSubscriptionFromTeam(toggle, body.team.id, pauseChannel, res)
         } else {
-          res.json({})
+          res.json({"text": "🤙"})
         }
         break;
       case 'remove-subscription':
