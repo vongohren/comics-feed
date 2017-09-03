@@ -168,7 +168,7 @@ const createPauseSubscription = (team) => {
       },
       {
         "name": "cancel",
-        "text": "Cancel",
+        "text": "Done",
         "type": "button",
         "style": "primary",
         "value": JSON.stringify({"channel":team.incoming_webhook.channel_id})
