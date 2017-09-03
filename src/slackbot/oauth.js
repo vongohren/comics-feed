@@ -50,7 +50,7 @@ const postStartSubscription = (team) => {
     var token = team.bot.bot_access_token;
     const channel_id = team.incoming_webhook.channel_id
     const channel_id_text = !team.directmessage ? `<#${channel_id}>` : showDirectOrChannel(team.incoming_webhook.channel)
-    var text =`Hello there 👋 I, Rodolphe, will be publishing comic strips, when they are published, to ${channel_id_text} \nThis subscription can be controlled through my command: /subscriptions 🚀 \nThe following list is the default list:`;
+    var text =`Hello there 👋 I, Rodolphe, will be sending comic strips, when they are published, to ${channel_id_text} \nThis subscription can be controlled through my command: /subscriptions 🚀 \nThe following list is the default list:`;
     var web = new WebClient(token);
     web.chat.postMessage(team.user_id, text , {attachments: createMessageAttachments(team), 'as_user': true}, function(err, res) {
         if (err) {
