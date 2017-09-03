@@ -1,4 +1,18 @@
 const comics = require('../../../../comics');
+import { showDirectOrChannel } from '../../../utils'
+export {
+  getConfirmRemovalAttachment,
+  getThankYouForHavingMeAttachment,
+  getCheerForStaying
+} from './removeTeamTemplates'
+
+export const getNoSubscriptionAttachment = () => {
+  return {
+    "text": "There are no subscriptions😊 If you want one visit https://comics.vongohren.me",
+    "color":"#DE9E31"
+  }
+}
+
 
 export const getListOfAllAvailableComics = () => {
   const comicFields = mapComicsToFieldValues()
@@ -16,8 +30,9 @@ const mapComicsToFieldValues = () => {
 
 export const getTeamsAttachment = (teams) => {
   const teamsAttachment = mapTeamsToAttachmentsWithButtons(teams)
+  const partialText = teams.length < 2 ? "a subscription" : "multiple subscriptions"
   return {
-    "text": "*Found multiple subscriptions on this team*",
+    "text": `Found ${partialText} on this team`,
     "color":"#DE9E31",
     "attachments": [
       ...teamsAttachment
@@ -47,8 +62,10 @@ const mapTeamsToAttachmentsWithButtons = (teams) => {
 
 export const getSubscriptionsAttachment = (team) => {
   const subscriptionAttachment = mapSubscriptionsToAttachmentsWithButtons(team)
+  const channel_id = team.incoming_webhook.channel_id
+  const channel_id_text = !team.directmessage ? `<#${channel_id}>` : showDirectOrChannel(team.incoming_webhook.channel)
   return {
-    "text": `*Here are the current posting comics for channel:* <#${team.incoming_webhook.channel_id}>`,
+    "text": `Here are the current posting comics for channel: ${channel_id_text}`,
     "color":"#36A64F",
     "attachments": [
       ...subscriptionAttachment,
@@ -107,6 +124,13 @@ const createPauseSubscription = (team) => {
         "type": "button",
         "style": style,
         "value": JSON.stringify({"toggle": toggle_value, "channel":team.incoming_webhook.channel_id})
+      },
+      {
+        "name": "remove-subscription",
+        "text": "Delete",
+        "type": "button",
+        "style": "danger",
+        "value": JSON.stringify({"channel":team.incoming_webhook.channel_id})
       }
     ]
   }

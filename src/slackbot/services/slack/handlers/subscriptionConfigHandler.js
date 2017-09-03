@@ -1,12 +1,20 @@
 import { Teams, SubscriptionsModel } from '../../../repository'
 import { Webhook } from '../slack'
-import { getTeamsAttachment, getSubscriptionsAttachment } from '../templates'
-import { toggleAgendaForTeam } from '../../agenda'
+import {
+  getTeamsAttachment,
+  getSubscriptionsAttachment,
+  getThankYouForHavingMeAttachment,
+  getConfirmRemovalAttachment,
+  getCheerForStaying,
+  getNoSubscriptionAttachment
+} from '../templates'
+import { toggleAgendaForTeam, deleteAgendaForTeam } from '../../agenda'
 
 export const findBasedOnTeamId = async (team_id, res) => {
   const query = {team_id: team_id}
   const teams = await Teams.find(query)
-  if(teams.length > 1) sendListOfTeams(teams, res)
+  if(teams.length > 0) sendListOfTeams(teams, res)
+  else sendNoSubscriptions(res)
 }
 
 export const findBasedOnTeamIdAndUserId = async (team_id, channel_id, user, res) => {
@@ -30,6 +38,11 @@ const sendListOfTeams = (teams, res) => {
   res.json(teamsAttachment)
 }
 
+const sendNoSubscriptions = (res) => {
+  const noSubscriptionAttachment = getNoSubscriptionAttachment();
+  res.json(noSubscriptionAttachment)
+}
+
 export const deleteSubscriptionFromTeam = async (name, team_id, channel_id, res) => {
   const query = {team_id: team_id, "incoming_webhook.channel_id": channel_id}
   const response = await Teams.findOneAndUpdate(query, { "$pull": {subscriptions:{name:name}}}, { "new": true})
@@ -47,4 +60,22 @@ export const addSubscriptionFromTeam = async (name, team_id, channel_id, res) =>
 
 export const pauseSubscriptionFromTeam = async (toggle, team_id, channel_id, res) => {
   toggleAgendaForTeam(toggle, team_id, channel_id, res)
+}
+
+export const deleteTeamSubscription = async(team_id, channel_id, res, confirmation) => {
+  const query = {team_id: team_id, "incoming_webhook.channel_id": channel_id}
+  if(confirmation) {
+    await deleteAgendaForTeam(team_id, channel_id)
+    const response = await Teams.deleteOne(query)
+    const thankYouAttachment = getThankYouForHavingMeAttachment()
+    res.json(thankYouAttachment)
+  } else {
+    const team = await Teams.findOne(query)
+    const confirmAttachment = getConfirmRemovalAttachment(team, channel_id)
+    res.json(confirmAttachment)
+  }
+}
+
+export const cheerForStaying = async (res) => {
+  res.json(getCheerForStaying())
 }

@@ -1,17 +1,22 @@
-const request = require('request');
+const request = require('request-promise');
 import { Teams } from './repository';
 const logger = require('../utils/logger');
 const comics = require('../comics');
 const WebClient = require('@slack/client').WebClient;
 const path = require('path');
+import { showDirectOrChannel } from './utils'
 
-module.exports = function(req, res) {
-    if (!req.query.code) {
-        logger.log('error', "Looks like we're not getting oauth code")
-        res.status(500);
-        res.send({"Error": "Looks like we're not getting code."});
+module.exports = async function(req, res) {
+    if(req.query.error === 'access_denied') {
+      res.redirect('/');
+      return;
+    } else if (!req.query.code) {
+      logger.log('error', "Looks like we're not getting oauth code")
+      res.status(500);
+      res.send({"Error": "Looks like we're not getting code. Info sent to web owner"});
     } else {
-        request({
+      try {
+        const opt = {
             url: 'https://slack.com/api/oauth.access',
             qs: {
                 code: req.query.code,
@@ -20,22 +25,29 @@ module.exports = function(req, res) {
                 redirect_uri:`https://${req.get('host')}${req.url.split('?')[0]}`
             },
             method: 'GET',
-        }, function (err, response, body) {
-            if (err) {
-                logger.log('error', "Oauth call to slack failed: " + err)
-            } else {
-                const team = JSON.parse(body)
-                saveTeam(team);
-                postStartSubscription(team);
-                res.redirect('/?added=true#slack');
-            }
-        })
+        }
+        const data = await request(opt)
+        const team = JSON.parse(data)
+        const channel_id = team.incoming_webhook.channel_id
+        if(channel_id.startsWith('G') || channel_id.startsWith('D')) {
+          team.directmessage = true
+        } else {
+          team.directmessage = false
+        }
+        saveTeam(team);
+        postStartSubscription(team);
+        res.redirect('/?added=true#slack');
+      } catch (err) {
+        logger.log('error', "Oauth call to slack failed: " + err)
+        res.redirect('/?failed=true');
+      }
     }
 }
 
 const postStartSubscription = (team) => {
     var token = team.bot.bot_access_token;
-    var text = `Hello there, I will be publishing comic strips daily to <#${team.incoming_webhook.channel_id}>`
+    const channel_id_text = !team.directmessage ? `<#${channel_id}>` : showDirectOrChannel(team.incoming_webhook.channel)
+    var text = `Hello there, I will be publishing comic strips daily to ${channel_id_text}`;
     var web = new WebClient(token);
     web.chat.postMessage(team.user_id, text , {attachments: createMessageAttachments(team), 'as_user': true}, function(err, res) {
         if (err) {
@@ -47,30 +59,31 @@ const postStartSubscription = (team) => {
 }
 
 const createMessageAttachments = (team) => {
-    return [
-    		{
-    			"title":"Defualt subscription list",
-                "fields": comics.defaultSubscription.map(comic=> {
-                    return {title: uppercaseFirst(comic.name), value: comic.tegneserieSideLink}
-                }),
-    		},
-            {
-                "title": "Activate subscription",
-                "fallback": "Shame... buttons aren't supported in this environment",
-                "callback_id": "start",
-                "color": "#2AB27B",
-                "attachment_type": "default",
-                "actions": [
-                    {
-                        "name": "start",
-                        "text": "Go",
-                        "style": "primary",
-                        "type": "button",
-                        "value": "subscribe"
-                    }
-                ]
-            }
-        ]
+  const actionValue = JSON.stringify({"value": "subscribe", "channel":team.incoming_webhook.channel_id})
+  return [
+  		{
+  			"title":"Defualt subscription list",
+              "fields": comics.defaultSubscription.map(comic=> {
+                  return {title: uppercaseFirst(comic.name), value: comic.tegneserieSideLink}
+              }),
+  		},
+          {
+              "title": "Activate subscription",
+              "fallback": "Shame... buttons aren't supported in this environment",
+              "callback_id": "start",
+              "color": "#2AB27B",
+              "attachment_type": "default",
+              "actions": [
+                  {
+                      "name": "start",
+                      "text": "Go",
+                      "style": "primary",
+                      "type": "button",
+                      "value": actionValue
+                  }
+              ]
+          }
+      ]
 }
 
 
@@ -119,7 +132,8 @@ const saveTeam = async (team) => {
             },
             subscriptions: comics.defaultSubscription.map(comic => {
                 return {name: comic.name, lastUrlPublished:''}
-            })
+            }),
+            directmessage: team.directmessage
         })
         newTeam.save(function (err, teamObj) {
           if (err) {
@@ -132,7 +146,7 @@ const saveTeam = async (team) => {
         const query = {team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id }
         Teams.update(query, {incoming_webhook: team.incoming_webhook}, (err, raw)=> {
             if (err) logger.log('error' `Team subscription update error: ${err}`)
-            logger.log('info',`${team.team_name} with ${team.incoming_webhook.channel} was update with new incomming webhook ${team.incoming_webhook}`);
+            logger.log('info',`${team.team_name} with ${team.incoming_webhook.channel} was update with new incomming webhook ${team.incoming_webhook.channel}`);
         })
     }
 

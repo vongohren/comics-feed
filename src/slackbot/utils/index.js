@@ -1,0 +1,3 @@
+export {
+  showDirectOrChannel
+} from './slackStringHelpers'

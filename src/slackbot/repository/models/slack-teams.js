@@ -8,6 +8,7 @@ module.exports = mongoose.model('slackteams', {
     team_id: String,
     user_id: String,
     active: { type: Boolean, default: false },
+    directmessage: { type: Boolean, default: false }, 
     incoming_webhook: {
         url: String,
         channel: String,

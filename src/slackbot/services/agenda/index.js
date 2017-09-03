@@ -34,6 +34,11 @@ export const toggleAgendaForTeam = async (toggle, team_id, channel_id, res) => {
   else if(toggle === 'off') disableAgendaForTeam(team_id, channel_id, res)
 }
 
+export const deleteAgendaForTeam = async (team_id, channel_id) => {
+  const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id)
+  console.log(numberDisabled)
+}
+
 const disableAgendaForTeam = async (team_id, channel_id, res) => {
   const team_query = { team_id: team_id, 'incoming_webhook.channel_id': channel_id }
   const team = await Teams.findOne(team_query).exec();
@@ -56,6 +61,8 @@ const disableAgendaForTeam = async (team_id, channel_id, res) => {
     }
   }
 }
+
+
 
 const enableAgendaForTeam = async (team_id, channel_id, res) => {
   const team_query = { team_id: team_id, 'incoming_webhook.channel_id': channel_id }
