@@ -8,7 +8,8 @@ import {
   deleteTeamSubscription,
   cheerForStaying
 } from './subscriptionConfigHandler'
-import whoHandlerImpl from './whoHandler'
+export whoHandler from './whoHandler'
+export suggestHandler from './suggestHandler'
 
 export const interactiveHandler = (body, res) => {
   let action = {}
@@ -60,7 +61,4 @@ export const interactiveHandler = (body, res) => {
 
 export const subscriptionHandler = (body, res) => {
   findBasedOnTeamId(body.team_id, res)
-}
-export const whoHandler = (res) => {
-  whoHandlerImpl(res)
 }

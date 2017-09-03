@@ -28,7 +28,9 @@ module.exports = async function(req, res) {
         }
         const data = await request(opt)
         const team = JSON.parse(data)
+        console.log(team)
         const channel_id = team.incoming_webhook.channel_id
+        console.log(channel_id)
         if(channel_id.startsWith('G') || channel_id.startsWith('D')) {
           team.directmessage = true
         } else {
@@ -46,8 +48,9 @@ module.exports = async function(req, res) {
 
 const postStartSubscription = (team) => {
     var token = team.bot.bot_access_token;
+    const channel_id = team.incoming_webhook.channel_id
     const channel_id_text = !team.directmessage ? `<#${channel_id}>` : showDirectOrChannel(team.incoming_webhook.channel)
-    var text = `Hello there, I will be publishing comic strips daily to ${channel_id_text}`;
+    var text =`Hello there 👋 I, Rodolphe, will be publishing comic strips, when they are published, to ${channel_id_text} \nThis subscription can be controlled through my command: /subscriptions 🚀 \nThe following list is the default list:`;
     var web = new WebClient(token);
     web.chat.postMessage(team.user_id, text , {attachments: createMessageAttachments(team), 'as_user': true}, function(err, res) {
         if (err) {
@@ -62,10 +65,13 @@ const createMessageAttachments = (team) => {
   const actionValue = JSON.stringify({"value": "subscribe", "channel":team.incoming_webhook.channel_id})
   return [
   		{
-  			"title":"Defualt subscription list",
-              "fields": comics.defaultSubscription.map(comic=> {
-                  return {title: uppercaseFirst(comic.name), value: comic.tegneserieSideLink}
-              }),
+        "color": "#2AB27B",
+        "fields": comics.defaultSubscription.map(comic=> {
+            return {
+              title: uppercaseFirst(comic.name),
+              value: comic.tegneserieSideLink,
+            }
+        }),
   		},
           {
               "title": "Activate subscription",

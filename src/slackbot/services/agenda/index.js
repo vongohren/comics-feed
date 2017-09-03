@@ -2,6 +2,7 @@ import { Teams } from '../../repository/'
 import Agenda from './agenda'
 import { postToChannelWithTeamId } from '../posting'
 const logger = require('../../../utils/logger');
+import { getSubscriptionEnabled, getSubscriptionDisabled } from '../slack/templates'
 
 export const initAgendaForAllTeams = async () => {
   const teams = await Teams.find({})
@@ -51,7 +52,7 @@ const disableAgendaForTeam = async (team_id, channel_id, res) => {
       const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id)
       await Teams.update(team_query, { active: false })
       res.status(200)
-      res.send(`Disabled ${numberDisabled} subscription. If you want to enable again, use /subscriptions and activate again`)
+      res.json(getSubscriptionDisabled())
     } catch(e) {
       logger.log('error', `Could not disable agenda for team ${team_id} and channel ${channel_id}`)
       res.send({
@@ -76,7 +77,7 @@ const enableAgendaForTeam = async (team_id, channel_id, res) => {
       await Agenda.enableAgendaForTeam(channel_id, team_id, postToChannelWithTeamId)
       await Teams.update(team_query, { active: true })
       res.status(200)
-      res.send(`Enabled subscription.`)
+      res.json(getSubscriptionEnabled())
     } catch (e) {
       logger.log('error', `Could not enable agenda for team ${team_id} and channel ${channel_id}`)
       res.send({
