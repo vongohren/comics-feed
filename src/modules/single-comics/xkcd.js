@@ -39,7 +39,6 @@ class Xkcd extends Feed {
         xkcdTitle: title
       })
     } catch(err) {
-      console.log(err)
       logger.log('error', 'XKCD encountered and error '+err)
     }
   }

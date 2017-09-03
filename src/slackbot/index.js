@@ -1,7 +1,12 @@
+require('./utils/stringPrototype')
 const oauth = require('./oauth');
-import { initAgendaForAllTeams, toggleAgendaForTeam } from './services/agenda'
-import { interactiveHandler, whoHandler } from './services/slack/handlers'
-
+import { initAgendaForAllTeams } from './services/agenda'
+import {
+  interactiveHandler,
+  subscriptionHandler,
+  whoHandler,
+  suggestHandler
+} from './services/slack/handlers'
 
 class Slackbot {
     constructor(app) {
@@ -22,11 +27,14 @@ class Slackbot {
           const body = JSON.parse(req.body.payload)
           interactiveHandler(body, res)
         })
-        this.app.post('/switch', function(req, res) {
-          toggleAgendaForTeam(req, res)
+        this.app.post('/subscriptions', function(req, res) {
+          subscriptionHandler(req.body, res)
         })
         this.app.post('/who', function(req, res) {
           whoHandler(res)
+        })
+        this.app.post('/suggest', function(req, res) {
+          suggestHandler(req.body.text, res)
         })
     }
 }
