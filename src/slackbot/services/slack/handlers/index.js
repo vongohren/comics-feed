@@ -41,8 +41,10 @@ export const interactiveHandler = (body, res) => {
         const pauseChannel = pauseValue.channel
         if(action.name === 'remove-subscription') {
           deleteTeamSubscription(body.team.id, pauseChannel, res)
-        } else {
+        } else if(action.name === 'pause-subscription') {
           pauseSubscriptionFromTeam(toggle, body.team.id, pauseChannel, res)
+        } else {
+          res.json({})
         }
         break;
       case 'remove-subscription':
