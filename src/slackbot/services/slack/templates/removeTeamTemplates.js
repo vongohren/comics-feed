@@ -4,7 +4,7 @@ export const getConfirmRemovalAttachment = (team, channel_id) => {
   const attachments = [];
   const channel_id_text = !team.directmessage ? `<#${channel_id}>` : showDirectOrChannel(team.incoming_webhook.channel)
 
-  attachments.push(createYesNoCombo(channel_id_text))
+  attachments.push(createYesNoCombo(channel_id, channel_id_text))
   if(team.active) {
     attachments.push(createPauseAttachment(team, channel_id))
   }
@@ -13,7 +13,7 @@ export const getConfirmRemovalAttachment = (team, channel_id) => {
   }
 }
 
-const createYesNoCombo = (channel_id_text) => {
+const createYesNoCombo = (channel_id, channel_id_text) => {
   return {
     "title": `Do you want to delete the subscription from channel ${channel_id_text}? 😔`,
     "callback_id": "remove-subscription",
