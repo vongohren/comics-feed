@@ -13,7 +13,7 @@ export const getConfirmRemovalAttachment = (team, channel_id) => {
   }
 }
 
-const createYesNoCombo = (channel_id) => {
+const createYesNoCombo = (channel_id_text) => {
   return {
     "title": `Do you want to delete the subscription from channel ${channel_id_text}? 😔`,
     "callback_id": "remove-subscription",
