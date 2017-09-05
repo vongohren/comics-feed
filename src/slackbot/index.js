@@ -34,7 +34,7 @@ class Slackbot {
           whoHandler(res)
         })
         this.app.post('/suggest', function(req, res) {
-          suggestHandler(req.body.text, res)
+          suggestHandler(req.body, res)
         })
     }
 }

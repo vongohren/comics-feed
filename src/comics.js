@@ -5,8 +5,9 @@ var Wumo = new (require('./modules/single-comics/wumo'))({})
 var Cyanideandhappines = new (require('./modules/single-comics/cyanideandhappines'))({})
 var Dilbert = new (require('./modules/single-comics/dilbert'))({})
 var Xkcd = new (require('./modules/single-comics/xkcd'))({})
+var ShermansLagoon = new (require('./modules/single-comics/shermanslagoon'))({})
 
-const available = [ Lunch, Pondus, Nemi, Wumo, Cyanideandhappines, Dilbert, Xkcd ];
+const available = [ Lunch, Pondus, Nemi, Wumo, Cyanideandhappines, Dilbert, Xkcd, ShermansLagoon ];
 
 for(var comic of available) {
   comic.fetch()
