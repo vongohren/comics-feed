@@ -101,9 +101,7 @@ const selectRightOrderForAttachments = (team, subscriptionAttachment) => {
 const mapSubscriptionsToAttachmentsWithButtons = (team) => {
   return team.subscriptions.map(subscription=> {
     const matchingComic = comics.available.find(comic => {
-      console.log(comic)
-      console.log(subscription)
-      comic.name == subscription.name
+      return comic.name === subscription.name
     })
     return {
       "title": `${subscription.name.upperCaseFirstLetter()} - (${matchingComic.language.upperCaseFirstLetter()})`,
