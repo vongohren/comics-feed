@@ -100,21 +100,24 @@ const selectRightOrderForAttachments = (team, subscriptionAttachment) => {
 
 const mapSubscriptionsToAttachmentsWithButtons = (team) => {
   return team.subscriptions.map(subscription=> {
-      return {
-        "title": `${subscription.name.upperCaseFirstLetter()}`,
-        "attachment_type": "default",
-        "color": "#2AB27B",
-        "callback_id": "delete-subscription",
-        "actions": [
-          {
-              "name": "subscription",
-              "text": "X",
-              "type": "button",
-              "style": "danger",
-              "value": JSON.stringify({"name": subscription.name, "channel":team.incoming_webhook.channel_id})
-          }
-        ]
-      }
+    const matchingComic = comics.available.find(comic => {
+      comic.name == subscription.name
+    })
+    return {
+      "title": `${subscription.name.upperCaseFirstLetter()} - (${matchingComic.language.upperCaseFirstLetter()})`,
+      "attachment_type": "default",
+      "color": "#2AB27B",
+      "callback_id": "delete-subscription",
+      "actions": [
+        {
+            "name": "subscription",
+            "text": "X",
+            "type": "button",
+            "style": "danger",
+            "value": JSON.stringify({"name": subscription.name, "channel":team.incoming_webhook.channel_id})
+        }
+      ]
+    }
   })
 }
 
@@ -180,7 +183,7 @@ const createPauseSubscription = (team) => {
 const mapOutOptions = (comics, team) => {
   return filterOutExistingComics(comics, team).map(comic => {
     return {
-      "text": `${comic.name.upperCaseFirstLetter()}`,
+      "text": `${comic.name.upperCaseFirstLetter()} - (${comic.language.upperCaseFirstLetter()})`,
       "value": JSON.stringify({"name": comic.name, "channel":team.incoming_webhook.channel_id})
     }
   })
@@ -188,7 +191,6 @@ const mapOutOptions = (comics, team) => {
 
 const filterOutExistingComics = (comics, team) => {
   return comics.filter(comic => {
-    const keep = true;
     const matches = team.subscriptions.filter(entry => {
       return entry.name === comic.name
     })

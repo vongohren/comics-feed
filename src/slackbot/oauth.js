@@ -68,7 +68,7 @@ const createMessageAttachments = (team) => {
         "color": "#2AB27B",
         "fields": comics.defaultSubscription.map(comic=> {
             return {
-              title: uppercaseFirst(comic.name),
+              title: `${comic.name.upperCaseFirstLetter()} - (${comic.language.upperCaseFirstLetter()})`,
               value: comic.tegneserieSideLink,
             }
         }),
@@ -90,11 +90,6 @@ const createMessageAttachments = (team) => {
               ]
           }
       ]
-}
-
-
-const uppercaseFirst = string => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const isItAnExistingTeamEntry = (team) => {
