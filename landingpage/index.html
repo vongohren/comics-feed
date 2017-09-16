@@ -15,7 +15,8 @@
 <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
 
 <!-- Bootstrap -->
-<link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/wallop.css">
 <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
 
 <script id="comic-template" type="text/x-handlebars-template">
@@ -117,7 +118,19 @@
         <div class="about-text">
           <h2 id='slack-feedback'>And you will get this 👇!</h2>
           <hr>
-          <img src="img/slack.png" class="img-responsive" alt="Slack preview"> </a> </div>
+          <div class="Wallop">
+            <div class="Wallop-list">
+                <div class="Wallop-item">
+                    <img src="img/slack.png" class="img-responsive" alt="Slack preview" />
+                </div>
+                <div class="Wallop-item">…</div>
+                <div class="Wallop-item">…</div>
+                <div class="Wallop-item">…</div>
+                <div class="Wallop-item">…</div>
+            </div>
+            <button class="Wallop-buttonPrevious">Previous</button>
+            <button class="Wallop-buttonNext">Next</button>
+          </div>
         </div>
       </div>
     </div>
@@ -181,6 +194,7 @@
   <div class="container text-center">
     <div class="col-md-12">
       <h3>Made with love in Norway</h3>
+      <h5><a href="/policy">Policy</a></h5>
     </div>
   </div>
 </div>
@@ -192,5 +206,11 @@
 <script type="text/javascript" src="js/jquery.isotope.js"></script>
 <script type="text/javascript" src="js/url-search-params.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
+<script src="js/Wallop.min.js"></script>
+<script>
+  var wallopEl = document.querySelector('.Wallop');
+  console.log(wallopEl)
+  var slider = new Wallop(wallopEl);
+</script>
 </body>
 </html>

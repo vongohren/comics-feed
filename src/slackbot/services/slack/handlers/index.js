@@ -10,6 +10,7 @@ import {
 } from './subscriptionConfigHandler'
 export whoHandler from './whoHandler'
 export suggestHandler from './suggestHandler'
+export supportHandler from './supportHandler'
 
 export const interactiveHandler = (body, res) => {
   let action = {}

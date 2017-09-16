@@ -5,7 +5,8 @@ import {
   interactiveHandler,
   subscriptionHandler,
   whoHandler,
-  suggestHandler
+  suggestHandler,
+  supportHandler
 } from './services/slack/handlers'
 
 class Slackbot {
@@ -36,6 +37,10 @@ class Slackbot {
         this.app.post('/suggest', function(req, res) {
           suggestHandler(req.body, res)
         })
+        this.app.post('/support', function(req, res) {
+          supportHandler(req.body, res)
+        })
+
     }
 }
 

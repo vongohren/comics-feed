@@ -22,6 +22,11 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+"/../landingpage/index.html"));
 });
 
+app.get('/policy', function (req, res) {
+    res.sendFile(path.join(__dirname+"/../landingpage/policy.html"));
+});
+
+
 app.get('/comics', function (req, res) {
     res.json(comics)
 })
