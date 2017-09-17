@@ -8,6 +8,46 @@ body, html {
 	height: 100% !important;
 }
 
+.Wallop-buttonPrevious {
+	position: absolute;
+	top: 200px;
+	display:block;
+    width:50px;
+    height:50px;
+    line-height:40px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    text-align:center;
+    text-decoration:none;
+    background: #464646;
+    box-shadow: 0 0 3px gray;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.Wallop-buttonNext {
+	position: absolute;
+	top: 200px;
+	right: 0;
+	display:block;
+	width:50px;
+	height:50px;
+	line-height:40px;
+	border: 2px solid #f5f5f5;
+	border-radius: 50%;
+	color:#f5f5f5;
+	text-align:center;
+	text-decoration:none;
+	background: #464646;
+	box-shadow: 0 0 3px gray;
+	font-size:20px;
+	font-weight:bold;
+}
+.Wallop {
+	margin-top: 15px;
+}
+
 .about-text h2 {
 	min-height: 100%;
 	display: flex;
@@ -300,7 +340,7 @@ header {
 }
 
 #slack .img-responsive {
-	max-width: 60%;
+	max-width: 85%;
 	margin: 0 auto;
 }
 
