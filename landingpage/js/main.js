@@ -17,7 +17,7 @@ function main() {
        var source   = $("#comic-template").html();
        var template = Handlebars.compile(source);
        data.forEach(function(comic) {
-           if(comic.name === 'lunch' || comic.name === 'dilbert' ) {
+           if(comic.name === 'lunch' || comic.name === 'dilbert' || comic.name === 'shermanslagoon' ) {
                comic.tegneserieLogo = '/img/'+comic.name+'-logo.png'
            }
        })
