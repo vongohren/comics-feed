@@ -5,7 +5,8 @@ const logger = require('./logger');
 export default (url, name, metadata) => {
   return new Promise( async (resolve, reject) => {
     try {
-      const response = await fetchRespons(url);
+      const skipCertificateCheck = name == 'shermanslagoon' ? true : false;
+      const response = await fetchRespons(url, skipCertificateCheck);
       const entryUrl = response.request.href;
       const entry = await Entry.findOne({url: entryUrl})
       if(!entry) {
@@ -20,7 +21,7 @@ export default (url, name, metadata) => {
         resolve(true)
       }
     } catch (err) {
-      logger.log('error', "FetchAndSaveImage failed with: " + err)
+      logger.log('error', `FetchAndSaveImage failed for ${name} - ${url} with: ${err}`)
       resolve(false)
     }
   })
@@ -36,9 +37,10 @@ const getEntries = (url) => {
   })
 }
 
-const fetchRespons = (url) => {
+const fetchRespons = (url, skipCertificateCheck) => {
   return new Promise((resolve, reject) => {
-    request(url, function (error, res) {
+    const options = skipCertificateCheck ? { rejectUnauthorized: false } : {}
+    request(url, options, function (error, res) {
       if(error) reject(error)
       else resolve(res)
     })
