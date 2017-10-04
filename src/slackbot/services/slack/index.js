@@ -22,6 +22,7 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
     logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}`);
     return true;
   } catch (error) {
+    logger.log('error', `Following error happend with team ${team.team_name}-${team.incoming_webhook.channel}`)
     logger.log('error', error);
     return false;
   }
