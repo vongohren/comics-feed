@@ -41,6 +41,7 @@ class Slackbot {
         this.app.post('/support', function(req, res) {
           supportHandler(req.body, res)
         })
+        //This is triggerd by zapier once a day!
         this.app.get('/clear', async (req, res)=> {
           var striked = await clearStrikedOutTeams()
           res.json(striked)
