@@ -8,9 +8,14 @@ class Webhook {
     return new Promise((resolve, reject) => {
       this.hook.send({attachments: attachments}, function(err, header, statusCode, body) {
         if (err) {
-          reject(err)
+          reject({
+            error: err
+          })
         } else if(statusCode != 200) {
-          reject(new Error(`Got status code ${statusCode} when posting ${JSON.stringify(attachments)}`))
+          reject({
+            error: new Error(`Got status code ${statusCode} when posting ${JSON.stringify(attachments)}`),
+            statusCode: statusCode
+          })
         } else {
           resolve({ 'ok': true })
         }

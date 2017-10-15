@@ -1,6 +1,7 @@
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
 import { Webhook } from './slack'
 import logger from '../../../utils/logger'
+import { Teams } from '../../repository'
 
 const comics = require('../../../comics');
 
@@ -21,12 +22,21 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
     await hook.send(hookAttachments);
     logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}`);
     return true;
-  } catch (error) {
+  } catch (errObj) {
     logger.log('error', `Following error happend with team ${team.team_name}-${team.incoming_webhook.channel}`)
-    logger.log('error', error);
+    if(errObj.statusCode == 404){
+      await addStrikeToTeam(team);
+    }
+    logger.log('error', errObj.error);
     return false;
   }
 
+}
+
+const addStrikeToTeam = async (team) => {
+  var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
+  const result = await Teams.update(query, { strike: team.strike+1 })
+  logger.log('error', `${team.team_name} got a strike!`)
 }
 
 const createAttachment = (entry) => {

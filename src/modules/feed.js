@@ -29,7 +29,7 @@ class Feed {
         }
 
       } else {
-        logger.log('error', "We’ve encountered an error: " + error)
+        logger.log('error', "We’ve encountered an fetch error with strip: "+this.stripUrl+" ---- "+ error)
       }
     });
   }

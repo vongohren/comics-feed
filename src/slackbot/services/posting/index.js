@@ -51,7 +51,6 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
         } catch (e) {
           logger.log('error', `Something went wrong for ${team.team_name} when updating the subscriptions!`)
         }
-
     }
   }
 }

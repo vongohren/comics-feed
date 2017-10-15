@@ -8,6 +8,7 @@ import {
   suggestHandler,
   supportHandler
 } from './services/slack/handlers'
+import { clearStrikedOutTeams } from './services/team'
 
 class Slackbot {
     constructor(app) {
@@ -40,7 +41,10 @@ class Slackbot {
         this.app.post('/support', function(req, res) {
           supportHandler(req.body, res)
         })
-
+        this.app.get('/clear', async (req, res)=> {
+          var striked = await clearStrikedOutTeams()
+          res.json(striked)
+        })
     }
 }
 

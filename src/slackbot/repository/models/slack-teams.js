@@ -8,7 +8,7 @@ module.exports = mongoose.model('slackteams', {
     team_id: String,
     user_id: String,
     active: { type: Boolean, default: false },
-    directmessage: { type: Boolean, default: false }, 
+    directmessage: { type: Boolean, default: false },
     incoming_webhook: {
         url: String,
         channel: String,
@@ -19,5 +19,6 @@ module.exports = mongoose.model('slackteams', {
         bot_user_id: String,
         bot_access_token: String
     },
-    subscriptions: [SubscriptionSchema]
+    subscriptions: [SubscriptionSchema],
+    strike: { type: Number, default: 0}
 });
