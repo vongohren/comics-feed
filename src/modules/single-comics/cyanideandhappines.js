@@ -15,7 +15,7 @@ class CyanideAndHappiness extends Feed {
   }
 
   extractImageSrc($) {
-    return 'http:'+$("#comic-container img").attr("src")
+    return 'http:'+$("#main-comic").attr("src")
   }
 }
 
