@@ -5,7 +5,7 @@ class CyanideAndHappiness extends Feed {
     name = 'cyanideandhappiness',
     itemDescription = 'CyanideAndHappinessstripe',
     tegneserieSideLink = 'http://explosm.net/',
-    tegneserieLogo = '//explosm.net/img/logo.png',
+    tegneserieLogo = '//userlogos.org/files/logos/Rog/explosm_net_02.png',
     stripUrl = 'http://explosm.net/comics/latest/',
     hour = '10',
     minute = '00'
