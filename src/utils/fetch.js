@@ -5,7 +5,8 @@ const logger = require('./logger');
 export default (url, name, metadata) => {
   return new Promise( async (resolve, reject) => {
     try {
-      const skipCertificateCheck = name == 'shermanslagoon' ? true : false;
+      let skipCertificateCheck = (name === 'shermanslagoon' || name === 'dilbert');
+      
       const response = await fetchRespons(url, skipCertificateCheck);
       const entryUrl = response.request.href;
       const entry = await Entry.findOne({url: entryUrl})
