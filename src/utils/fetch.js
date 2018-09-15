@@ -1,12 +1,14 @@
 var Entry = require('../models/comic-entry.js');
 var request = require('request');
 const logger = require('./logger');
+const perfy = require('perfy');
 
 export default (url, name, metadata) => {
   return new Promise( async (resolve, reject) => {
+    const performanceKey = 'fetch-method-'+name;
+    perfy.start(performanceKey);
     try {
-      let skipCertificateCheck = (name === 'shermanslagoon' || name === 'dilbert');
-      
+      const skipCertificateCheck = (name === 'shermanslagoon' || name === 'dilbert');
       const response = await fetchRespons(url, skipCertificateCheck);
       const entryUrl = response.request.href;
       const entry = await Entry.findOne({url: entryUrl})
@@ -18,23 +20,22 @@ export default (url, name, metadata) => {
         if(metadata) entryObject.metadata = metadata
         const newEntry = new Entry(entryObject)
         const saveObject = await newEntry.save()
-        logger.log('info',saveObject.label+ ' was saved successfully with url: '+ saveObject.url);
+        const result = perfy.end(performanceKey);
+        logger.log('info',saveObject.label+ ' was saved successfully with url: '+ saveObject.url+' used '+result.seconds + ' sec, ' + result.milliseconds.toFixed(3) + ' ms.');
+        
         resolve(true)
       }
     } catch (err) {
-      logger.log('error', `FetchAndSaveImage failed for ${name} - ${url} with: ${err}`)
+      const result = perfy.end(performanceKey);
+      if(err.code === 'ETIMEDOUT') {
+        logger.log(
+          'error', 
+          `FetchAndSaveImage failed with a TIMEOUT for ${name} - ${url}. It was a connection timeout: ${err.connect}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)}ms. Error: ${err}`
+        )  
+      }
+      logger.log('error', `FetchAndSaveImage failed for ${name} - ${url}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)} ms. Error: ${err}`)
       resolve(false)
     }
-  })
-}
-
-const getEntries = (url) => {
-  return new Promise((resolve, reject) => {
-    const entries =
-    request(url, function (error, res) {
-      if(error) reject(error)
-      else resolve(res)
-    })
   })
 }
 
@@ -46,5 +47,4 @@ const fetchRespons = (url, skipCertificateCheck) => {
       else resolve(res)
     })
   })
-
 }
