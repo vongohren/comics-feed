@@ -4,7 +4,7 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "private": true,
   "engines": {
-    "node": "7.10.1"
+    "node": "9.10.0"
   },
   "scripts": {
     "heroku-prebuild": "npm install --only=dev",
