@@ -16,7 +16,7 @@ module.exports = Promise.coroutine(function*(name, itemDescription, tegneserieLi
 
     var comicFeed = new feed({
         title:          itemTitle,
-        description:    'This is the norwegian '+name+' comic feed',
+        description:    'This is '+name+' comic feed',
         link:           tegneserieLink,
         image:          tegneserieLogo,
         copyright:      'None',
