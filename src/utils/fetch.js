@@ -32,8 +32,9 @@ export default (url, name, metadata) => {
           'error', 
           `FetchAndSaveImage failed with a TIMEOUT for ${name} - ${url}. It was a connection timeout: ${err.connect}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)}ms. Error: ${err}`
         )  
+      } else {
+        logger.log('error', `FetchAndSaveImage failed for ${name} - ${url}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)} ms. Error: ${err}`)
       }
-      logger.log('error', `FetchAndSaveImage failed for ${name} - ${url}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)} ms. Error: ${err}`)
       resolve(false)
     }
   })
