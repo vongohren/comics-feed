@@ -4,6 +4,7 @@ import cronjob from '../utils/cronjob';
 import generateFeed from '../utils/generateFeed';
 import fetchAndSaveImage from '../utils/fetch';
 import logger from '../utils/logger';
+import { httpsCheckerAndAttacher } from '../utils/urlHandler';
 
 
 class Feed {
@@ -21,6 +22,7 @@ class Feed {
       if (!error) {
         var $ = cheerio.load(body);
         var imageSrc = this.extractImageSrc($);
+        imageSrc = httpsCheckerAndAttacher(imageSrc);
 
         if(imageSrc) {
           fetchAndSaveImage(imageSrc, this.name);
