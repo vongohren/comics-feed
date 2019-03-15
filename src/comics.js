@@ -8,13 +8,13 @@ var Xkcd = new (require('./modules/single-comics/xkcd'))({})
 var ShermansLagoon = new (require('./modules/single-comics/shermanslagoon'))({})
 var Commitstrip = new (require('./modules/single-comics/commitstrip'))({})
 
-const available = [ Lunch, Pondus, Nemi, Wumo, Cyanideandhappines, Dilbert, Xkcd, ShermansLagoon, Commitstrip ];
+const available = [ Lunch, Nemi, Wumo, Cyanideandhappines, Dilbert, Xkcd, ShermansLagoon, Commitstrip ];
 
 for(var comic of available) {
   comic.fetch()
 }
 
-const defaultSubscription = [ Lunch, Pondus, Wumo, Cyanideandhappines, Xkcd ];
+const defaultSubscription = [ Lunch, Wumo, Cyanideandhappines, Xkcd, Commitstrip ];
 
 module.exports = {
     available: available,
