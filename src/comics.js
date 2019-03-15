@@ -1,5 +1,5 @@
-var Lunch = new (require('./modules/dagbladet/lunch'))({})
 var Pondus = new (require('./modules/dagbladet/pondus'))({})
+var Lunch = new (require('./modules/tu/lunch'))({})
 var Nemi = new (require('./modules/dagbladet/nemi'))({})
 var Wumo = new (require('./modules/single-comics/wumo'))({})
 var Cyanideandhappines = new (require('./modules/single-comics/cyanideandhappines'))({})
