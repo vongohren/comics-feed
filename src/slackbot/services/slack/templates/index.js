@@ -103,6 +103,9 @@ const mapSubscriptionsToAttachmentsWithButtons = (team) => {
     const matchingComic = comics.available.find(comic => {
       return comic.name === subscription.name
     })
+    if(!matchingComic){
+      return {}
+    }
     return {
       "title": `${subscription.name.upperCaseFirstLetter()} - (${matchingComic.language.upperCaseFirstLetter()})`,
       "attachment_type": "default",
