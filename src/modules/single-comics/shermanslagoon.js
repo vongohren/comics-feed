@@ -1,12 +1,13 @@
 var Feed = require('../feed');
 
-class CyanideAndHappiness extends Feed {
+
+class ShermansLagoonstripe extends Feed {
   constructor({
     name = 'shermanslagoon',
     itemDescription = 'ShermansLagoonstripe',
-    tegneserieSideLink = 'http://shermanslagoon.com/',
-    tegneserieLogo = '//shermanslagoon.com/wp-content/themes/sherman3/img/logo.png',
-    stripUrl = 'http://shermanslagoon.com/',
+    tegneserieSideLink = 'https://comicskingdom.com/sherman-s-lagoon',
+    tegneserieLogo = '//api.kingdigital.com/img/features/1442/logos/website.png',
+    stripUrl = 'https://comicskingdom.com/sherman-s-lagoon',
     hour = '10',
     minute = '00'
   }) {
@@ -14,9 +15,11 @@ class CyanideAndHappiness extends Feed {
     this.language = 'english'
   }
 
+
   extractImageSrc($) {
-    return $("#comicpanel img").attr("src")
+    return $("meta[property='og:image']").attr("content")
   }
 }
 
-module.exports = CyanideAndHappiness;
+
+module.exports = ShermansLagoonstripe;
