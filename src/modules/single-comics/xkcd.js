@@ -19,14 +19,32 @@ class Xkcd extends Feed {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.baseUrl = 'https://www.xkcd.com/'
     this.language = 'english'
-    this.rssUrl = 'http://xkcd.com/rss.xml'
+    this.bareUrl = 'https://xkcd.com'
+    this.rssUrl =  this.bareUrl+'/rss.xml'
+  }
+
+  testUrl (url, xmlJson) {
+    if(!url.includes(this.bareUrl)) {
+      const newUrl = xmlJson.rss.channel[0].item[1].link[0];
+      return this.testUrl(newUrl, xmlJson);
+    } else {
+      return url;
+    }
+  }
+
+  parseAndTestUrl (xmlJson) {
+    let testUrl = xmlJson.rss.channel[0].item[0].link[0];
+    const properUrl = this.testUrl(testUrl, xmlJson);
+    return properUrl;
   }
 
   async fetch() {
+    let logUrl = ''
     try{
       const xmlBody = await this.getRssFeed(this.rssUrl)
       const xmlJson = await this.parseRssFeed(xmlBody)
-      const url = xmlJson.rss.channel[0].item[0].link[0];
+      const url = this.parseAndTestUrl(xmlJson);
+      logUrl=url
       const xkcdDocument = cheerio.load(xmlJson.rss.channel[0].item[0].description[0])
       const title = xkcdDocument("img").attr("title")
       const pageBody = await this.getPageBody(url)
@@ -39,7 +57,7 @@ class Xkcd extends Feed {
         xkcdTitle: title
       })
     } catch(err) {
-      logger.log('error', 'XKCD encountered and error '+err)
+      logger.log('error', 'XKCD encountered and error with: '+logUrl+' - '+err)
     }
   }
 
