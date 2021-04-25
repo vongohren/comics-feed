@@ -14,13 +14,17 @@ class Xkcd extends Feed {
     tegneserieLogo = '//www.xkcd.com/s/0b7742.png',
     stripUrl = 'https://www.xkcd.com/',
     hour = '10',
-    minute = '00'
+    minute = '00',
+    author = 'Randall Munroe',
+    authorUrl = 'https://en.wikipedia.org/wiki/Randall_Munroe'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.baseUrl = 'https://www.xkcd.com/'
     this.language = 'english'
     this.bareUrl = 'https://xkcd.com'
     this.rssUrl =  this.bareUrl+'/rss.xml'
+    this.author = author
+    this.authorUrl = authorUrl
   }
 
   testUrl (url, xmlJson) {
