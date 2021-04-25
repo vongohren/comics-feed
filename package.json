@@ -40,7 +40,8 @@
     "slack-node": "^0.1.8",
     "winston": "^2.3.1",
     "winston-papertrail": "^1.0.4",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.17",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -50,7 +51,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-tape-runner": "^2.0.1",
     "babel-watch": "^2.0.6",
-    "dotenv": "^8.2.0",
     "mongoui": "^4.1.2"
   },
   "heroku-run-build-script": true
