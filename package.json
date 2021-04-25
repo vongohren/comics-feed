@@ -4,7 +4,7 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "private": true,
   "engines": {
-    "node": "9.10.0"
+    "node": "12.18.0"
   },
   "scripts": {
     "heroku-prebuild": "npm install --only=dev",
@@ -50,6 +50,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-tape-runner": "^2.0.1",
     "babel-watch": "^2.0.6",
+    "dotenv": "^8.2.0",
     "mongoui": "^4.1.2"
   },
   "heroku-run-build-script": true
