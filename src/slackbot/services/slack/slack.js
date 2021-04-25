@@ -13,7 +13,7 @@ class Webhook {
           })
         } else if(statusCode != 200) {
           reject({
-            error: new Error(`Got status code ${statusCode} when posting ${JSON.stringify(attachments)}`),
+            error: new Error(`Got status code ${statusCode} when posting ${JSON.stringify(attachments)}. Error: ${err}. Body: ${body}`),
             statusCode: statusCode
           })
         } else {
