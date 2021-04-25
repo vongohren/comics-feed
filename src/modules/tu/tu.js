@@ -1,10 +1,11 @@
 var Feed = require('../feed');
 
-class Dagbladet extends Feed {
+class TU extends Feed {
   constructor(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.mediator = 'Teknisk Ukeblad';
-    this.mediatorLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Teknisk_Ukeblad_logo.svg/400px-Teknisk_Ukeblad_logo.svg.png'
+    this.mediatorLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Teknisk_Ukeblad_logo.svg/400px-Teknisk_Ukeblad_logo.svg.png',
+    this.mediatorUrl = 'https://www.tu.no/tegneserier/lunch'
   }
 
   extractImageSrc($) {
@@ -16,4 +17,4 @@ class Dagbladet extends Feed {
   }
 }
 
-module.exports = Dagbladet;
+module.exports = TU;

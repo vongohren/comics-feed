@@ -46,6 +46,42 @@ const createAttachment = (entry) => {
 
   const name = uppercaseFirst(comic.name)
   return {
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*Dagens ${name}*\n\nProdusert av <${comic.authorUrl || comic.stripUrl}|${comic.author || comic.itemDescription}>\n\n:pencil2::pencil2::pencil2::pencil2::pencil2::pencil2::pencil2::pencil2::pencil2:`
+          },
+          "accessory": {
+            "type": "image",
+            "image_url": `${comic.slackPlaceHolder || 'http:'+comic.tegneserieLogo }`,
+            "alt_text": `${name} picture`
+          }
+        },
+        {
+          "type": "image",
+          "image_url": entry.url,
+          "alt_text": "the cartoon"
+        },
+        {
+          "type": "context",
+          "elements": [
+            {
+              "type": "mrkdwn",
+              "text": `*Levert av*  :email:  <${comic.mediatorUrl || comic.stripUrl}|${comic.mediator || name}>`
+            },
+            {
+              "type": "image",
+              "image_url": comic.mediatorLogo || 'http:'+comic.tegneserieLogo,
+              "alt_text": `${comic.mediator || name} logo`
+            }
+          ]
+        }
+      ]
+  }
+  
+  return {
               "fallback": entry.url,
               "color": "#36a64f",
               "author_name": name,

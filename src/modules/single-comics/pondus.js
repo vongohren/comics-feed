@@ -8,10 +8,14 @@ class Pondus extends Feed {
     tegneserieLogo = '//login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png',
     stripUrl = 'https://www.folkebladet.no/kultur/pondus/',
     hour = '10',
-    minute = '00'
+    minute = '00',
+    author = 'Frode Øverli',
+    authorUrl = 'https://no.wikipedia.org/wiki/Frode_%C3%98verli'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.language = 'norwegian'
+    this.author = author
+    this.authorUrl = authorUrl
   }
   extractImageSrc($) {
     return $($('.picture')[0]).find('img').attr('src')
