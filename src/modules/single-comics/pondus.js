@@ -10,12 +10,18 @@ class Pondus extends Feed {
     hour = '10',
     minute = '00',
     author = 'Frode Øverli',
-    authorUrl = 'https://no.wikipedia.org/wiki/Frode_%C3%98verli'
+    authorUrl = 'https://no.wikipedia.org/wiki/Frode_%C3%98verli',
+    mediator = 'Folkebladet',
+    mediatorLogo = 'https://media.snl.no/media/133653/standard_folkebladet_logo.jpg',
+    mediatorUrl = 'https://www.folkebladet.no/kultur/pondus/'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.language = 'norwegian'
     this.author = author
     this.authorUrl = authorUrl
+    this.mediator = mediator;
+    this.mediatorLogo = mediatorLogo
+    this.mediatorUrl = mediatorUrl
   }
   extractImageSrc($) {
     return $($('.picture')[0]).find('img').attr('src')
