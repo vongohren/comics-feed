@@ -1,5 +1,8 @@
+import { Teams } from '../../../../repository'
 const mongoose = require('mongoose');
 const got = require('got');
+import ThankYou from './thank-you-modal.json'
+
 
 const Actions = mongoose.model('actions', {
     user: {
@@ -26,19 +29,21 @@ export default async (body, res) => {
     }
   })
   try {
-    const result = await Actions.insertMany(actions);
-    // const team_mates = await Actions.find().where({type: })
-    // console.log(result)
-    // const ok = await got.post(body.response_url, {
-    //   json: {
-    //     text: "Thanks for your message",
-    //     response_type: "ephemeral"
-    //   },
-    //   responseType: 'json'
-    // });
-    // console.log(ok);
+    await Actions.insertMany(actions);
+    const query = {team_id: body.team.id}
+
+    const team = await Teams.findOne(query)
+    const ok = await got.post('https://slack.com/api/views.open', {
+      json: {
+        trigger_id: body.trigger_id ,
+        view: ThankYou
+      },
+      headers: {Authorization: `Bearer ${team.bot.bot_access_token}`},
+      responseType: 'json'
+    });
     res.status(200).send();
   } catch (error) {
+    console.log(error)
     res.status(500).send();
   } 
 }
