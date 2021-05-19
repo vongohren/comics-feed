@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node lib/index.js",
     "dev": "babel-watch --inspect src/index.js",
-    "build": "BABEL_ENV=commonjs babel src -d lib"
+    "build": "BABEL_ENV=commonjs babel src -d lib --copy-files"
   },
   "keywords": [
     "rss",
