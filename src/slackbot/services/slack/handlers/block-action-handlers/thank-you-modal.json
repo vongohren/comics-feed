@@ -15,7 +15,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "You have done a great job giving us some feedback. All feedback is good feedback. Share the bot with friends: https://comics.vongohren.me/"
+				"text": "You have done a great job giving us some feedback. All feedback is good feedback. \nIf you want to provide more detailed feedback, use the /support command. \n\n🚀 Share the bot with friends: https://comics.vongohren.me/"
 			}
 		}
 	]
