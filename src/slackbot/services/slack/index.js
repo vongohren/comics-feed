@@ -11,7 +11,7 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
     const comicAttachment = createAttachment(entry);
     const hookAttachments = [comicAttachment];
     await hook.send(hookAttachments);
-    logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}`);
+    logger.log('info',`Successfully posted: ${entry.url} to ${team.team_name}-${team.incoming_webhook.channel}, with attachment: ${JSON.stringify(hookAttachments)}`);
     return true;
   } catch (errObj) {
     logger.log('error', `Following error happend with team ${team.team_name}-${team.incoming_webhook.channel}`)
