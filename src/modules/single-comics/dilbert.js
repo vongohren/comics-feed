@@ -5,7 +5,7 @@ class Dilbert extends Feed {
     name = 'dilbert',
     itemDescription = 'Dilbertstripe',
     tegneserieSideLink = 'http://dilbert.com/',
-    tegneserieLogo = '//dilbert.com/assets/packs/images/dilbert-logo-515f1f57d74079af0c64a41158ded433.png',
+    tegneserieLogo = '//comic-feed.herokuapp.com/img/dilbert-logo.png',
     stripUrl = 'http://dilbert.com/',
     hour = '10',
     minute = '00'
