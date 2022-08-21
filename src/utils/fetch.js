@@ -3,36 +3,41 @@ var request = require('request');
 const logger = require('./logger');
 const perfy = require('perfy');
 
+
 export default (url, name, metadata) => {
-  return new Promise( async (resolve, reject) => {
-    const performanceKey = 'fetch-method-'+name;
+  return new Promise(async(resolve, reject) => {
+    const performanceKey = 'fetch-method-' + name;
     perfy.start(performanceKey);
     try {
       const skipCertificateCheck = (name === 'shermanslagoon' || name === 'dilbert');
       const response = await fetchRespons(url, skipCertificateCheck);
       const entryUrl = response.request.href;
-      const entry = await Entry.findOne({url: entryUrl})
-      if(!entry) {
+      const entry = await Entry.findOne({ url: entryUrl })
+      if (!entry) {
         const entryObject = {
           url: entryUrl,
           label: name
         }
-        if(metadata) entryObject.metadata = metadata
+        if (metadata) entryObject.metadata = metadata
         const newEntry = new Entry(entryObject)
         const saveObject = await newEntry.save()
         const result = perfy.end(performanceKey);
-        logger.log('info',saveObject.label+ ' was saved successfully with url: '+ saveObject.url+' used '+result.seconds + ' sec, ' + result.milliseconds.toFixed(3) + ' ms.');
-        
+        logger.log('info', saveObject.label + ' was saved successfully with url: ' + saveObject.url + ' used ' + result.seconds + ' sec, ' + result.milliseconds.toFixed(3) + ' ms.');
+
         resolve(true)
       }
     } catch (err) {
       const result = perfy.end(performanceKey);
-      if(err.code === 'ETIMEDOUT') {
+      if (err.code === 'ETIMEDOUT') {
         logger.log(
-          'error', 
+          'error',
           `FetchAndSaveImage failed with a TIMEOUT for ${name} - ${url}. It was a connection timeout: ${err.connect}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)}ms. Error: ${err}`
-        )  
+        )
       } else {
+        if (name === 'pondus' && `${err}`.includes('410')) {
+          resolve(false);
+          return
+        }
         logger.log('error', `FetchAndSaveImage failed for ${name} - ${url}. Used ${result.seconds} sec, ${result.milliseconds.toFixed(3)} ms. Error: ${err}`)
       }
       resolve(false)
@@ -43,8 +48,9 @@ export default (url, name, metadata) => {
 const fetchRespons = (url, skipCertificateCheck) => {
   return new Promise((resolve, reject) => {
     const options = skipCertificateCheck ? { rejectUnauthorized: false } : {}
-    request(url, options, function (error, res) {
-      if(error) reject(error)
+    request(url, options, function(error, res) {
+      if (error) reject(error)
+      if (res.statusCode !== 200) reject(`Non 200 response: ${res.statusCode} for url ${url}`)
       else resolve(res)
     })
   })

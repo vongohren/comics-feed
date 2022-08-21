@@ -5,9 +5,9 @@ class ShermansLagoonstripe extends Feed {
   constructor({
     name = 'shermanslagoon',
     itemDescription = 'ShermansLagoonstripe',
-    tegneserieSideLink = 'https://comicskingdom.com/sherman-s-lagoon',
+    tegneserieSideLink = 'https://www.gocomics.com/shermanslagoon',
     tegneserieLogo = '//api.kingdigital.com/img/features/1442/logos/website.png',
-    stripUrl = 'https://comicskingdom.com/sherman-s-lagoon',
+    stripUrl = 'https://www.gocomics.com/shermanslagoon',
     hour = '10',
     minute = '00'
   }) {
@@ -15,9 +15,8 @@ class ShermansLagoonstripe extends Feed {
     this.language = 'english'
   }
 
-
   extractImageSrc($) {
-    return $("meta[property='og:image']").attr("content")
+    return $('.gc-deck--cta-0 img').attr("src")
   }
 }
 

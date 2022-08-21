@@ -1,4 +1,5 @@
 var Feed = require('../feed');
+var moment = require('moment');
 
 class Pondus extends Feed {
   constructor({
@@ -6,14 +7,14 @@ class Pondus extends Feed {
     itemDescription = 'Pondusstripe',
     tegneserieSideLink = 'http://www.klikk.no/pondus/',
     tegneserieLogo = '//login.mediaconnect.no/resources/partner/2/no.serieforlaget.tegneserier.pondus/logo.png',
-    stripUrl = 'https://www.adressa.no/kultur/tegneserier/pondus/',
+    stripUrl = 'https://www.vg.no/tegneserier',
     hour = '10',
     minute = '00',
     author = 'Frode Øverli',
     authorUrl = 'https://no.wikipedia.org/wiki/Frode_%C3%98verli',
     mediator = 'Adressa',
-    mediatorLogo = 'https://i.imgur.com/UkzELp1.jpg',
-    mediatorUrl = 'https://www.adressa.no/kultur/tegneserier/pondus/'
+    mediatorLogo = 'https://www.vg.no/vgc/hyperion/img/logo.png',
+    mediatorUrl = 'https://www.vg.no/tegneserier'
   }) {
     super(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute);
     this.language = 'norwegian'
@@ -24,7 +25,9 @@ class Pondus extends Feed {
     this.mediatorUrl = mediatorUrl
   }
   extractImageSrc($) {
-    return $($('.lp_pondusstripe')[0]).find('img').attr('src')
+    const today = moment().format('YYYY-MM-DD')
+    const url = `https://www.vg.no/tegneserier/api/images/pondus/${today}`;
+    return url;
   }
 }
 
