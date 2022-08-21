@@ -12,7 +12,7 @@ class Pondus extends Feed {
     minute = '00',
     author = 'Frode Øverli',
     authorUrl = 'https://no.wikipedia.org/wiki/Frode_%C3%98verli',
-    mediator = 'Adressa',
+    mediator = 'VG',
     mediatorLogo = 'https://www.vg.no/vgc/hyperion/img/logo.png',
     mediatorUrl = 'https://www.vg.no/tegneserier'
   }) {
