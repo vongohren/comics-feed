@@ -33,7 +33,7 @@
     "feed": "^0.3.0",
     "got": "^11.8.2",
     "moment": "^2.18.1",
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.35",
     "mongoose": "^4.11.5",
     "node-uuid": "^1.4.7",
     "perfy": "^1.1.5",
