@@ -15,8 +15,9 @@ class Wumo extends Feed {
     this.language = 'norwegian'
   }
 
-  extractImageSrc($) {
-    return this.baseUrl+$(".strip.wumo img").attr("src")
+  extractImageSrc($, callback) {
+    const url = this.baseUrl+$(".strip.wumo img").attr("src")
+    callback(url);
   }
 }
 

@@ -15,8 +15,9 @@ class ShermansLagoonstripe extends Feed {
     this.language = 'english'
   }
 
-  extractImageSrc($) {
-    return $('.gc-deck--cta-0 img').attr("src")
+  extractImageSrc($, callback) {
+    const url = $('.gc-deck--cta-0 img').attr("src")
+    callback(url);
   }
 }
 

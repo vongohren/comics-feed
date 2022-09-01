@@ -14,8 +14,9 @@ class Dilbert extends Feed {
     this.language = 'english'
   }
 
-  extractImageSrc($) {
-    return $($('.comic-item-container')[0]).find('img').attr('src')
+  extractImageSrc($, callback) {
+    const url = $($('.comic-item-container')[0]).find('img').attr('src')
+    callback(url);
   }
 }
 

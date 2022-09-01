@@ -22,8 +22,10 @@
   "author": "Snorrre Lothar von Gohren Edwin <snorre.edwin@gmail.com> (https://github.com/Snorlock)",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^6.4.1",
     "@slack/client": "^3.9.0",
     "agenda": "^0.9.1",
+    "axios": "^0.27.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "cheerio": "^0.20.0",

@@ -14,8 +14,9 @@ class CyanideAndHappiness extends Feed {
     this.language = 'english'
   }
 
-  extractImageSrc($) {
-    return $($('#comic')).find('img').attr('src')
+  extractImageSrc($,callback) {
+    const url = $($('#comic')).find('img').attr('src')
+    callback(url);
   }
 }
 

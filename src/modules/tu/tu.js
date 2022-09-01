@@ -8,12 +8,13 @@ class TU extends Feed {
     this.mediatorUrl = 'https://www.tu.no/tegneserier/lunch'
   }
 
-  extractImageSrc($) {
+  extractImageSrc($, callback) {
     const list = $('.feed-comics figure');
     const length = list.length;
     const lastObject = list[length-1];
     const imgSrc = $(lastObject).find('.image-container img').attr('src');
-    return `https://www.tu.no${imgSrc}`
+    const url = `https://www.tu.no${imgSrc}`
+    callback(url)
   }
 }
 

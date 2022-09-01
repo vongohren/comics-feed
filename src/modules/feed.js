@@ -21,23 +21,23 @@ class Feed {
     request(this.stripUrl, (error, response, body) => {
       if (!error) {
         var $ = cheerio.load(body);
-        var imageSrc = this.extractImageSrc($);
-        imageSrc = httpsCheckerAndAttacher(imageSrc);
-
-        if(imageSrc) {
-          fetchAndSaveImage(imageSrc, this.name);
-        } else {
-          logger.log('error', `Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
-        }
-
+        this.extractImageSrc($, (imageSrc) => {
+          imageSrc = httpsCheckerAndAttacher(imageSrc);
+          if(imageSrc) {
+            fetchAndSaveImage(imageSrc, this.name);
+          } else {
+            logger.log('error', `Image source was not a valid object. Strip: ${this.stripUrl} ImageSource: ${imageSrc}`)
+          }
+        });
       } else {
         logger.log('error', "We’ve encountered an fetch error with strip: "+this.stripUrl+" ---- "+ error)
       }
     });
   }
 
-  extractImageSrc($) {
-    return $('.strip-container img').attr('src')
+  extractImageSrc($, callback) {
+    const url = $('.strip-container img').attr('src')
+    callback(url);
   }
 
   routeFunction(req, res) {
