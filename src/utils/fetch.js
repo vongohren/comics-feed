@@ -48,7 +48,8 @@ export default (url, name, metadata) => {
 const fetchRespons = (url, skipCertificateCheck) => {
   return new Promise((resolve, reject) => {
     const options = skipCertificateCheck ? { rejectUnauthorized: false } : {}
-    request(url, options, function(error, res) {
+    const encodedUrl = encodeURI(url)
+    request(encodedUrl, options, function(error, res) {
       if (error) reject(error)
       if (res.statusCode !== 200) reject(`Non 200 response: ${res.statusCode} for url ${url}`)
       else resolve(res)
