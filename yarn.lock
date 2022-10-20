@@ -2773,9 +2773,10 @@ mongodb@^2.1.11, mongodb@^2.2.10:
     mongodb-core "2.1.20"
     readable-stream "2.2.7"
 
-mongoose@^4.11.5:
-  version "4.13.17"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.13.17.tgz#0af0396b1e5af027edf404518c62cc194de7d17a"
+mongoose@^4.13.21:
+  version "4.13.21"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.13.21.tgz#83f4a8461b19aca1b2274feaaaf262b71b6f034d"
+  integrity sha512-0VZtQu1rSUPwUtbb7zh6CymI0nNkVInOIDbtWNlna070qnUO14On8PpSVSwlx3gwmkKL2OkP4ioCj5YHC6trMg==
   dependencies:
     async "2.6.0"
     bson "~1.0.4"
