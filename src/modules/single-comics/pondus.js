@@ -5,7 +5,8 @@ const {Storage} = require('@google-cloud/storage');
 const logger = require('../../utils/logger')
 
 // Instantiate a storage client
-const storagePriv = JSON.parse(process.env.STORAGE_KEY)
+const base64Decoded = Buffer.from(process.env.STORAGE_KEY, 'base64').toString('utf8')
+const storagePriv = JSON.parse(base64Decoded);
 const storage = new Storage({credentials:storagePriv});
 
 class Pondus extends Feed {
