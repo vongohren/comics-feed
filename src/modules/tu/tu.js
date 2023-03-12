@@ -9,12 +9,14 @@ class TU extends Feed {
   }
 
   extractImageSrc($, callback) {
-    const list = $('.feed-comics figure');
-    const length = list.length;
-    const lastObject = list[length-1];
-    const imgSrc = $(lastObject).find('.image-container img').attr('src');
-    const url = `https://www.tu.no${imgSrc}`
-    callback(url)
+    const images = $('div').find('img')
+    const imgArray = images.toArray()
+    const matchingImages = imgArray.filter(img => {
+      console.log(img)
+      return $(img).attr('src').includes('api/widgets/comics')
+    })
+    const imgSrc = $(matchingImages[0]).attr('src')
+    callback(imgSrc)
   }
 }
 
