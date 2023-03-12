@@ -12,7 +12,6 @@ class TU extends Feed {
     const images = $('div').find('img')
     const imgArray = images.toArray()
     const matchingImages = imgArray.filter(img => {
-      console.log(img)
       return $(img).attr('src').includes('api/widgets/comics')
     })
     const imgSrc = $(matchingImages[0]).attr('src')
