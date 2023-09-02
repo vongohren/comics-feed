@@ -7,9 +7,7 @@ var bodyParser = require('body-parser');
 const logger = require('./utils/logger');
 const comicsStorage = require('./comics');
 mongoose.Promise = require('bluebird');
-mongoose.connect(process.env.MONGODB_URI, {
-    useMongoClient: true
-});
+mongoose.connect(process.env.MONGODB_URI);
 
 var comics = comicsStorage.available
 

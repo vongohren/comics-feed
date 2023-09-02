@@ -4,7 +4,7 @@
   "description": "This is a server that parses pages with comics and serve them up as an rss feed",
   "private": true,
   "engines": {
-    "node": "12.18.0"
+    "node": "14.21"
   },
   "scripts": {
     "heroku-prebuild": "npm install --only=dev",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@google-cloud/storage": "^6.4.1",
     "@slack/client": "^3.9.0",
-    "agenda": "^0.9.1",
+    "agenda": "^2.3.0",
     "axios": "^0.27.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
@@ -36,7 +36,7 @@
     "got": "^11.8.2",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
-    "mongoose": "^4.11.5",
+    "mongoose": "^6.11.2",
     "node-uuid": "^1.4.7",
     "perfy": "^1.1.5",
     "request": "^2.71.0",
