@@ -18,3 +18,12 @@ Need to change the auth, interactive and commands on slack app to a localhost br
 I need to check the rss feeds on the hosted page to see if the database flows
 I need to see that it stores the newest comics.
 I need to make sure it posts
+
+# Documentation for app
+## Hosting
+Its currently hosted on (render)[https://render.com/], with free version. This turns itself off at times
+I use (cron-job.org)[https://cron-job.org/en/] to wake it 3 times a morning, in case there are different posting routines
+No-SQL is hosted on (mongoDb)[https://mongodb.com]
+## Logs
+I currently push things to (papertrail)[https://www.papertrail.com/] and use their filters for warnings.    
+If I log error, slack message is sent to gjengen-ntnu.slack.com i kanalen #logging
