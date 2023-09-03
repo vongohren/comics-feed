@@ -12,11 +12,11 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
 
   const subscriptions = team.subscriptions;
   const webhook = team.incoming_webhook.url
-  const tempSubsscriptions = [...subscriptions];
+  const tempSubscriptions = [...subscriptions];
 
   let update = false;
-  while(tempSubsscriptions.length != 0) {
-    const subscription = tempSubsscriptions.pop();
+  while(tempSubscriptions.length != 0) {
+    const subscription = tempSubscriptions.pop();
     const entry = await fetchLatestEntry(subscription)
     if(!entry) {
       logger.log('error', `Entry was null with subscription name ${subscription.name}`)
