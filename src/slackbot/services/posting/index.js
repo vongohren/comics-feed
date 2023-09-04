@@ -41,7 +41,7 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
       }
     }
 
-    if(update && tempSubsscriptions.length == 0) {
+    if(update && tempSubscriptions.length == 0) {
         var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
         try {
           const result = await Teams.update(query, { subscriptions: subscriptions })
