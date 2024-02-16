@@ -44,6 +44,15 @@ const createAttachment = (entry) => {
     }
   } : null;
 
+  const larsonsGaleVerdenAddittion = entry.label === 'larsonsgaleverden' ?
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": `Statement to picture: *${entry.metadata.sentence}* `
+    }
+  } : null;
+
   const name = uppercaseFirst(comic.name)
   const intro =         {
     "type": "section",
@@ -82,8 +91,21 @@ const createAttachment = (entry) => {
 
   const blocks = [intro, image,context];
   const xkcdBlocks = [intro,xkcdAddition, image,context];
-  return {
-      "blocks": xkcdAddition ? xkcdBlocks : blocks
+  const larsonsGaleVerdenBlocks = [intro,larsonsGaleVerdenAddittion, image,context];
+  if(larsonsGaleVerdenAddittion) {
+    return {
+      "blocks": larsonsGaleVerdenBlocks
+    }
+  }
+  if(xkcdAddition) {
+    return {
+      "blocks": xkcdBlocks
+    }
+  }
+  else {
+    return {
+      "blocks": blocks
+    }
   }
 }
 
