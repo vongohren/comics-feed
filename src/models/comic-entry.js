@@ -6,6 +6,7 @@ module.exports = mongoose.model('entry', {
   label: String,
   metadata: {
     explanationUrl: String,
-    xkcdTitle: String
+    xkcdTitle: String,
+    sentence: String
   }
 });
