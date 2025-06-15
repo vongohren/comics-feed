@@ -3,6 +3,7 @@
 `yarn dev`
 
 Need a DB url in the MONGODB_URI env variable
+Need a Storage KEY in the STORAGE_KEY env variable(all available at (render)[https://render.com/])
 
 ### Slack development
 * You need a representation of the bot on slack apps.
