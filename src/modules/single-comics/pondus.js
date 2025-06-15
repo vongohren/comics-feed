@@ -36,13 +36,15 @@ class Pondus extends Feed {
   async extractImageSrc($,callback) {
     const today = moment().format('YYYY-MM-DD')
     const url = `https://www.vg.no/tegneserier/api/images/pondus/${today}`;
-    const oneYearJwt = "eyJraWQiOiIzYWNkODdmNS0zYmQyLTQ5ZTMtYWFhOC0wYTI5ZjU2MzY1YTIiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzZHJuOnNwaWQubm86Y2xpZW50OjRlZjFjZmIwZTk2MmRkMmUwZDhkMDAwMCIsInN1YiI6IjgzZDNhMDY1LWNhZGMtNTAzMC1hYTdmLTgyY2I4OGEzYTc3ZiIsInVzZXJfaWQiOiIyNDEyMjAiLCJpc3MiOiJodHRwczpcL1wvc2Vzc2lvbi1zZXJ2aWNlLmxvZ2luLnNjaGlic3RlZC5jb20iLCJleHAiOjE3NDgyMDAwNDQsImlhdCI6MTcxNjY2NDA0NCwianRpIjoiNjgwZTY3NmUtMGE1Yi00OTY1LWFjNjQtMGNlMGIyMDUxMzk0In0.CGMvkDvV4fgLNDY8hmBLhwDLUQvlWsmGTZ8Njb8pa1cm1jp5McAjwMp65akmS1x54rWMAiDqDi26FTmdZZCmMFsfdj--uS6-S8HFq8UUEZsDsolqH3ZoZ-86eQuejSNzdNTGCX-mYOmS74zBWVLb-Q2FdMPuj-vAu_2ikO4H2rIcmQ9JoJk2hdELQjVCUj07X3_SGHDueJ90beY816-CsuNYX_aT6LWJHvlgmyrB2vDshTfLBGc4i7TDsQZGCv5PkVePeYxGjxFqeV7wJZhSobx9UIQz1Bmmh6dA6sW537TC9J1il4uUYaEJ7CCekUXVukFtA5KxgPfOJ5kZqoduAHhQHnaiDInfz8dHGHwoDIEXeJgzVpx4n1mmm7q-i-Ru5_tDjf1oxqje_VjBgS0QHujgv-dPAjAwRZT3aGe23fZ7a8UUseySdK5WeT6s-yk5l1pqjVh9-MIVBs3DekWjkcDJNPDxudt8ag6rYIqoshlkFi0ovZxtAPQGLCBzcT4H289NYt_5tb_czXt-0pNUZ1dFjZSD8DUHTeW606ZMqdjF9XUE8fuevy_-lGx5OVXd1o0ZD6UdTabLDlfaweDEiEaP4qFHRtb71phSB3eEbEfND2lxilURsL-4OztTSKOoXCXJi-BxLwHxK1-3XIFQDtPhxph-fMmO06XHnS2Gm-E";
+    const oneYearJwt = "eyJraWQiOiIzYWNkODdmNS0zYmQyLTQ5ZTMtYWFhOC0wYTI5ZjU2MzY1YTIiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzZHJuOnNwaWQubm86Y2xpZW50OjRlZjFjZmIwZTk2MmRkMmUwZDhkMDAwMCIsInN1YiI6IjgzZDNhMDY1LWNhZGMtNTAzMC1hYTdmLTgyY2I4OGEzYTc3ZiIsInVzZXJfaWQiOiIyNDEyMjAiLCJpc3MiOiJodHRwczpcL1wvc2Vzc2lvbi1zZXJ2aWNlLmxvZ2luLnNjaGlic3RlZC5jb20iLCJleHAiOjE3ODE1NDA0NTQsImlhdCI6MTc1MDAwNDQ1NCwianRpIjoiMDk1NDg5YTAtNmUzZS00N2I1LTk1NDctMDNhMmY1MjdhMDcwIn0.X6SS-HxFyIZ7Guwd80oXenav704eecXZyCM7qty8Cp2tl0orfQRJccIRq9-1jWKJty2PYJiWxC9-l-gR4OhTFaicavJ1TCZSHaNgOTmc3AdhArKs1oR1hT1dvYeeHsilE5ecVV_lYHs3ToqtrPeFp77YDb7vL85SB-mMgOVN6j8tRRx40ojGomMwAFGJEIDdFbx7IfYjtqj0ixiZajd6PNgKt8IuAnhQ-Q8OWmUk5LGJgtZ5N4eblP_UowHM2vuzQVYpPJRZGRfkSvyG3Jig4rdDdsGoAYNTCswoCHRpIbrU12iJ9xqF4gbqyM2ZQhYhM5goVP8kJakGTVhrozVhrCmtMyXVTXR94n2MM5s9VPQcR3TOtS4DRZkx2ufEDatgxN5xQDq3cqKxF0NIrplf9DS_3EK3G9CKcjBhb64qrCuKIO1ZWBeojMq45IxckM1JBBWAvp0qlIcuO9uPiKlwrSHe8UTO_unsIkrmfoIbIC5yArkcbKpj26L5N4UErd7L-ws9NgwwMDldXgfb7gzvQmmTCvJipsxp6YiLub0Rw7ABk9HuVbbmvJa7YYjXHIDJB2GVIHoZJL0zPlDVgJIePRehFEHp7GjP0aCKkyUf6zQMd7DjOWhLFyHqMIWuTVCnOvwQGfnYHPHF7bkM5BIiogeLySA0wG3Nu4-eSR6PyXM";
     const jwtData = jwt_decode(oneYearJwt);
     const exp = jwtData.exp;
     const now = moment().unix();
     // make a check if the jwt has 60 days left of expiring and error log it
     if(exp - now < 5184000) {
-      logger.log('error', `Pondus jwt has less than 60 days left of expiring. Exp: ${exp} Now: ${now}. Just go to VG and load ${url}, login and copy the jwt from the cookie and replace it in the code.`)
+      const expFormatted = moment.unix(exp).format('DD-MM-YYYY');
+      const nowFormatted = moment.unix(now).format('DD-MM-YYYY');
+      logger.log('error', `Pondus jwt has less than 60 days left of expiring. Exp: ${expFormatted} Now: ${nowFormatted}. Just go to VG and load ${url}, login and copy the jwt from the cookie and replace it in the code.`)
     }
 
     try {
