@@ -16,7 +16,7 @@ class ShermansLagoonstripe extends Feed {
   }
 
   extractImageSrc($, callback) {
-    const url = $('.gc-deck--cta-0 img').attr("src")
+    const url = $('img[class*="Comic_comic__image"]').attr("src")
     callback(url);
   }
 }

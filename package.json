@@ -57,5 +57,8 @@
     "babel-watch": "^2.0.6",
     "mongoui": "^4.1.2"
   },
-  "heroku-run-build-script": true
+  "heroku-run-build-script": true,
+  "volta": {
+    "node": "14.21.3"
+  }
 }
