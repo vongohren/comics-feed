@@ -4,7 +4,9 @@ import cronjob from '../utils/cronjob';
 import generateFeed from '../utils/generateFeed';
 import fetchAndSaveImage from '../utils/fetch';
 import logger from '../utils/logger';
-import { httpsCheckerAndAttacher } from '../utils/urlHandler';
+import urlHandler from '../utils/urlHandler';
+
+const { httpsCheckerAndAttacher } = urlHandler;
 
 
 class Feed {
@@ -49,4 +51,4 @@ class Feed {
   };
 }
 
-module.exports = Feed;
+export default Feed;

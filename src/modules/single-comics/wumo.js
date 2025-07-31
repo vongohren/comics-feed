@@ -1,4 +1,4 @@
-var Feed = require('../feed');
+import Feed from '../feed';
 
 class Wumo extends Feed {
   constructor({
@@ -21,4 +21,4 @@ class Wumo extends Feed {
   }
 }
 
-module.exports = Wumo;
+export default Wumo;

@@ -93,4 +93,4 @@ class Xkcd extends Feed {
   }
 }
 
-module.exports = Xkcd;
+export default Xkcd;

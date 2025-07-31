@@ -1,8 +1,15 @@
 {
-  "presets": ["stage-0"],
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "node": "14"
+      },
+      "modules": "commonjs"
+    }]
+  ],
   "plugins": [
-    "transform-es2015-modules-commonjs",
-    "transform-flow-strip-types",
-    "transform-es2015-destructuring"
-  ]
+    "@babel/plugin-transform-flow-strip-types"
+  ],
+  "sourceMaps": "inline",
+  "retainLines": true
 }

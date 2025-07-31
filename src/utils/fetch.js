@@ -1,7 +1,7 @@
-var Entry = require('../models/comic-entry.js');
-var request = require('request');
-const logger = require('./logger');
-const perfy = require('perfy');
+import Entry from '../models/comic-entry.js';
+import request from 'request';
+import logger from './logger';
+import perfy from 'perfy';
 
 
 export default (url, name, metadata) => {

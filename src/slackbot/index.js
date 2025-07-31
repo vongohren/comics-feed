@@ -1,5 +1,5 @@
-require('./utils/stringPrototype')
-const oauth = require('./oauth');
+import './utils/stringPrototype'
+import oauth from './oauth';
 import { initAgendaForAllTeams } from './services/agenda'
 import {
   interactiveHandler,

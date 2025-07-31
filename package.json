@@ -10,7 +10,7 @@
     "heroku-prebuild": "npm install --only=dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node lib/index.js",
-    "dev": "babel-watch --inspect src/index.js",
+    "dev": "nodemon --exec \"node -r @babel/register --inspect\" src/index.js",
     "build": "BABEL_ENV=commonjs babel src -d lib --copy-files"
   },
   "keywords": [
@@ -48,13 +48,14 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-stage-0": "^6.24.1",
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/node": "^7.21.0",
+    "@babel/register": "^7.21.0",
+    "@babel/preset-env": "^7.21.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.21.0",
     "babel-tape-runner": "^2.0.1",
-    "babel-watch": "^2.0.6",
+    "nodemon": "^2.0.22",
     "mongoui": "^4.1.2"
   },
   "heroku-run-build-script": true,

@@ -1,4 +1,4 @@
-var Feed = require('../feed');
+import Feed from '../feed';
 
 class CyanideAndHappiness extends Feed {
   constructor({
@@ -20,4 +20,4 @@ class CyanideAndHappiness extends Feed {
   }
 }
 
-module.exports = CyanideAndHappiness;
+export default CyanideAndHappiness;

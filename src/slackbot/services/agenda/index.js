@@ -1,7 +1,7 @@
 import { Teams } from '../../repository/'
 import Agenda from './agenda'
 import { postToChannelWithTeamId } from '../posting'
-const logger = require('../../../utils/logger');
+import logger from '../../../utils/logger';
 import { getSubscriptionEnabled, getSubscriptionDisabled } from '../slack/templates'
 
 export const initAgendaForAllTeams = async () => {

@@ -1,4 +1,4 @@
-var Feed = require('../feed');
+import Feed from '../feed';
 
 
 class ShermansLagoonstripe extends Feed {
@@ -21,5 +21,4 @@ class ShermansLagoonstripe extends Feed {
   }
 }
 
-
-module.exports = ShermansLagoonstripe;
+export default ShermansLagoonstripe;

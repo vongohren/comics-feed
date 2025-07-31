@@ -1,4 +1,4 @@
-const logger = require('../../../../utils/logger');
+import logger from '../../../../utils/logger';
 
 export default (body, res) => {
   const text = `Support messge: ${body.text} - From: ${body.user_name} at team: ${body.team_domain}. UserID for reply: ${body.user_id}`

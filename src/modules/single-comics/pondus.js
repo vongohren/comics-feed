@@ -1,14 +1,23 @@
-var Feed = require('../feed');
-var moment = require('moment');
-const axios = require('axios');
-const {Storage} = require('@google-cloud/storage');
-const logger = require('../../utils/logger')
-const jwt_decode = require('jwt-decode');
+import Feed from '../feed';
+import moment from 'moment';
+import axios from 'axios';
+import {Storage} from '@google-cloud/storage';
+import logger from '../../utils/logger'
+import jwt_decode from 'jwt-decode';
 
-// Instantiate a storage client
-const base64Decoded = Buffer.from(process.env.STORAGE_KEY, 'base64').toString('utf8')
-const storagePriv = JSON.parse(base64Decoded);
-const storage = new Storage({credentials:storagePriv});
+// Instantiate a storage client only if STORAGE_KEY is available
+let storage = null;
+if (process.env.STORAGE_KEY) {
+  try {
+    const base64Decoded = Buffer.from(process.env.STORAGE_KEY, 'base64').toString('utf8')
+    const storagePriv = JSON.parse(base64Decoded);
+    storage = new Storage({credentials:storagePriv});
+  } catch (error) {
+    logger.log('warn', 'Failed to initialize Google Cloud Storage: ' + error.message);
+  }
+} else {
+  logger.log('info', 'STORAGE_KEY not found - Google Cloud Storage will not be available (this is normal in development)');
+}
 
 class Pondus extends Feed {
   constructor({
@@ -58,6 +67,11 @@ class Pondus extends Feed {
         }
       })
 
+      if (!storage) {
+        logger.log('warn', 'Google Cloud Storage is not initialized, skipping image upload.');
+        return;
+      }
+
       const myBucket = storage.bucket('comics-feed');
       const file = myBucket.file(`pondus-${today}`)
       const blobStream = file.createWriteStream({
@@ -87,4 +101,4 @@ class Pondus extends Feed {
   }
 }
 
-module.exports = Pondus;
+export default Pondus;

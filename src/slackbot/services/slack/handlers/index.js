@@ -10,10 +10,11 @@ import {
 } from './subscriptionConfigHandler'
 
 import BlockAction from './block-action-handlers';
+import whoHandler from './whoHandler'
+import suggestHandler from './suggestHandler'
+import supportHandler from './supportHandler'
 
-export whoHandler from './whoHandler'
-export suggestHandler from './suggestHandler'
-export supportHandler from './supportHandler'
+export { whoHandler, suggestHandler, supportHandler }
 
 export const interactiveHandler = (body, res) => {
   let action = {}

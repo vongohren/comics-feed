@@ -1,4 +1,4 @@
-var Feed = require('../feed');
+import Feed from '../feed';
 
 class TU extends Feed {
   constructor(name, itemDescription, tegneserieSideLink, tegneserieLogo, stripUrl, hour, minute) {
@@ -19,4 +19,4 @@ class TU extends Feed {
   }
 }
 
-module.exports = TU;
+export default TU;

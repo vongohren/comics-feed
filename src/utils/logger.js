@@ -1,5 +1,5 @@
-const winston = require('winston')
-require('winston-papertrail').Papertrail;
+import winston from 'winston'
+import 'winston-papertrail';
 
 const DEV = process.env.NODE_ENV !== 'production';
 
@@ -53,4 +53,4 @@ process.on("unhandledRejection", function(reason, promise) {
     LoggerClass.log('error', reason)
 });
 
-module.exports = LoggerClass;
+export default LoggerClass;

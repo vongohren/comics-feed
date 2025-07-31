@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 import { SubscriptionSchema } from './subscriptions'
 
-module.exports = mongoose.model('slackteams', {
+export default mongoose.model('slackteams', {
     access_token: String,
     scope: String,
     team_name: String,

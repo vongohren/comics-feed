@@ -1,7 +1,7 @@
-var Entry = require('../models/comic-entry.js');
-var Promise = require('bluebird');
-var feed = require('feed');
-const logger = require('./logger');
+import Entry from '../models/comic-entry.js';
+const Feed = require('feed');
+const Promise = require('bluebird');
+import logger from './logger';
 
 function getObjs (name) {
     return Entry.find({'label':name}).sort('-date').limit(3).exec()
@@ -11,10 +11,10 @@ function capitalizeFirstLetter(string) {
   return (string.charAt(0).toUpperCase() + string.slice(1))
 }
 
-module.exports = Promise.coroutine(function*(name, itemDescription, tegneserieLink, tegneserieLogo){
+export default Promise.coroutine(function*(name, itemDescription, tegneserieLink, tegneserieLogo){
     var itemTitle = capitalizeFirstLetter(name);
 
-    var comicFeed = new feed({
+    var comicFeed = new Feed({
         title:          itemTitle,
         description:    'This is '+name+' comic feed',
         link:           tegneserieLink,
