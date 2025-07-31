@@ -11,6 +11,6 @@ const httpsCheckerAndAttacher = (imageSrc) => {
   return imageSrc;
 }
 
-module.exports = {
+export default {
   httpsCheckerAndAttacher
 }

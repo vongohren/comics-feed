@@ -1,4 +1,4 @@
-var Feed = require('../feed');
+import Feed from '../feed';
 import logger from '../../utils/logger';
 import request from 'request';
 import cheerio from 'cheerio';
@@ -57,5 +57,4 @@ class LarsonsGaleVerden extends Feed {
   }
 }
 
-
-module.exports = LarsonsGaleVerden;
+export default LarsonsGaleVerden;

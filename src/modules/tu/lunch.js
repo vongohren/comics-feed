@@ -1,4 +1,4 @@
-var TU = require('./tu');
+import TU from './tu';
 
 class Lunch extends TU {
   constructor({
@@ -21,4 +21,4 @@ class Lunch extends TU {
   }
 }
 
-module.exports = Lunch;
+export default Lunch;

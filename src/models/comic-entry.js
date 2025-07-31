@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-module.exports = mongoose.model('entry', {
+export default mongoose.model('entry', {
   url: String,
   date: { type: Date, default: Date.now },
   label: String,

@@ -1,12 +1,12 @@
-const request = require('request-promise');
+import request from 'request-promise';
 import { Teams } from './repository';
-const logger = require('../utils/logger');
-const comics = require('../comics');
-const WebClient = require('@slack/client').WebClient;
-const path = require('path');
+import logger from '../utils/logger';
+import comics from '../comics';
+import { WebClient } from '@slack/client';
+import path from 'path';
 import { showDirectOrChannel } from './utils'
 
-module.exports = async function(req, res) {
+export default async function(req, res) {
     if(req.query.error === 'access_denied') {
       res.redirect('/');
       return;
