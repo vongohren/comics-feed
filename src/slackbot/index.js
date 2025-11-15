@@ -1,6 +1,6 @@
 import './utils/stringPrototype'
 import oauth from './oauth';
-import { initAgendaForAllTeams } from './services/agenda'
+import { initAgendaForAllTeams, initCleanupJob } from './services/agenda'
 import {
   interactiveHandler,
   subscriptionHandler,
@@ -21,6 +21,7 @@ class Slackbot {
 
     initializeAgendaForAllTeams() {
       initAgendaForAllTeams();
+      initCleanupJob();
     }
 
     initializeRoutes() {

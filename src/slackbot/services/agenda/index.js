@@ -3,6 +3,7 @@ import Agenda from './agenda'
 import { postToChannelWithTeamId } from '../posting'
 import logger from '../../../utils/logger';
 import { getSubscriptionEnabled, getSubscriptionDisabled } from '../slack/templates'
+import { clearStrikedOutTeams } from '../team'
 
 export const initAgendaForAllTeams = async () => {
   const teams = await Teams.find({})
@@ -38,6 +39,10 @@ export const toggleAgendaForTeam = async (toggle, team_id, channel_id, res) => {
 export const deleteAgendaForTeam = async (team_id, channel_id) => {
   const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id)
   console.log(numberDisabled)
+}
+
+export const initCleanupJob = () => {
+  Agenda.defineCleanupJob(clearStrikedOutTeams);
 }
 
 const disableAgendaForTeam = async (team_id, channel_id, res) => {

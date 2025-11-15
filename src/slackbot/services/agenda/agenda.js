@@ -93,6 +93,27 @@ class AgendaService {
         resolve(true)
       })
     }
+
+    defineCleanupJob(cleanupFunction) {
+      if (!this.agenda) {
+        logger.log('warn', 'Agenda not available, skipping cleanup job definition');
+        return;
+      }
+      
+      this.agenda.define('cleanup-striked-teams', async (job, done) => {
+        try {
+          await cleanupFunction();
+          logger.log('info', 'Cleanup job completed successfully');
+        } catch (error) {
+          logger.log('error', `Cleanup job failed: ${error}`);
+        }
+        done();
+      });
+      
+      // Run daily at 3 AM
+      this.agenda.every('0 3 * * *', 'cleanup-striked-teams');
+      logger.log('info', 'Scheduled daily cleanup job at 3 AM');
+    }
 }
 
 const agenda = new AgendaService()

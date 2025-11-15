@@ -5,6 +5,8 @@ import { Teams } from '../../repository'
 
 const comics = require('../../../comics');
 
+const STRIKE_THRESHOLD = 3;
+
 export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
   try {
     const hook = new Webhook(webhook);
@@ -25,9 +27,18 @@ export const postEntryToSlackWithWebhook = async (entry, webhook, team) => {
 }
 
 const addStrikeToTeam = async (team) => {
-  var query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
-  const result = await Teams.update(query, { strike: team.strike+1 })
-  logger.log('error', `${team.team_name} got a strike!`)
+  const newStrikeCount = team.strike + 1;
+  const query = { team_id: team.team_id, "incoming_webhook.channel_id": team.incoming_webhook.channel_id };
+  
+  const updateData = { strike: newStrikeCount };
+  if (newStrikeCount > STRIKE_THRESHOLD) {
+    updateData.active = false;
+    logger.log('error', `${team.team_name} exceeded strike threshold (${newStrikeCount}), disabling team`);
+  } else {
+    logger.log('error', `${team.team_name} got strike ${newStrikeCount}/${STRIKE_THRESHOLD}`);
+  }
+  
+  await Teams.update(query, updateData);
 }
 
 const createAttachment = (entry) => {

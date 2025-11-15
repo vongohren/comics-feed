@@ -5,10 +5,18 @@ import { postEntryToSlackWithWebhook } from '../slack'
 import { Entries } from '../../repository'
 import moment from 'moment';
 
+const STRIKE_THRESHOLD = 3;
+
 export const postToChannelWithTeamId = async (channel_id, team_id) => {
   const team_query = { team_id: team_id, 'incoming_webhook.channel_id': channel_id }
   const team = await Teams.findOne(team_query).exec();
   if(!team) throw `Team not found with ${team_id} and ${channel_id}`
+  
+  // Skip posting if team has exceeded strike threshold
+  if(team.strike > STRIKE_THRESHOLD) {
+    logger.log('warn', `Team ${team.team_name} has ${team.strike} strikes, skipping post attempt`);
+    return;
+  }
 
   const subscriptions = team.subscriptions;
   const webhook = team.incoming_webhook.url
@@ -24,7 +32,7 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
     }
 
     if(!subscription.lastUrlPublished) {
-      if (postEntryToSlackWithWebhook(entry, webhook, team)) {
+      if (await postEntryToSlackWithWebhook(entry, webhook, team)) {
         setSubscriptionData(subscription, entry)
         update = true
       }
@@ -32,7 +40,7 @@ export const postToChannelWithTeamId = async (channel_id, team_id) => {
     if(subscription.lastUrlPublished !== entry.url) {
       const timeToPost = isTimeToPost(subscription)
       if(timeToPost) {
-        if(postEntryToSlackWithWebhook(entry, webhook, team)) {
+        if(await postEntryToSlackWithWebhook(entry, webhook, team)) {
           setSubscriptionData(subscription, entry)
           update = true;
         } else {
