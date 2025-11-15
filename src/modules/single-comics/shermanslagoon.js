@@ -16,7 +16,19 @@ class ShermansLagoonstripe extends Feed {
   }
 
   extractImageSrc($, callback) {
-    const url = $('img[class*="Comic_comic__image"]').attr("src")
+    // Look for the strip image specifically - it has "isStrip" in the class
+    let url = $('img[class*="isStrip"]').first().attr("src");
+    
+    // Fallback: Look for Comic_comic__image class (more general)
+    if (!url) {
+      url = $('img[class*="Comic_comic__image"]').first().attr("src");
+    }
+    
+    // Fallback: Old selector for backwards compatibility
+    if (!url) {
+      url = $('picture.item-comic-image img').attr("src");
+    }
+    
     callback(url);
   }
 }

@@ -50,9 +50,15 @@ const fetchRespons = (url, skipCertificateCheck) => {
     const options = skipCertificateCheck ? { rejectUnauthorized: false } : {}
     const encodedUrl = encodeURI(url)
     request(encodedUrl, options, function(error, res) {
-      if (error) reject(error)
-      if (res.statusCode !== 200) reject(`Non 200 response: ${res.statusCode} for url ${url}`)
-      else resolve(res)
+      if (error) {
+        reject(error)
+        return // Early return to prevent accessing undefined res
+      }
+      if (res.statusCode !== 200) {
+        reject(`Non 200 response: ${res.statusCode} for url ${url}`)
+        return
+      }
+      resolve(res)
     })
   })
 }

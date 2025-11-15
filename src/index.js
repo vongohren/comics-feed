@@ -100,6 +100,40 @@ app.get('/slackurl', function (req, res) {
     res.send(process.env.SLACK_URL)
 })
 
+// Manual fetch trigger endpoint for debugging
+app.post('/trigger-fetch', function (req, res) {
+    const { comicName } = req.body;
+    
+    if (comicName) {
+        // Trigger specific comic
+        const comic = comics.find(c => c.name === comicName);
+        if (comic) {
+            logger.log('info', `Manually triggering fetch for: ${comicName}`);
+            comic.fetch();
+            res.json({ 
+                success: true, 
+                message: `Fetch triggered for ${comicName}`,
+                comic: comicName
+            });
+        } else {
+            res.status(404).json({ 
+                success: false, 
+                error: `Comic '${comicName}' not found`,
+                available: comics.map(c => c.name)
+            });
+        }
+    } else {
+        // Trigger all comics
+        logger.log('info', 'Manually triggering fetch for all comics');
+        comics.forEach(comic => comic.fetch());
+        res.json({ 
+            success: true, 
+            message: `Fetch triggered for all ${comics.length} comics`,
+            comics: comics.map(c => c.name)
+        });
+    }
+});
+
 for(var comic of comics) {
   app.get(`/${comic.name}`, comic.routeFunction.bind(comic));
 }
