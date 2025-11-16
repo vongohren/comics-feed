@@ -16,12 +16,19 @@ class Slackbot {
       this.initializeRoutes();
       this.clientId = process.env.SLACK_CLIENT_ID;
       this.clientSecret = process.env.SLACK_CLIENT_SECRET;
-      this.initializeAgendaForAllTeams();
+      // Don't await in constructor - initialize async
+      this.initializeAgendaForAllTeams().catch(err => {
+        console.error('Failed to initialize Agenda:', err);
+      });
     }
 
-    initializeAgendaForAllTeams() {
-      initAgendaForAllTeams();
-      initCleanupJob();
+    async initializeAgendaForAllTeams() {
+      try {
+        await initAgendaForAllTeams();
+        await initCleanupJob();
+      } catch (error) {
+        console.error('Error during Agenda initialization:', error);
+      }
     }
 
     initializeRoutes() {

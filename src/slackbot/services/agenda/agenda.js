@@ -5,6 +5,7 @@ class AgendaService {
     constructor() {
         this.ready = false;
         this.agenda = null;
+        this.readyPromise = null;
         
         if (!process.env.MONGODB_URI) {
             logger.log('info', 'MONGODB_URI not found - Agenda job scheduler will not be available (this is normal in development)');
@@ -13,22 +14,58 @@ class AgendaService {
 
         try {
             logger.log('info', `[Agenda.constructor] Initializing Agenda with MongoDB URI: ${process.env.MONGODB_URI.substring(0, 20)}...`);
-            this.agenda = new Agenda({db: { address: process.env.MONGODB_URI, collection: 'agendaJobs', processEvery: '1 minute' }});
-            
-            this.agenda.on('ready', () => {
-                this.ready = true;
-                this.agenda.start();
-                logger.log('info', '[Agenda.constructor] Agenda job scheduler initialized successfully and started');
+            this.agenda = new Agenda({
+                db: { 
+                    address: process.env.MONGODB_URI, 
+                    collection: 'agendaJobs',
+                    options: {
+                        useUnifiedTopology: true,
+                        useNewUrlParser: true
+                    }
+                },
+                processEvery: '1 minute'
             });
+            
+            // Create a promise that resolves when Agenda is ready
+            this.readyPromise = new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('Agenda initialization timeout after 10 seconds'));
+                }, 10000);
+                
+                this.agenda.on('ready', () => {
+                    clearTimeout(timeout);
+                    this.ready = true;
+                    this.agenda.start();
+                    logger.log('info', '[Agenda.constructor] Agenda job scheduler initialized successfully and started');
+                    resolve();
+                });
 
-            this.agenda.on('error', (e) => {
-                this.ready = false;
-                logger.log('error', `[Agenda.constructor] Agenda initialization failed with error: ${e.message}`)
-                logger.log('error', `[Agenda.constructor] Stack trace: ${e.stack}`)
+                this.agenda.on('error', (e) => {
+                    clearTimeout(timeout);
+                    this.ready = false;
+                    logger.log('error', `[Agenda.constructor] Agenda initialization failed with error: ${e.message}`)
+                    logger.log('error', `[Agenda.constructor] Stack trace: ${e.stack}`)
+                    reject(e);
+                });
             });
         } catch (error) {
             logger.log('error', `[Agenda.constructor] Failed to initialize Agenda: ${error.message}`);
             logger.log('error', `[Agenda.constructor] Stack trace: ${error.stack}`);
+            this.readyPromise = Promise.reject(error);
+        }
+    }
+
+    async waitUntilReady() {
+        if (!this.readyPromise) {
+            logger.log('warn', '[Agenda.waitUntilReady] No MongoDB URI configured, Agenda not available');
+            return false;
+        }
+        try {
+            await this.readyPromise;
+            return true;
+        } catch (error) {
+            logger.log('error', `[Agenda.waitUntilReady] Failed to wait for Agenda: ${error.message}`);
+            return false;
         }
     }
 
@@ -55,11 +92,17 @@ class AgendaService {
         });
     }
 
-    defineTeamPosting(channel_id, team_id, func) {
+    async defineTeamPosting(channel_id, team_id, func) {
         if (!this.agenda) {
             logger.log('warn', 'Agenda not available, skipping team posting definition');
             return;
         }
+        
+        if (!this.ready) {
+            logger.log('warn', `[defineTeamPosting] Agenda not ready yet, waiting...`);
+            await this.waitUntilReady();
+        }
+        
         const jobId = `${team_id}-${channel_id}`
         this.agenda.define(jobId, function(job, done) {
             func(job.attrs.data.channel_id, job.attrs.data.team_id)
@@ -68,14 +111,14 @@ class AgendaService {
         this.agenda.every(process.env.CHECK_INTERVAL, jobId, {team_id: team_id, channel_id: channel_id});
     }
 
-    initAgendaForTeam(team, agendaFunction) {
+    async initAgendaForTeam(team, agendaFunction) {
         if (!this.agenda) {
             logger.log('warn', 'Agenda not available, skipping team initialization');
             return;
         }
         const team_id = team.team_id;
         const channel_id = team.channel_id || team.incoming_webhook.channel_id;
-        this.defineTeamPosting(channel_id, team_id, agendaFunction);
+        await this.defineTeamPosting(channel_id, team_id, agendaFunction);
     }
 
     async disableAgendaForTeam(team_id, channel_id) {
@@ -119,21 +162,29 @@ class AgendaService {
     }
 
     async enableAgendaForTeam(channel_id, team_id, agendaFunction) {
-      return new Promise((resolve, reject) => {
-        if (!this.agenda) {
-            logger.log('warn', 'Agenda not available, cannot enable team');
-            resolve(false);
-            return;
-        }
-        this.defineTeamPosting(channel_id, team_id, agendaFunction);
-        resolve(true)
-      })
+      if (!this.agenda) {
+          logger.log('warn', 'Agenda not available, cannot enable team');
+          return false;
+      }
+      
+      try {
+        await this.defineTeamPosting(channel_id, team_id, agendaFunction);
+        return true;
+      } catch (error) {
+        logger.log('error', `[enableAgendaForTeam] Error enabling team: ${error.message}`);
+        return false;
+      }
     }
 
-    defineCleanupJob(cleanupFunction) {
+    async defineCleanupJob(cleanupFunction) {
       if (!this.agenda) {
         logger.log('warn', 'Agenda not available, skipping cleanup job definition');
         return;
+      }
+      
+      if (!this.ready) {
+        logger.log('warn', `[defineCleanupJob] Agenda not ready yet, waiting...`);
+        await this.waitUntilReady();
       }
       
       this.agenda.define('cleanup-striked-teams', async (job, done) => {

@@ -50,9 +50,6 @@ class Feed {
             decompressedBody = body.toString('utf-8');
           }
           
-          // Debug logging
-          this.debugResponse(response, decompressedBody);
-          
           var $ = cheerio.load(decompressedBody);
           this.extractImageSrc($, (imageSrc) => {
             imageSrc = httpsCheckerAndAttacher(imageSrc);
@@ -70,60 +67,7 @@ class Feed {
       }
     });
   }
-
-  debugResponse(response, body) {
-    // Log response metadata
-    logger.log('info', `[${this.name}] ━━━ Debug Start ━━━`);
-    logger.log('info', `[${this.name}] Status: ${response.statusCode}`);
-    logger.log('info', `[${this.name}] Content-Type: ${response.headers['content-type']}`);
-    logger.log('info', `[${this.name}] Content-Length: ${body.length} bytes`);
-    
-    // Show first 500 chars of body (compress whitespace for readability)
-    const bodyPreview = body.substring(0, 500).replace(/\s+/g, ' ').trim();
-    logger.log('info', `[${this.name}] Body preview: "${bodyPreview}..."`);
-    
-    // Detect bot protection patterns
-    const botBlockingPatterns = [
-      'Cloudflare',
-      'Just a moment',
-      'Challenge',
-      'cf-browser-verification',
-      'captcha',
-      'blocked',
-      'Security check'
-    ];
-    
-    const detectedPattern = botBlockingPatterns.find(pattern => 
-      body.toLowerCase().includes(pattern.toLowerCase())
-    );
-    
-    if (detectedPattern) {
-      logger.log('error', `[${this.name}] 🚫 BOT PROTECTION DETECTED: "${detectedPattern}" - This is NOT the actual page!`);
-    }
-    
-    // Parse with cheerio and show DOM stats
-    const $ = cheerio.load(body);
-    const imgCount = $('img').length;
-    const scriptCount = $('script').length;
-    const titleText = $('title').text();
-    
-    logger.log('info', `[${this.name}] DOM Stats - Images: ${imgCount}, Scripts: ${scriptCount}, Title: "${titleText}"`);
-    
-    // List all image sources found (helpful for debugging selectors)
-    if (imgCount > 0) {
-      const imgSources = [];
-      $('img').each((i, el) => {
-        const src = $(el).attr('src') || $(el).attr('data-src') || 'NO_SRC';
-        const classes = $(el).attr('class') || 'NO_CLASS';
-        imgSources.push({ src, classes });
-      });
-    } else {
-      logger.log('error', `[${this.name}] ⚠️  NO IMAGES FOUND in HTML!`);
-    }
-    
-    logger.log('info', `[${this.name}] ━━━ Debug End ━━━`);
-  }
-
+  
   extractImageSrc($, callback) {
     const url = $('.strip-container img').attr('src')
     callback(url);

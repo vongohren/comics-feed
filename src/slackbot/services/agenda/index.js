@@ -7,18 +7,26 @@ import { clearStrikedOutTeams } from '../team'
 import mongoose from 'mongoose'
 
 export const initAgendaForAllTeams = async () => {
+  // Wait for Agenda to be ready before scheduling any jobs
+  const isReady = await Agenda.waitUntilReady();
+  if (!isReady) {
+    logger.log('warn', 'Agenda is not ready, skipping team initialization');
+    return;
+  }
+  
   const teams = await Teams.find({})
   if(teams.length < 1) {
     logger.log('info', 'No teams to init agenda posting for')
   }
   else {
-    teams.forEach(function(team) {
+    // Process teams sequentially to avoid race conditions
+    for (const team of teams) {
       if(team.active) {
-        Agenda.initAgendaForTeam(team, postToChannelWithTeamId)
+        await Agenda.initAgendaForTeam(team, postToChannelWithTeamId)
         logger.log('info', `Server just started, so trying to post to ${team.team_name} in channel ${team.incoming_webhook.channel}`)
         postToChannelWithTeamId(team.incoming_webhook.channel_id, team.team_id)
       }
-    });
+    }
   }
 }
 
@@ -77,8 +85,8 @@ export const deleteAgendaForTeam = async (team_id, channel_id) => {
   }
 }
 
-export const initCleanupJob = () => {
-  Agenda.defineCleanupJob(clearStrikedOutTeams);
+export const initCleanupJob = async () => {
+  await Agenda.defineCleanupJob(clearStrikedOutTeams);
 }
 
 const disableAgendaForTeam = async (team_id, channel_id, res) => {
