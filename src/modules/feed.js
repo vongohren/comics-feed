@@ -117,7 +117,6 @@ class Feed {
         const classes = $(el).attr('class') || 'NO_CLASS';
         imgSources.push({ src, classes });
       });
-      logger.log('info', `[${this.name}] All images: ${JSON.stringify(imgSources, null, 2)}`);
     } else {
       logger.log('error', `[${this.name}] ⚠️  NO IMAGES FOUND in HTML!`);
     }
