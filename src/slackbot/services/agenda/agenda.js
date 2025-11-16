@@ -12,25 +12,36 @@ class AgendaService {
         }
 
         try {
+            logger.log('info', `[Agenda.constructor] Initializing Agenda with MongoDB URI: ${process.env.MONGODB_URI.substring(0, 20)}...`);
             this.agenda = new Agenda({db: { address: process.env.MONGODB_URI, collection: 'agendaJobs', processEvery: '1 minute' }});
             
             this.agenda.on('ready', () => {
                 this.ready = true;
                 this.agenda.start();
-                logger.log('info', 'Agenda job scheduler initialized successfully');
+                logger.log('info', '[Agenda.constructor] Agenda job scheduler initialized successfully and started');
             });
 
             this.agenda.on('error', (e) => {
                 this.ready = false;
-                logger.log('error', `Agenda initialization failed with error: ${e}`)
+                logger.log('error', `[Agenda.constructor] Agenda initialization failed with error: ${e.message}`)
+                logger.log('error', `[Agenda.constructor] Stack trace: ${e.stack}`)
             });
         } catch (error) {
-            logger.log('error', `Failed to initialize Agenda: ${error.message}`);
+            logger.log('error', `[Agenda.constructor] Failed to initialize Agenda: ${error.message}`);
+            logger.log('error', `[Agenda.constructor] Stack trace: ${error.stack}`);
         }
     }
 
     isReady() {
         return this.ready && this.agenda !== null;
+    }
+
+    getStatus() {
+        return {
+            hasAgenda: this.agenda !== null,
+            isReady: this.ready,
+            canOperate: this.isReady()
+        };
     }
 
     _stop() {
@@ -69,15 +80,40 @@ class AgendaService {
 
     async disableAgendaForTeam(team_id, channel_id) {
       return new Promise((resolve, reject) => {
+        const status = this.getStatus();
+        logger.log('info', `[Agenda.disableAgendaForTeam] Agenda status: ${JSON.stringify(status)}`);
+        
         if (!this.agenda) {
-            logger.log('warn', 'Agenda not available, cannot disable team');
+            logger.log('warn', '[Agenda.disableAgendaForTeam] Agenda not available, cannot disable team');
             resolve(0);
             return;
         }
-        const jobId = `${team_id}-${channel_id}`
+        
+        if (!this.ready) {
+            logger.log('warn', `[Agenda.disableAgendaForTeam] Agenda not ready for team ${team_id}, channel ${channel_id}`);
+            resolve(0);
+            return;
+        }
+        
+        const jobId = `${team_id}-${channel_id}`;
+        logger.log('info', `[Agenda.disableAgendaForTeam] Attempting to cancel job ${jobId}...`);
+        
+        // Add a 5-second timeout for the cancel operation
+        const timeoutId = setTimeout(() => {
+          logger.log('error', `[Agenda.disableAgendaForTeam] MongoDB operation timeout for job ${jobId} - this usually indicates a MongoDB connection issue`);
+          reject(new Error(`Timeout cancelling agenda job ${jobId}`));
+        }, 5000);
+        
         this.agenda.cancel({name: jobId}, function(err, numRemoved) {
-          if(err) reject(err)
-          resolve(numRemoved)
+          clearTimeout(timeoutId);
+          
+          if(err) {
+            logger.log('error', `[Agenda.disableAgendaForTeam] Error cancelling job ${jobId}: ${err.message}`);
+            reject(err);
+          } else {
+            logger.log('info', `[Agenda.disableAgendaForTeam] Successfully cancelled ${numRemoved} job(s) for ${jobId}`);
+            resolve(numRemoved);
+          }
         });
       })
     }

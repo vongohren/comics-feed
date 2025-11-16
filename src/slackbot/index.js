@@ -44,8 +44,25 @@ class Slackbot {
         })
         //This is triggerd by zapier once a day!
         this.app.get('/clear', async (req, res)=> {
-          var striked = await clearStrikedOutTeams()
-          res.json(striked)
+          try {
+            // Set a timeout of 8 seconds (leaving 2 seconds buffer for curl's 10s timeout)
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Operation timed out after 8 seconds')), 8000)
+            );
+            
+            const clearPromise = clearStrikedOutTeams();
+            
+            const striked = await Promise.race([clearPromise, timeoutPromise]);
+            
+            res.status(200).json(striked);
+          } catch (error) {
+            console.error('Error in /clear endpoint:', error);
+            res.status(500).json({ 
+              error: error.message, 
+              removed: 0,
+              success: false 
+            });
+          }
         })
     }
 }

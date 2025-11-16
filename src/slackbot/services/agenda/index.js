@@ -4,6 +4,7 @@ import { postToChannelWithTeamId } from '../posting'
 import logger from '../../../utils/logger';
 import { getSubscriptionEnabled, getSubscriptionDisabled } from '../slack/templates'
 import { clearStrikedOutTeams } from '../team'
+import mongoose from 'mongoose'
 
 export const initAgendaForAllTeams = async () => {
   const teams = await Teams.find({})
@@ -36,9 +37,44 @@ export const toggleAgendaForTeam = async (toggle, team_id, channel_id, res) => {
   else if(toggle === 'off') disableAgendaForTeam(team_id, channel_id, res)
 }
 
+// Direct MongoDB deletion - bypasses the Agenda library's problematic cancel() method
+const deleteAgendaJobDirectly = async (team_id, channel_id) => {
+  try {
+    const jobName = `${team_id}-${channel_id}`;
+    logger.log('info', `[deleteAgendaJobDirectly] Directly deleting agenda job ${jobName} from MongoDB...`);
+    
+    // Access the agendaJobs collection directly via mongoose
+    const agendaJobsCollection = mongoose.connection.collection('agendaJobs');
+    const result = await agendaJobsCollection.deleteMany({ name: jobName });
+    
+    logger.log('info', `[deleteAgendaJobDirectly] Deleted ${result.deletedCount} agenda job(s) for ${jobName}`);
+    return result.deletedCount;
+  } catch (error) {
+    logger.log('error', `[deleteAgendaJobDirectly] Error deleting job directly: ${error.message}`);
+    throw error;
+  }
+};
+
 export const deleteAgendaForTeam = async (team_id, channel_id) => {
-  const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id)
-  console.log(numberDisabled)
+  try {
+    logger.log('info', `[deleteAgendaForTeam] Deleting agenda for team ${team_id}, channel ${channel_id}`);
+    
+    // Try direct MongoDB deletion first (more reliable)
+    try {
+      const numberDeleted = await deleteAgendaJobDirectly(team_id, channel_id);
+      logger.log('info', `[deleteAgendaForTeam] Successfully deleted ${numberDeleted} jobs using direct MongoDB access`);
+      return numberDeleted;
+    } catch (directError) {
+      logger.log('warn', `[deleteAgendaForTeam] Direct deletion failed, falling back to Agenda library: ${directError.message}`);
+      // Fallback to Agenda library method
+      const numberDisabled = await Agenda.disableAgendaForTeam(team_id, channel_id);
+      logger.log('info', `[deleteAgendaForTeam] Disabled ${numberDisabled} agenda jobs using Agenda library for team ${team_id}`);
+      return numberDisabled;
+    }
+  } catch (error) {
+    logger.log('error', `[deleteAgendaForTeam] Error deleting agenda for team ${team_id}: ${error.message}`);
+    throw error;
+  }
 }
 
 export const initCleanupJob = () => {
